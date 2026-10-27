@@ -157,13 +157,18 @@ export function hasDailyRoom(): boolean {
   return state().units + costOf({ kind: 'aging' }) <= limits().dailyCap;
 }
 
-/** Client IP: first `x-forwarded-for`, then `x-real-ip`, else `local`. */
+/**
+ * Client IP from headers the client cannot forge. On Vercel the edge sets
+ * `x-vercel-forwarded-for` and `x-real-ip` itself. Elsewhere only the right-most
+ * `x-forwarded-for` hop (added by our own proxy) is trusted, never the left-most.
+ */
 export function clientIp(headers: Headers): string {
-  const xff = headers.get('x-forwarded-for');
-  const first = xff?.split(',')[0]?.trim();
-  if (first) return first;
+  const vercel = headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim();
+  if (vercel) return vercel;
   const real = headers.get('x-real-ip')?.trim();
-  return real || 'local';
+  if (real) return real;
+  const last = headers.get('x-forwarded-for')?.split(',').map(s => s.trim()).filter(Boolean).at(-1);
+  return last || 'local';
 }
 
 /** Test helper: drops all counters and the credit cache. */

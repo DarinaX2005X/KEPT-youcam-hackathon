@@ -1,0 +1,909 @@
+{
+  "generatedAt": "2026-10-27T07:20:40.726Z",
+  "noise": 4,
+  "face": {
+    "credit": "Face generated with YouCam AI Image Generator"
+  },
+  "trials": [
+    {
+      "trial": {
+        "id": "sample-niacinamide",
+        "product": {
+          "name": "10% niacinamide toner",
+          "actives": [
+            "niacinamide"
+          ]
+        },
+        "targets": [
+          "pore",
+          "oiliness"
+        ],
+        "watch": [
+          "redness",
+          "moisture"
+        ],
+        "startedAt": "-160d",
+        "plan": {
+          "checkinDays": [
+            7,
+            14,
+            21,
+            28,
+            42,
+            56
+          ],
+          "onsetDay": 28,
+          "fullEffectDay": 56
+        },
+        "status": "stopped",
+        "decidedAt": "-104d",
+        "sample": true
+      },
+      "scans": [
+        {
+          "id": "sample-niacinamide-day-0",
+          "trialId": "sample-niacinamide",
+          "kind": "baseline",
+          "day": 0,
+          "takenAt": "-160d",
+          "photo": {
+            "url": "/demo/niacinamide-toner/day-0/photo.jpg"
+          },
+          "masks": {
+            "pore": {
+              "url": "/demo/niacinamide-toner/day-0/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/niacinamide-toner/day-0/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/niacinamide-toner/day-0/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/niacinamide-toner/day-0/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "pore": {
+              "ui": 69,
+              "raw": 54
+            },
+            "oiliness": {
+              "ui": 77,
+              "raw": 71.61
+            },
+            "redness": {
+              "ui": 64,
+              "raw": 41.09
+            },
+            "moisture": {
+              "ui": 68,
+              "raw": 44.49
+            }
+          },
+          "overall": 69.5,
+          "skinAge": 36,
+          "maskStats": {
+            "redness": {
+              "areaPct": 5.5
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 177.9
+          }
+        },
+        {
+          "id": "sample-niacinamide-day-14",
+          "trialId": "sample-niacinamide",
+          "kind": "checkin",
+          "day": 14,
+          "takenAt": "-146d",
+          "photo": {
+            "url": "/demo/niacinamide-toner/day-14/photo.jpg"
+          },
+          "masks": {
+            "pore": {
+              "url": "/demo/niacinamide-toner/day-14/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/niacinamide-toner/day-14/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/niacinamide-toner/day-14/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/niacinamide-toner/day-14/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "pore": {
+              "ui": 68,
+              "raw": 51.8
+            },
+            "oiliness": {
+              "ui": 76,
+              "raw": 69.08
+            },
+            "redness": {
+              "ui": 64,
+              "raw": 41.61
+            },
+            "moisture": {
+              "ui": 67,
+              "raw": 41.83
+            }
+          },
+          "overall": 68.75,
+          "skinAge": 35,
+          "maskStats": {
+            "redness": {
+              "areaPct": 5.5
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 187.8
+          }
+        },
+        {
+          "id": "sample-niacinamide-day-28",
+          "trialId": "sample-niacinamide",
+          "kind": "checkin",
+          "day": 28,
+          "takenAt": "-132d",
+          "photo": {
+            "url": "/demo/niacinamide-toner/day-28/photo.jpg"
+          },
+          "masks": {
+            "pore": {
+              "url": "/demo/niacinamide-toner/day-28/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/niacinamide-toner/day-28/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/niacinamide-toner/day-28/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/niacinamide-toner/day-28/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "pore": {
+              "ui": 66,
+              "raw": 47.04
+            },
+            "oiliness": {
+              "ui": 77,
+              "raw": 72.45
+            },
+            "redness": {
+              "ui": 63,
+              "raw": 40.75
+            },
+            "moisture": {
+              "ui": 67,
+              "raw": 42.08
+            }
+          },
+          "overall": 68.25,
+          "skinAge": 35,
+          "maskStats": {
+            "redness": {
+              "areaPct": 5.2
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 178.8
+          }
+        },
+        {
+          "id": "sample-niacinamide-day-42",
+          "trialId": "sample-niacinamide",
+          "kind": "checkin",
+          "day": 42,
+          "takenAt": "-118d",
+          "photo": {
+            "url": "/demo/niacinamide-toner/day-42/photo.jpg"
+          },
+          "masks": {
+            "pore": {
+              "url": "/demo/niacinamide-toner/day-42/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/niacinamide-toner/day-42/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/niacinamide-toner/day-42/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/niacinamide-toner/day-42/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "pore": {
+              "ui": 70,
+              "raw": 55.58
+            },
+            "oiliness": {
+              "ui": 79,
+              "raw": 76.65
+            },
+            "redness": {
+              "ui": 64,
+              "raw": 41.53
+            },
+            "moisture": {
+              "ui": 68,
+              "raw": 44.25
+            }
+          },
+          "overall": 70.25,
+          "skinAge": 35,
+          "maskStats": {
+            "redness": {
+              "areaPct": 5.5
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 166.5
+          }
+        },
+        {
+          "id": "sample-niacinamide-day-56",
+          "trialId": "sample-niacinamide",
+          "kind": "checkin",
+          "day": 56,
+          "takenAt": "-104d",
+          "photo": {
+            "url": "/demo/niacinamide-toner/day-56/photo.jpg"
+          },
+          "masks": {
+            "pore": {
+              "url": "/demo/niacinamide-toner/day-56/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/niacinamide-toner/day-56/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/niacinamide-toner/day-56/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/niacinamide-toner/day-56/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "pore": {
+              "ui": 69,
+              "raw": 52.29
+            },
+            "oiliness": {
+              "ui": 76,
+              "raw": 70.36
+            },
+            "redness": {
+              "ui": 64,
+              "raw": 40.9
+            },
+            "moisture": {
+              "ui": 67,
+              "raw": 42.46
+            }
+          },
+          "overall": 69,
+          "skinAge": 36,
+          "maskStats": {
+            "redness": {
+              "areaPct": 5.6
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 177.8
+          }
+        }
+      ]
+    },
+    {
+      "trial": {
+        "id": "sample-salicylic",
+        "product": {
+          "name": "2% salicylic acid serum",
+          "actives": [
+            "salicylic"
+          ]
+        },
+        "targets": [
+          "acne",
+          "pore",
+          "oiliness"
+        ],
+        "watch": [
+          "redness"
+        ],
+        "startedAt": "-100d",
+        "plan": {
+          "checkinDays": [
+            7,
+            14,
+            21,
+            28,
+            42,
+            56
+          ],
+          "onsetDay": 14,
+          "fullEffectDay": 56,
+          "purge": {
+            "fromDay": 7,
+            "toDay": 42
+          }
+        },
+        "projection": {
+          "photo": {
+            "url": "/demo/salicylic-serum/target/photo.jpg"
+          },
+          "scores": {
+            "acne": {
+              "ui": 72,
+              "raw": 60
+            },
+            "pore": {
+              "ui": 79,
+              "raw": 76.94
+            },
+            "oiliness": {
+              "ui": 81,
+              "raw": 79.95
+            },
+            "redness": {
+              "ui": 83,
+              "raw": 84.88
+            }
+          },
+          "intensities": {
+            "acne": 1,
+            "redness": 0.4,
+            "pores": 0.4,
+            "oiliness": 0.4
+          }
+        },
+        "status": "kept",
+        "decidedAt": "-44d",
+        "sample": true
+      },
+      "scans": [
+        {
+          "id": "sample-salicylic-day-0",
+          "trialId": "sample-salicylic",
+          "kind": "baseline",
+          "day": 0,
+          "takenAt": "-100d",
+          "photo": {
+            "url": "/demo/salicylic-serum/day-0/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/salicylic-serum/day-0/mask-acne.png"
+            },
+            "pore": {
+              "url": "/demo/salicylic-serum/day-0/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/salicylic-serum/day-0/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/salicylic-serum/day-0/mask-redness.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 66,
+              "raw": 47.08
+            },
+            "pore": {
+              "ui": 69,
+              "raw": 52.29
+            },
+            "oiliness": {
+              "ui": 76,
+              "raw": 70.36
+            },
+            "redness": {
+              "ui": 64,
+              "raw": 40.9
+            }
+          },
+          "overall": 68.75,
+          "skinAge": 36,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 42
+            },
+            "redness": {
+              "areaPct": 5.6
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 177.8
+          }
+        },
+        {
+          "id": "sample-salicylic-day-14",
+          "trialId": "sample-salicylic",
+          "kind": "checkin",
+          "day": 14,
+          "takenAt": "-86d",
+          "photo": {
+            "url": "/demo/salicylic-serum/day-14/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/salicylic-serum/day-14/mask-acne.png"
+            },
+            "pore": {
+              "url": "/demo/salicylic-serum/day-14/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/salicylic-serum/day-14/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/salicylic-serum/day-14/mask-redness.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 67,
+              "raw": 47.78
+            },
+            "pore": {
+              "ui": 72,
+              "raw": 59.59
+            },
+            "oiliness": {
+              "ui": 78,
+              "raw": 74.65
+            },
+            "redness": {
+              "ui": 69,
+              "raw": 53.64
+            }
+          },
+          "overall": 71.5,
+          "skinAge": 34,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 28
+            },
+            "redness": {
+              "areaPct": 3.4
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 174.8
+          }
+        },
+        {
+          "id": "sample-salicylic-day-28",
+          "trialId": "sample-salicylic",
+          "kind": "checkin",
+          "day": 28,
+          "takenAt": "-72d",
+          "photo": {
+            "url": "/demo/salicylic-serum/day-28/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/salicylic-serum/day-28/mask-acne.png"
+            },
+            "pore": {
+              "url": "/demo/salicylic-serum/day-28/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/salicylic-serum/day-28/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/salicylic-serum/day-28/mask-redness.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 67,
+              "raw": 48.63
+            },
+            "pore": {
+              "ui": 73,
+              "raw": 61.82
+            },
+            "oiliness": {
+              "ui": 79,
+              "raw": 76.83
+            },
+            "redness": {
+              "ui": 74,
+              "raw": 64.19
+            }
+          },
+          "overall": 73.25,
+          "skinAge": 33,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 24
+            },
+            "redness": {
+              "areaPct": 2.1
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 176.3
+          }
+        },
+        {
+          "id": "sample-salicylic-day-42",
+          "trialId": "sample-salicylic",
+          "kind": "checkin",
+          "day": 42,
+          "takenAt": "-58d",
+          "photo": {
+            "url": "/demo/salicylic-serum/day-42/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/salicylic-serum/day-42/mask-acne.png"
+            },
+            "pore": {
+              "url": "/demo/salicylic-serum/day-42/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/salicylic-serum/day-42/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/salicylic-serum/day-42/mask-redness.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 72,
+              "raw": 60.28
+            },
+            "pore": {
+              "ui": 77,
+              "raw": 70.81
+            },
+            "oiliness": {
+              "ui": 80,
+              "raw": 77.74
+            },
+            "redness": {
+              "ui": 79,
+              "raw": 76.04
+            }
+          },
+          "overall": 77,
+          "skinAge": 32,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 17
+            },
+            "redness": {
+              "areaPct": 0.8
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 181.3
+          }
+        },
+        {
+          "id": "sample-salicylic-day-56",
+          "trialId": "sample-salicylic",
+          "kind": "checkin",
+          "day": 56,
+          "takenAt": "-44d",
+          "photo": {
+            "url": "/demo/salicylic-serum/day-56/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/salicylic-serum/day-56/mask-acne.png"
+            },
+            "pore": {
+              "url": "/demo/salicylic-serum/day-56/mask-pore.png"
+            },
+            "oiliness": {
+              "url": "/demo/salicylic-serum/day-56/mask-oiliness.png"
+            },
+            "redness": {
+              "url": "/demo/salicylic-serum/day-56/mask-redness.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 74,
+              "raw": 65.18
+            },
+            "pore": {
+              "ui": 80,
+              "raw": 78.08
+            },
+            "oiliness": {
+              "ui": 82,
+              "raw": 82.1
+            },
+            "redness": {
+              "ui": 83,
+              "raw": 84.71
+            }
+          },
+          "overall": 79.75,
+          "skinAge": 32,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 11
+            },
+            "redness": {
+              "areaPct": 0.5
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 180.9
+          }
+        }
+      ]
+    },
+    {
+      "trial": {
+        "id": "sample-retinal",
+        "product": {
+          "name": "0.05% retinal cream",
+          "actives": [
+            "retinal"
+          ]
+        },
+        "targets": [
+          "acne",
+          "texture"
+        ],
+        "watch": [
+          "redness",
+          "moisture"
+        ],
+        "startedAt": "-21d",
+        "plan": {
+          "checkinDays": [
+            7,
+            14,
+            21,
+            28,
+            42,
+            56,
+            84
+          ],
+          "onsetDay": 21,
+          "fullEffectDay": 84,
+          "purge": {
+            "fromDay": 14,
+            "toDay": 42
+          }
+        },
+        "projection": {
+          "photo": {
+            "url": "/demo/retinal-cream/target/photo.jpg"
+          },
+          "scores": {
+            "acne": {
+              "ui": 74,
+              "raw": 64.46
+            },
+            "texture": {
+              "ui": 85,
+              "raw": 89.72
+            },
+            "redness": {
+              "ui": 79,
+              "raw": 76.76
+            },
+            "moisture": {
+              "ui": 73,
+              "raw": 56.76
+            }
+          },
+          "intensities": {
+            "acne": 0.4,
+            "texture": 0.5
+          }
+        },
+        "status": "testing",
+        "sample": true
+      },
+      "scans": [
+        {
+          "id": "sample-retinal-day-0",
+          "trialId": "sample-retinal",
+          "kind": "baseline",
+          "day": 0,
+          "takenAt": "-21d",
+          "photo": {
+            "url": "/demo/retinal-cream/day-0/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/retinal-cream/day-0/mask-acne.png"
+            },
+            "texture": {
+              "url": "/demo/retinal-cream/day-0/mask-texture.png"
+            },
+            "redness": {
+              "url": "/demo/retinal-cream/day-0/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/retinal-cream/day-0/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 72,
+              "raw": 59.22
+            },
+            "texture": {
+              "ui": 82,
+              "raw": 82.79
+            },
+            "redness": {
+              "ui": 80,
+              "raw": 77.96
+            },
+            "moisture": {
+              "ui": 69,
+              "raw": 46.73
+            }
+          },
+          "overall": 75.75,
+          "skinAge": 33,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 16
+            },
+            "redness": {
+              "areaPct": 0.8
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 176
+          }
+        },
+        {
+          "id": "sample-retinal-day-7",
+          "trialId": "sample-retinal",
+          "kind": "checkin",
+          "day": 7,
+          "takenAt": "-14d",
+          "photo": {
+            "url": "/demo/retinal-cream/day-7/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/retinal-cream/day-7/mask-acne.png"
+            },
+            "texture": {
+              "url": "/demo/retinal-cream/day-7/mask-texture.png"
+            },
+            "redness": {
+              "url": "/demo/retinal-cream/day-7/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/retinal-cream/day-7/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 71,
+              "raw": 57.8
+            },
+            "texture": {
+              "ui": 82,
+              "raw": 83.89
+            },
+            "redness": {
+              "ui": 79,
+              "raw": 76.67
+            },
+            "moisture": {
+              "ui": 68,
+              "raw": 45.93
+            }
+          },
+          "overall": 75,
+          "skinAge": 30,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 16
+            },
+            "redness": {
+              "areaPct": 0.8
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 182.2
+          }
+        },
+        {
+          "id": "sample-retinal-day-18",
+          "trialId": "sample-retinal",
+          "kind": "checkin",
+          "day": 18,
+          "takenAt": "-3d",
+          "photo": {
+            "url": "/demo/retinal-cream/day-18/photo.jpg"
+          },
+          "masks": {
+            "acne": {
+              "url": "/demo/retinal-cream/day-18/mask-acne.png"
+            },
+            "texture": {
+              "url": "/demo/retinal-cream/day-18/mask-texture.png"
+            },
+            "redness": {
+              "url": "/demo/retinal-cream/day-18/mask-redness.png"
+            },
+            "moisture": {
+              "url": "/demo/retinal-cream/day-18/mask-moisture.png"
+            }
+          },
+          "scores": {
+            "acne": {
+              "ui": 66,
+              "raw": 45.59
+            },
+            "texture": {
+              "ui": 80,
+              "raw": 78.4
+            },
+            "redness": {
+              "ui": 80,
+              "raw": 78.73
+            },
+            "moisture": {
+              "ui": 68,
+              "raw": 44.77
+            }
+          },
+          "overall": 73.5,
+          "skinAge": 30,
+          "maskStats": {
+            "acne": {
+              "blemishCount": 37
+            },
+            "redness": {
+              "areaPct": 0.8
+            }
+          },
+          "capture": {
+            "source": "sample",
+            "luminance": 177.6
+          }
+        }
+      ]
+    }
+  ],
+  "samplePhotos": {
+    "baseline": "/demo/sample/baseline.jpg",
+    "checkin": "/demo/sample/week6.jpg"
+  },
+  "hero": {
+    "trialId": "sample-salicylic",
+    "frames": [
+      "sample-salicylic-day-0",
+      "sample-salicylic-day-28"
+    ],
+    "verdict": null
+  }
+}

@@ -98,8 +98,10 @@ describe('quota', () => {
     expect(quotaSnapshot().units).toBe(9);
   });
 
-  it('reads the client IP from proxy headers', () => {
-    expect(clientIp(new Headers({ 'x-forwarded-for': '9.9.9.9, 10.0.0.1' }))).toBe('9.9.9.9');
+  it('reads the client IP from headers the client cannot forge', () => {
+    expect(clientIp(new Headers({ 'x-vercel-forwarded-for': '7.7.7.7', 'x-forwarded-for': '1.1.1.1' }))).toBe('7.7.7.7');
+    // A spoofed left-most x-forwarded-for entry is ignored; only our proxy's right-most hop counts.
+    expect(clientIp(new Headers({ 'x-forwarded-for': '9.9.9.9, 10.0.0.1' }))).toBe('10.0.0.1');
     expect(clientIp(new Headers({ 'x-real-ip': '8.8.8.8' }))).toBe('8.8.8.8');
     expect(clientIp(new Headers())).toBe('local');
   });

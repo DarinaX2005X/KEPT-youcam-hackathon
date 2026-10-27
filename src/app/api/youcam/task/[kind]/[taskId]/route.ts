@@ -1,7 +1,7 @@
 import { getTask, TASK_PATH } from '@/server/youcam/client';
 import { fail, json, upstreamFailure } from '@/server/youcam/http';
 import { engineError, ENGINE_MESSAGES, normalizeAging, normalizeAnalysis, normalizeSimulation } from '@/server/youcam/normalize';
-import { releaseTask, settleTask } from '@/server/youcam/quota';
+import { settleTask } from '@/server/youcam/quota';
 import type { TaskPoll } from '@/server/youcam/types';
 import { isOpaqueId, isTaskKind } from '@/server/youcam/validate';
 
@@ -25,7 +25,8 @@ export async function GET(_req: Request, ctx: { params: Promise<{ kind: string; 
   }
 
   if (data.task_status === 'error') {
-    releaseTask(kind, taskId);
+    // YouCam still charges for engine errors such as error_src_face_too_small, so the units stay spent.
+    settleTask(kind, taskId);
     const { code, message } = engineError(data.error);
     if (data.error) console.warn(`[youcam] ${kind} task error: ${data.error}`);
     return json({ status: 'error', code, message } satisfies TaskPoll);
