@@ -38,8 +38,8 @@ export function AgingViewer({ frames, age, sample }: AgingViewerProps) {
 
   const minAge = frames[0]?.age ?? 0;
   const maxAge = frames[frames.length - 1]?.age ?? 0;
-  const span = Math.max(maxAge - minAge, 1);
-  const positions = useMemo(() => frames.map((f) => ((f.age - minAge) / span) * 100), [frames, minAge, span]);
+  // Stops sit under the thumbnails, one per frame, evenly spaced.
+  const positions = useMemo(() => frames.map((_, i) => (frames.length > 1 ? (i / (frames.length - 1)) * 100 : 50)), [frames]);
 
   function fromPointer(e: PointerEvent<HTMLDivElement>) {
     const rect = trackRef.current?.getBoundingClientRect();
@@ -91,7 +91,7 @@ export function AgingViewer({ frames, age, sample }: AgingViewerProps) {
         </figcaption>
       </figure>
 
-      <div className={styles.controls}>
+      <div className={styles.controls} style={{ ['--n' as string]: frames.length }}>
         <ul className={styles.strip} aria-label="Ages">
           {frames.map((f, i) => (
             <li key={f.age}>

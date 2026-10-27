@@ -153,6 +153,13 @@
   .print {
     max-width: none;
   }
+  /* Before the photo exists the empty frame stays small, so the advice and the button fit the first screen. */
+  .printWaiting {
+    max-width: 200px;
+  }
+  .textFirst > :last-child {
+    order: -1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

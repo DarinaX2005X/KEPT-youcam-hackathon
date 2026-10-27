@@ -76,7 +76,7 @@
   max-width: 460px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .bigPrint {
@@ -156,11 +156,10 @@
 }
 
 .strip {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
   gap: 8px;
-  overflow-x: auto;
-  padding: 4px 2px 6px;
-  scrollbar-width: none;
+  padding: 4px 0 2px;
 }
 
 .strip::-webkit-scrollbar {
@@ -172,7 +171,9 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  width: 64px;
+  width: 100%;
+  max-width: 76px;
+  margin: 0 auto;
   padding: 4px 4px 6px;
   border-radius: 12px;
   background: var(--surface);
@@ -209,7 +210,7 @@
 .track {
   position: relative;
   height: 36px;
-  margin: 0 12px;
+  margin: 0 calc((100% - (var(--n) - 1) * 8px) / var(--n) / 2);
   touch-action: none;
   cursor: pointer;
 }
@@ -270,12 +271,11 @@
   .visualCol {
     justify-content: flex-start;
   }
-  .emptyPrint,
-  .viewer {
-    max-width: min(100%, calc((100dvh - var(--header-h) - 150px) * 0.75));
+  .emptyPrint {
+    max-width: min(100%, calc((100dvh - var(--header-h) - 170px) * 0.75));
   }
   .viewer {
-    max-width: min(100%, calc((100dvh - var(--header-h) - 260px) * 0.75));
+    max-width: min(100%, calc((100dvh - var(--header-h) - 340px) * 0.75));
   }
 }
 
@@ -286,6 +286,13 @@
 }
 
 @media (max-width: 767.98px) {
+  /* Before the frames exist the explanation leads; the empty frame stays small below it. */
+  .textFirst .main {
+    order: -1;
+  }
+  .textFirst .emptyPrint {
+    max-width: 220px;
+  }
   .lead {
     font-size: var(--t-17);
   }

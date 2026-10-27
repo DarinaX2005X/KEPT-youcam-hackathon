@@ -96,14 +96,15 @@
 /* Photos with the trial's facts beside them */
 .top {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 156px;
+  grid-template-columns: auto minmax(156px, 1fr);
   gap: 24px;
   align-items: start;
 }
 
+/* Prints keep one size whether the trial has a target or not; the facts move up beside them. */
 .prints {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--count, 3), 170px);
   gap: 14px;
 }
 
@@ -320,8 +321,8 @@
   vertical-align: top;
 }
 
-.table tbody tr:not(.group):nth-of-type(even) {
-  background: rgb(239 233 225 / 0.45);
+.table tbody tr:not(.group):nth-of-type(even) > * {
+  background: #f4efe9;
 }
 
 .group th {
@@ -398,11 +399,16 @@
     gap: 16px;
   }
   .prints {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
   }
   .print.print {
     padding: 5px 5px 7px;
     border-radius: 10px;
+  }
+  /* Too small for the plate; the caption says it is simulated. */
+  .print.print > div:first-child > span {
+    display: none;
   }
   .facts {
     display: grid;
@@ -444,6 +450,13 @@
     border-radius: 0;
     box-shadow: none;
     zoom: var(--print-zoom, 1);
+  }
+  /* The sheen rim is drawn with a CSS mask that print engines fill solid: use a plain ring on paper. */
+  .print.print::before {
+    display: none;
+  }
+  .printTarget.printTarget {
+    box-shadow: 0 0 0 2px #c9e6d6, 0 6px 14px -8px rgb(40 34 26 / 0.25);
   }
   .verdict,
   .chart,

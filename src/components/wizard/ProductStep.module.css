@@ -116,3 +116,16 @@
     animation: none;
   }
 }
+
+.narrow {
+  display: none;
+}
+
+@media (max-width: 420px) {
+  .wide {
+    display: none;
+  }
+  .narrow {
+    display: inline;
+  }
+}

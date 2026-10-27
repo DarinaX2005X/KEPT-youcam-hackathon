@@ -37,6 +37,7 @@
     var(--sunk);
   display: grid;
   place-items: center;
+  container-type: inline-size;
 }
 
 .outline {
@@ -106,6 +107,21 @@
   font-size: var(--t-13);
   color: var(--ink-soft);
   line-height: 1.3;
+}
+
+/* Narrow prints, such as two side by side on a phone: a tighter plate and smaller words. */
+@container (max-width: 240px) {
+  .inner {
+    width: calc(100% - 16px);
+    padding: 10px 10px;
+    border-radius: 12px;
+    font-size: var(--t-13);
+  }
+  .inner li {
+    min-height: 32px;
+    gap: 8px;
+    font-size: var(--t-13);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

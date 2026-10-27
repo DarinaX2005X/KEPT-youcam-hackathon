@@ -82,7 +82,7 @@ export function ReportSheet({ trial, scans, verdict, urls, now, className }: Rep
       <h1 className={styles.product}>{trial.product.name}</h1>
 
       <div className={styles.top}>
-        <div className={styles.prints}>
+        <div className={styles.prints} style={{ ['--count' as string]: [basePhoto, lastPhoto && latest, urls.target].filter(Boolean).length || 1 }}>
           {basePhoto ? (
             <PhotoPrint src={basePhoto} alt="Day 0 photo" label="Day 0" sublabel={formatLongDate(trial.startedAt)} priority className={styles.print} />
           ) : null}
@@ -101,10 +101,10 @@ export function ReportSheet({ trial, scans, verdict, urls, now, className }: Rep
               src={urls.target}
               alt="Simulated target"
               label="Target"
-              sublabel={`Day ${trial.plan.fullEffectDay} if it works`}
+              sublabel={`Simulated for day ${trial.plan.fullEffectDay}`}
               variant="target"
               priority
-              className={styles.print}
+              className={clsx(styles.print, styles.printTarget)}
             />
           ) : null}
         </div>

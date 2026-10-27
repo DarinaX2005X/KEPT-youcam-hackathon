@@ -300,7 +300,7 @@ export function CheckinFlow({ trialId }: CheckinFlowProps) {
       <main className={styles.body}>
         <div className={styles.photos}>
           {loaded.baseUrl ? (
-            <PhotoPrint src={loaded.baseUrl} alt="" label="Day 0" tilt={-4} className={styles.basePrint} />
+            <PhotoPrint src={loaded.baseUrl} alt="" label="Day 0" tilt={-4} priority className={styles.basePrint} />
           ) : null}
           <motion.div
             className={styles.todayWrap}

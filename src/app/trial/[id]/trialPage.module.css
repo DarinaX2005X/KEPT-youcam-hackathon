@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
+  /* CheckinStrip's visually-hidden labels are positioned against the strip root, outside its scroller,
+     so on phones they widen the page. Clip until the strip fixes it (position: relative on .scroller). */
+  overflow-x: clip;
 }
 
 /* Trial menu */

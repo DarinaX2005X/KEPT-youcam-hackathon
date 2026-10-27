@@ -4,6 +4,8 @@
 }
 
 .scroller {
+  /* Contains the absolutely positioned screen-reader labels so they don't widen the page. */
+  position: relative;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;

@@ -23,8 +23,17 @@ export function TrialSheet({ name, activeIds }: TrialSheetProps) {
   return (
     <div className={styles.sheet}>
       <div className={styles.prints}>
-        <EmptyPrint label={weekLabel(plan.fullEffectDay)} sublabel="Target" variant="target" tilt={2.5} className={styles.back} />
-        <EmptyPrint label="Day 0" sublabel="Your photo" tilt={-2} className={styles.front} />
+        {prevention ? (
+          <>
+            <EmptyPrint label="Years from now" sublabel="Aging simulation" variant="target" tilt={2.5} className={styles.back} />
+            <EmptyPrint label="Today" sublabel="Your photo" tilt={-2} className={styles.front} />
+          </>
+        ) : (
+          <>
+            <EmptyPrint label={weekLabel(plan.fullEffectDay)} sublabel="Target" variant="target" tilt={2.5} className={styles.back} />
+            <EmptyPrint label="Day 0" sublabel="Your photo" tilt={-2} className={styles.front} />
+          </>
+        )}
       </div>
 
       <div className={styles.body}>

@@ -72,7 +72,7 @@ export function PreventionStep({ productName, saving, onAddToShelf }: Prevention
   const running = run.status === 'running';
 
   return (
-    <div className={styles.split}>
+    <div className={clsx(styles.split, run.status !== 'done' && styles.textFirst)}>
       <div className={styles.visualCol}>
         {run.status === 'done' ? (
           <AgingViewer frames={run.frames} age={run.age} sample={sample} />

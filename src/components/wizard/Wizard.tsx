@@ -139,7 +139,8 @@ export function Wizard() {
           type: 'target',
           value: {
             status: 'error',
-            message: isScanError(err) ? err.message : MESSAGES.upstream,
+            // The engine's own words are about retaking a photo, which does not apply to the simulated face.
+            message: isScanError(err) && (err.code === 'limit' || err.code === 'network' || err.code === 'timeout') ? err.message : "YouCam couldn't make the target photo this time",
             limit: isScanError(err) && err.code === 'limit',
           },
         });
@@ -156,6 +157,7 @@ export function Wizard() {
   async function onCapture(result: CaptureResult) {
     setCapturing(false);
     setCaptured(result);
+    window.scrollTo({ top: 0 });
     targetCtrl.current?.abort();
     dispatch({ type: 'baseline', data: null });
     const measured = [...zones];

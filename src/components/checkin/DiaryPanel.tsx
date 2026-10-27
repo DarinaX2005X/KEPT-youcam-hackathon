@@ -68,8 +68,8 @@ export function DiaryPanel({ sinceDay, value, onChange, difference, areas, onRun
         </div>
       ) : null}
 
+      <p className={styles.areas}>Measures {areas}, the same areas as day 0.</p>
       <div className={styles.runRow}>
-        <p className={styles.areas}>Measures {areas}, the same areas as day 0.</p>
         <div className={styles.actions}>
           <Button size="lg" onClick={onRun}>
             Run check-in

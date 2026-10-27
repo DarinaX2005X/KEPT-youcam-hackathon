@@ -173,8 +173,23 @@ export function ProductStep({ state, dispatch, onContinue }: ProductStepProps) {
               onChange={(m) => dispatch({ type: 'mode', value: m })}
               block
               options={[
-                { value: 'pick', label: 'Pick active ingredients' },
-                { value: 'paste', label: 'Paste ingredient list' },
+                {
+                  value: 'pick',
+                  label: (
+                    <>
+                      Pick <span className={styles.wide}>active ingredients</span>
+                      <span className={styles.narrow}>actives</span>
+                    </>
+                  ),
+                },
+                {
+                  value: 'paste',
+                  label: (
+                    <>
+                      Paste <span className={styles.wide}>ingredient </span>list
+                    </>
+                  ),
+                },
               ]}
             />
 

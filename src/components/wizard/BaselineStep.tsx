@@ -64,11 +64,11 @@ export function BaselineStep({ zones, baseline, scan, captured, sample, targetSt
       </PhotoPrint>
     );
   } else {
-    photo = <EmptyPrint label="Day 0" sublabel="Baseline photo" tilt={-1} className={styles.print} busy={phase === 'done'} />;
+    photo = <EmptyPrint label="Day 0" sublabel="Baseline photo" tilt={-1} className={clsx(styles.print, phase === 'intro' && styles.printWaiting)} busy={phase === 'done'} />;
   }
 
   return (
-    <div className={styles.split}>
+    <div className={clsx(styles.split, phase === 'intro' && styles.textFirst)}>
       <div className={styles.photoCol}>{photo}</div>
 
       <div className={layout.main}>

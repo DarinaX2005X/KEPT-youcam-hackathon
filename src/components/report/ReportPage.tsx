@@ -11,12 +11,14 @@ import styles from './Report.module.css';
 
 /** A4 minus the 10 mm page margins, in CSS px. */
 const PRINT_HEIGHT_PX = (277 / 25.4) * 96;
+/** Print text wraps a little differently from screen: leave room. */
+const PRINT_SAFETY = 0.95;
 /** The sheet is drawn at print width on screens at least this wide, so its measured height is the printed height. */
 const PRINT_WIDTH_PX = (190 / 25.4) * 96;
 
 const PAGE_CSS = `
 @page { size: A4; margin: 10mm; }
-@media print { html, body { background: #fff !important; } }
+@media print { html, body { background: #fff !important; } .skip-link, nextjs-portal { display: none !important; } }
 `;
 
 async function copyText(text: string): Promise<boolean> {
@@ -67,7 +69,8 @@ export function ReportPage({ trialId }: ReportPageProps) {
       const innerW = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
       if (Math.abs(innerW - PRINT_WIDTH_PX) > 2) return;
       const innerH = el.scrollHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-      setZoom(innerH > PRINT_HEIGHT_PX ? Math.floor((PRINT_HEIGHT_PX / innerH) * 1000) / 1000 : 1);
+      const room = PRINT_HEIGHT_PX * PRINT_SAFETY;
+      setZoom(innerH > room ? Math.floor((room / innerH) * 1000) / 1000 : 1);
     };
     measure();
     const ro = new ResizeObserver(measure);

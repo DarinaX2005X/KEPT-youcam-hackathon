@@ -7,6 +7,7 @@ import { computeVerdict } from '@/lib/domain';
 import { useToast } from '@/components/ui';
 import { TrialWorkspace, TrialWorkspaceSkeleton, useTrialData, type ReadyTrialData } from '@/components/trial';
 import { FROM_TRIAL_KEY, TrialMissing } from '@/components/checkin';
+import { CoachPanel } from '@/components/coach';
 import { TrialMenu } from './TrialMenu';
 import styles from './trialPage.module.css';
 
@@ -84,7 +85,13 @@ export function TrialPage({ trialId, newScanId }: TrialPageProps) {
   return (
     <main className={styles.main}>
       {shown ? (
-        <TrialWorkspace key={shown.trial.id} data={shown} onRunCheckin={runCheckin} headerAside={<TrialMenu data={shown} />} />
+        <TrialWorkspace
+          key={shown.trial.id}
+          data={shown}
+          onRunCheckin={runCheckin}
+          headerAside={<TrialMenu data={shown} />}
+          belowVerdict={<CoachPanel trial={shown.trial} scans={shown.scans} verdict={shown.verdict} now={shown.now} />}
+        />
       ) : (
         <TrialWorkspaceSkeleton />
       )}

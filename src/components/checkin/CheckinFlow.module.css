@@ -152,10 +152,7 @@
 }
 
 .runRow {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 4px;
+  margin-top: -4px;
 }
 
 .areas {
@@ -175,12 +172,16 @@
 
 /* Phone: the action stays under the thumb. */
 @media (max-width: 767px) {
+  .photos {
+    width: min(270px, 72%);
+  }
   .runRow {
     position: sticky;
     bottom: 0;
-    margin: 4px calc(-1 * var(--gutter)) 0;
+    margin: -4px calc(-1 * var(--gutter)) 0;
     padding: 12px var(--gutter) max(16px, env(safe-area-inset-bottom));
-    background: linear-gradient(180deg, rgb(248 244 239 / 0) 0, var(--field) 18px);
+    background: var(--field);
+    box-shadow: 0 -1px 0 var(--line);
   }
   .actions > * {
     flex: 1 1 auto;
