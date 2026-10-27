@@ -1,23 +1,12 @@
 import clsx from 'clsx';
 import { Button, Tag } from '@/components/ui';
-import { AlertTriangle, CheckCircle2, Hourglass, MinusCircle, RefreshCw, TrendingUp, type LucideIcon } from 'lucide-react';
-import type { VerdictKind } from '@/lib/domain';
 import { BuyReportPreview } from './BuyReportPreview';
 import { MiniPrint } from '@/components/shelf/MiniPrint';
 import type { BuyCheckData, VerdictRow, WorkspaceData } from './data';
 import { Reveal } from './Reveal';
 import { WorkspacePreview } from './WorkspacePreview';
+import { VerdictStrip } from './VerdictStrip';
 import styles from './Sections.module.css';
-
-/** Same icons and tones as VerdictCard (VERDICT_LOOK lives in a client module, so this server list repeats it). */
-const VERDICT_LOOK: Record<VerdictKind, { icon: LucideIcon; tone: 'better' | 'worse' | 'reacting' | 'flat' }> = {
-  too_early: { icon: Hourglass, tone: 'flat' },
-  on_track: { icon: TrendingUp, tone: 'better' },
-  working: { icon: CheckCircle2, tone: 'better' },
-  purging: { icon: RefreshCw, tone: 'reacting' },
-  reacting: { icon: AlertTriangle, tone: 'worse' },
-  not_enough: { icon: MinusCircle, tone: 'flat' },
-};
 
 export function TrialSection({ data }: { data: WorkspaceData }) {
   return (
@@ -54,26 +43,9 @@ export function VerdictsSection({ rows }: { rows: VerdictRow[] }) {
             Verdicts you can act on
           </h2>
         </Reveal>
-        <ul className={styles.verdictList}>
-          {rows.map((r, i) => {
-            const look = VERDICT_LOOK[r.kind];
-            const Icon = look.icon;
-            return (
-              <li key={r.kind}>
-                <Reveal delay={Math.min(i, 5) * 0.05} className={styles.verdictRow}>
-                  <div className={styles.verdictName}>
-                    <span className={clsx(styles.verdictIcon, styles[`tone_${look.tone}`])}>
-                      <Icon size={22} strokeWidth={2} aria-hidden />
-                    </span>
-                    <h3 className={styles.verdictHeadline}>{r.headline}</h3>
-                  </div>
-                  <p className={clsx(styles.verdictExample, 'num')}>{r.example}</p>
-                  <p className={styles.verdictNext}>{r.next}</p>
-                </Reveal>
-              </li>
-            );
-          })}
-        </ul>
+        <Reveal>
+          <VerdictStrip rows={rows} />
+        </Reveal>
       </div>
     </section>
   );

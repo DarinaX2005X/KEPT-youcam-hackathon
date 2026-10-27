@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { CircleAlert, Eye, EyeOff, Minus, TrendingDown, TrendingUp, type LucideIcon } from 'lucide-react';
+import { Eye, EyeOff, Minus, RefreshCw, TrendingDown, TrendingUp, type LucideIcon } from 'lucide-react';
 import { concernLabel, formatShortDate, type Concern, type Verdict } from '@/lib/domain';
 import { CompareSlider, IconButton, MaskLayer, type Tone } from '@/components/ui';
 import { concernTone, formatDelta, TONE_SR, type Frame } from './model';
@@ -13,7 +13,7 @@ const TONE_ICON: Record<Tone, LucideIcon> = {
   better: TrendingUp,
   worse: TrendingDown,
   flat: Minus,
-  reacting: CircleAlert,
+  reacting: RefreshCw,
 };
 
 export interface CompareStageProps {
@@ -94,6 +94,8 @@ export function CompareStage({
   };
 
   const single = frame.id === baseline.id;
+  // The target is a simulation, not a result: day 0 stays neutral and the target reads as a plan.
+  const projection = frame.kind === 'target';
   const base = baseline.scores[concern]?.ui;
   const now = frame.scores[concern]?.ui;
   const delta = base !== undefined && now !== undefined ? now - base : undefined;
@@ -153,7 +155,7 @@ export function CompareStage({
       <figcaption className={styles.caption}>
         <div className={styles.captionRow}>
         <div className={styles.reading} aria-live="polite">
-          {delta !== undefined && !single ? (
+          {delta !== undefined && !single && !projection ? (
             <span className={clsx(styles.badge, styles[tone])} title={TONE_SR[tone]}>
               <ToneIcon size={14} strokeWidth={2.25} aria-hidden />
             </span>
@@ -161,7 +163,7 @@ export function CompareStage({
           <span className={styles.concern}>{label}</span>
           {base !== undefined ? (
             <span className={clsx(styles.scores, 'num')}>
-              {single || now === undefined ? (
+              {single || now === undefined || projection ? (
                 base
               ) : (
                 <>
@@ -170,14 +172,18 @@ export function CompareStage({
               )}
             </span>
           ) : null}
-          {delta !== undefined && !single ? (
+          {delta !== undefined && !single && !projection ? (
             <span className={clsx(styles.delta, styles[`${tone}Text`], 'num')}>
               {formatDelta(delta)}
               <span className="visually-hidden">, {TONE_SR[tone]}</span>
             </span>
           ) : null}
-          {stat ? <span className={clsx(styles.stat, 'num')}>{stat}</span> : null}
-          {frame.kind === 'target' ? <span className={styles.stat}>expected by day {frame.day}</span> : null}
+          {stat && !projection ? <span className={clsx(styles.stat, 'num')}>{stat}</span> : null}
+          {projection ? (
+            <span className={clsx(styles.stat, 'num')}>
+              {delta !== undefined ? `on day 0. Target ${formatDelta(delta)} by day ${frame.day}` : `on day 0. No target for this area`}
+            </span>
+          ) : null}
         </div>
         <div className={styles.tools}>
           <span className={clsx(styles.date, 'num')}>

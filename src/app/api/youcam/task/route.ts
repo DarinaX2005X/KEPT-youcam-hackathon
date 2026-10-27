@@ -1,4 +1,4 @@
-import { createTask } from '@/server/youcam/client';
+import { YouCamError, createTask } from '@/server/youcam/client';
 import { fail, json, upstreamFailure } from '@/server/youcam/http';
 import { checkAndReserve, clientIp, release, trackTask } from '@/server/youcam/quota';
 import { parseTaskRequest, quotaTaskOf, youcamTaskOf } from '@/server/youcam/validate';
@@ -29,7 +29,8 @@ export async function POST(req: Request) {
     trackTask(request.kind, taskId, ip, quotaTask);
     return json({ taskId, kind: request.kind });
   } catch (err) {
-    release(ip, quotaTask);
+    // Only a clear rejection from YouCam means no task exists. After a timeout it may have started and charged.
+    if (err instanceof YouCamError && err.code !== 'Timeout') release(ip, quotaTask);
     return upstreamFailure(err);
   }
 }

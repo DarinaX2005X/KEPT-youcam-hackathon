@@ -1,6 +1,16 @@
 // Allow-list and content type for the YouCam asset proxy.
 
-/** Only https YouCam S3 objects: host `*.amazonaws.com` and bucket `yce-…` (virtual-hosted or path style). */
+/**
+ * Exact YouCam result buckets only. A prefix rule (`yce-*`) is not enough: anyone can create a
+ * bucket with that prefix and have this domain serve their file.
+ */
+export const YOUCAM_ASSET_HOSTS = new Set([
+  'yce-us.s3-accelerate.amazonaws.com',
+  'yce-us.s3.amazonaws.com',
+  'yce-us.s3.us-west-2.amazonaws.com',
+]);
+
+/** Only https links to YouCam's own result buckets, virtual-hosted style. */
 export function allowedAssetUrl(raw: string | null): URL | null {
   if (!raw || raw.length > 4096) return null;
   let url: URL;
@@ -10,11 +20,7 @@ export function allowedAssetUrl(raw: string | null): URL | null {
     return null;
   }
   if (url.protocol !== 'https:' || url.username || url.password || url.port) return null;
-  const host = url.hostname.toLowerCase();
-  if (!host.endsWith('.amazonaws.com')) return null;
-  const bucketInHost = host.startsWith('yce-') || host.startsWith('yce.');
-  const bucketInPath = /^\/yce-[^/]+\//.test(url.pathname);
-  return bucketInHost || bucketInPath ? url : null;
+  return YOUCAM_ASSET_HOSTS.has(url.hostname.toLowerCase()) ? url : null;
 }
 
 const BY_EXT: Record<string, string> = {
@@ -25,10 +31,10 @@ const BY_EXT: Record<string, string> = {
   gif: 'image/gif',
 };
 
-/** Upstream content type unless it is missing or generic, then by file extension. */
-export function assetContentType(url: URL, upstream: string | null): string {
+/** Always an image type: by upstream header if it is an image, else by extension, else null (refused). */
+export function assetContentType(url: URL, upstream: string | null): string | null {
   const ct = upstream?.split(';')[0].trim().toLowerCase();
-  if (ct && ct !== 'application/octet-stream' && ct !== 'binary/octet-stream') return upstream!;
+  if (ct && Object.values(BY_EXT).includes(ct)) return ct;
   const ext = url.pathname.split('.').pop()?.toLowerCase() ?? '';
-  return BY_EXT[ext] ?? 'application/octet-stream';
+  return BY_EXT[ext] ?? null;
 }

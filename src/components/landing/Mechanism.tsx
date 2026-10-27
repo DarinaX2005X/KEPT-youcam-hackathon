@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Image from 'next/image';
-import { CheckCircle2, TrendingUp } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Hourglass, Info, Minus, MinusCircle, RefreshCw, TrendingDown, TrendingUp } from 'lucide-react';
 import { MaskLayer } from '@/components/ui';
 import { ChecksList } from '@/components/capture/ChecksList';
 import { TrendChart } from '@/components/trial/TrendChart';
@@ -55,7 +55,7 @@ function MapPart({ photo, mask, scores, blemishes }: Pick<MechanismData, 'scores
         </div>
         <span className={clsx(styles.mapCount, 'num')}>{blemishes} blemishes</span>
       </div>
-      <ul className={styles.mapScores} aria-label="Scores on day 0">
+      <ul className={styles.mapScores} aria-label="Scores at this check-in">
         {scores.map((s) => (
           <li key={s.concern}>
             <span>{s.label}</span>
@@ -67,22 +67,38 @@ function MapPart({ photo, mask, scores, blemishes }: Pick<MechanismData, 'scores
   );
 }
 
+const SLIP_LOOK = {
+  working: { icon: CheckCircle2, tone: 'better' },
+  on_track: { icon: TrendingUp, tone: 'better' },
+  purging: { icon: RefreshCw, tone: 'reacting' },
+  reacting: { icon: AlertTriangle, tone: 'worse' },
+  too_early: { icon: Hourglass, tone: 'flat' },
+  not_enough: { icon: MinusCircle, tone: 'flat' },
+} as const;
+
+const REASON_ICON = { better: TrendingUp, worse: TrendingDown, flat: Minus, info: Info } as const;
+
 function VerdictPart({ data }: { data: MechanismData }) {
   const v = data.verdict;
-  const reasons = v.reasons.filter((r) => r.tone === 'better').slice(0, 2);
+  const look = SLIP_LOOK[v.kind];
+  const Icon = look.icon;
+  const reasons = v.reasons.filter((r) => r.tone !== 'info' && r.tone !== 'flat').slice(0, 2);
   return (
-    <div className={styles.slip}>
+    <div className={clsx(styles.slip, styles[`slip_${look.tone}`])}>
       <div className={styles.slipHead}>
-        <CheckCircle2 size={22} strokeWidth={2} aria-hidden />
+        <Icon size={22} strokeWidth={2} aria-hidden />
         <span>{v.headline}</span>
       </div>
       <ul className={styles.slipReasons}>
-        {reasons.map((r) => (
-          <li key={r.text} className="num">
-            <TrendingUp size={14} strokeWidth={2.5} aria-hidden />
-            <span>{r.text.split('. ')[0]}</span>
-          </li>
-        ))}
+        {reasons.map((r) => {
+          const RIcon = REASON_ICON[r.tone];
+          return (
+            <li key={r.text} className="num">
+              <RIcon size={14} strokeWidth={2.5} aria-hidden />
+              <span>{r.text}</span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

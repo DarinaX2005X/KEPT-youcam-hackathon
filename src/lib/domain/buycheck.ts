@@ -166,7 +166,9 @@ export function buyCheck(
             : `${cap(joinNouns(parts))}. This product targets things that aren't a problem for you`,
       });
     } else if (!failedBefore) {
-      const low = scored.filter((c) => (scores[c] as number) <= ROOM_TO_IMPROVE).sort((x, y) => (scores[x] as number) - (scores[y] as number));
+      // Only the active's main target counts, so a hydrator isn't argued for with a redness score.
+      const main = a.targets[0];
+      const low = main !== undefined && scores[main] !== undefined && (scores[main] as number) <= ROOM_TO_IMPROVE ? [main] : [];
       if (low.length) {
         promising = true;
         findings.push({

@@ -16,7 +16,8 @@ export const HEADLINES: Record<VerdictKind, string> = {
 };
 
 /** Check-in photos further apart than this are not averaged. */
-export const SMOOTHING_GAP_DAYS = 10;
+/** Check-ins are never averaged: every screen (chips, chart, report, verdict) shows the latest photo's score. */
+export const SMOOTHING_GAP_DAYS = 0;
 /** Relative luminance change from day 0 that lowers confidence to medium / low. */
 export const LIGHT_MEDIUM = 0.1;
 export const LIGHT_LOW = 0.18;
@@ -73,7 +74,7 @@ export function computeVerdict(trial: Trial, scans: Scan[], now: Date, options: 
   const checkins = baseline ? sorted.filter((s) => s !== baseline && s.day > baseline.day) : [];
   const latest = checkins[checkins.length - 1];
   const previous = checkins[checkins.length - 2];
-  const smooth = latest && previous && latest.day - previous.day <= SMOOTHING_GAP_DAYS ? previous : undefined;
+  const smooth = SMOOTHING_GAP_DAYS > 0 && latest && previous && latest.day - previous.day <= SMOOTHING_GAP_DAYS ? previous : undefined;
   const decided = trial.status === 'kept' || trial.status === 'stopped';
   const nowDay = Math.max(0, dayOf(trial, now));
   const evidenceDay = latest ? latest.day : 0;
@@ -417,19 +418,17 @@ export function computeVerdict(trial: Trial, scans: Scan[], now: Date, options: 
   primary.push(...[...targetChanges].sort((a, b) => b.delta - a.delta).map((c) => changeReason(c, 'plain')));
   primary.push(...maskReasons());
   primary.push(dayInfo());
-  // «On track» needs some movement the right way; flat or slipping targets before full effect are «too early».
-  if (meanDelta >= 1) {
-    return finish(
-      'on_track',
-      'Your skin is moving the right way, though not yet past the difference between repeat photos.',
-      primary,
-      checkinStep(),
-    );
-  }
-  return finish(
-    'too_early',
-    `No clear change yet, which is normal before day ${plan.fullEffectDay}.`,
-    primary,
-    checkinStep(),
-  );
+  // Between first changes and full effect: «On track» either way, with a summary that says whether it moved.
+  const lagging = trial.targets.some((c) => {
+    const ch = changeFor(c);
+    const expected = expectedScore(trial, baseline, c, evidenceDay);
+    return ch && expected !== null && ch.current < expected - noise;
+  });
+  const summary =
+    meanDelta >= 1
+      ? 'Your skin is moving the right way, though not yet past the difference between repeat photos.'
+      : lagging
+        ? `No clear change yet. Give it until day ${plan.fullEffectDay} before deciding.`
+        : `No clear change yet, which is still normal before day ${plan.fullEffectDay}.`;
+  return finish('on_track', summary, primary, checkinStep());
 }

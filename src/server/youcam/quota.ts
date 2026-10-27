@@ -38,6 +38,8 @@ interface QuotaState {
   day: string;
   units: number;
   scansByIp: Map<string, number>;
+  /** Units booked per IP across every task kind, so simulations and aging can't drain the balance. */
+  unitsByIp: Map<string, number>;
   credit?: { value: number; at: number };
   tasks: Map<string, Reservation>;
 }
@@ -53,13 +55,14 @@ function state(): QuotaState {
   const today = utcDay();
   let s = g[KEY];
   if (!s) {
-    s = { day: today, units: 0, scansByIp: new Map(), tasks: new Map() };
+    s = { day: today, units: 0, scansByIp: new Map(), unitsByIp: new Map(), tasks: new Map() };
     g[KEY] = s;
   }
   if (s.day !== today) {
     s.day = today;
     s.units = 0;
     s.scansByIp.clear();
+    s.unitsByIp.clear();
     s.tasks.clear();
   }
   return s;
@@ -73,6 +76,7 @@ function envInt(name: string, fallback: number): number {
 const limits = () => ({
   dailyCap: envInt('DAILY_UNIT_CAP', 150),
   scansPerIp: envInt('SCANS_PER_IP_PER_DAY', 6),
+  unitsPerIp: envInt('UNITS_PER_IP_PER_DAY', 70),
   reserve: envInt('UNIT_RESERVE', 60),
 });
 
@@ -97,11 +101,14 @@ async function balance(s: QuotaState): Promise<number | undefined> {
 /** Checks all guards and, if they pass, books the task's units (and the IP's analysis). */
 export async function checkAndReserve(ip: string, task: QuotaTask): Promise<QuotaCheck> {
   const s = state();
-  const { dailyCap, scansPerIp, reserve } = limits();
+  const { dailyCap, scansPerIp, unitsPerIp, reserve } = limits();
   const cost = costOf(task);
 
   if (s.units + cost > dailyCap) return { ok: false, reason: 'daily', message: LIMIT_MESSAGE };
   if (task.kind === 'analysis' && !isUnlimited(ip) && (s.scansByIp.get(ip) ?? 0) >= scansPerIp) {
+    return { ok: false, reason: 'ip', message: LIMIT_MESSAGE };
+  }
+  if (!isUnlimited(ip) && (s.unitsByIp.get(ip) ?? 0) + cost > unitsPerIp) {
     return { ok: false, reason: 'ip', message: LIMIT_MESSAGE };
   }
   const credit = await balance(s);
@@ -112,15 +119,19 @@ export async function checkAndReserve(ip: string, task: QuotaTask): Promise<Quot
   if (now.units + cost > dailyCap) return { ok: false, reason: 'daily', message: LIMIT_MESSAGE };
   now.units += cost;
   if (task.kind === 'analysis') now.scansByIp.set(ip, (now.scansByIp.get(ip) ?? 0) + 1);
+  now.unitsByIp.set(ip, (now.unitsByIp.get(ip) ?? 0) + cost);
   if (now.credit) now.credit.value -= cost;
   return { ok: true, cost };
 }
 
-/** Gives back the units (and the IP's analysis) of a task that ended in an error. YouCam doesn't charge for those. */
+/** Gives back the units (and the IP's analysis) of a task YouCam never created (the create call failed). */
 export function release(ip: string, task: QuotaTask): void {
   const s = state();
   const cost = costOf(task);
   s.units = Math.max(0, s.units - cost);
+  const used = (s.unitsByIp.get(ip) ?? 0) - cost;
+  if (used > 0) s.unitsByIp.set(ip, used);
+  else s.unitsByIp.delete(ip);
   if (task.kind === 'analysis') {
     const n = (s.scansByIp.get(ip) ?? 0) - 1;
     if (n > 0) s.scansByIp.set(ip, n);

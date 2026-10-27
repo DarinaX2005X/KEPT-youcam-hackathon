@@ -208,7 +208,7 @@ export function ReportSheet({ trial, scans, verdict, urls, now, className }: Rep
       <footer className={styles.sheetFoot}>
         <p>
           Measured with YouCam AI Skin Analysis. Photos taken with Kept&apos;s capture guide; repeat photos vary by ±{NOISE} points. Scores run
-          from 0 to 100, higher is better.
+          from 1 to 100, higher is better.
         </p>
         <p>
           Kept compares photos of your skin. It is not a medical diagnosis.

@@ -280,9 +280,8 @@
 .mapZoom {
   position: absolute;
   inset: 0;
-  aspect-ratio: auto;
-  transform: scale(1.5);
-  transform-origin: 50% 22%;
+  transform: scale(2);
+  transform-origin: 50% 48%;
 }
 
 .mapZoom img {
@@ -353,8 +352,6 @@
   align-items: center;
   gap: 10px;
   padding: 16px 18px;
-  background: var(--better-bg);
-  color: var(--better);
   font-size: var(--t-22);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -378,88 +375,32 @@
 .slipReasons svg {
   flex: none;
   margin-top: 3px;
+}
+
+.slip_better .slipHead,
+.slip_better .slipReasons svg {
   color: var(--better);
 }
-
-/* ---------------------------------------------------------------- 3. verdicts */
-
-.verdictList {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  margin-top: 40px;
-}
-
-.verdictRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
-}
-
-.verdictName {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.verdictIcon {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-}
-
-.tone_better {
+.slip_better .slipHead {
   background: var(--better-bg);
-  color: var(--better);
 }
-.tone_worse {
-  background: var(--worse-bg);
-  color: var(--worse);
-}
-.tone_reacting {
+.slip_reacting .slipHead {
   background: var(--reacting-bg);
   color: var(--reacting);
 }
-.tone_flat {
+.slip_reacting .slipReasons svg {
+  color: var(--reacting);
+}
+.slip_worse .slipHead {
+  background: var(--worse-bg);
+  color: var(--worse);
+}
+.slip_worse .slipReasons svg {
+  color: var(--worse);
+}
+.slip_flat .slipHead {
   background: var(--flat-bg);
-  color: var(--flat);
-}
-
-.verdictHeadline {
-  font-size: var(--t-22);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-
-.verdictExample {
-  font-size: var(--t-17);
-  line-height: 1.5;
   color: var(--ink);
-}
-
-.verdictNext {
-  font-size: var(--t-15);
-  line-height: 1.45;
-  color: var(--ink-soft);
-}
-
-@media (min-width: 900px) {
-  .verdictList {
-    gap: 36px;
-    margin-top: 56px;
-  }
-  .verdictRow {
-    grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.4fr) minmax(200px, 0.8fr);
-    align-items: center;
-    gap: 40px;
-  }
-  .verdictExample,
-  .verdictNext {
-    padding-top: 2px;
-  }
 }
 
 /* ---------------------------------------------------------------- 4. before you buy */

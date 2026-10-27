@@ -13,6 +13,7 @@ import styles from './BuyCheck.module.css';
 
 type Mode = 'paste' | 'pick';
 
+const EXAMPLE_NAME = 'Niacinamide 10% serum';
 const EXAMPLE_INCI = 'Aqua, Niacinamide, Pentylene Glycol, Zinc PCA, Tamarindus Indica Seed Gum, Sodium Hyaluronate, Phenoxyethanol';
 
 function useDebounced<T>(value: T, ms: number): T {
@@ -215,7 +216,12 @@ export function BuyCheckPage() {
                 {parsed ? (
                   <FoundPreview parsed={parsed} onPick={() => setMode('pick')} />
                 ) : inci.trim() ? null : (
-                  <button type="button" className={clsx(styles.inlineLink, styles.example)} onClick={() => setInci(EXAMPLE_INCI)}>
+                  <button type="button" className={clsx(styles.inlineLink, styles.example)} onClick={() => {
+                      setInci(EXAMPLE_INCI);
+                      if (!name.trim()) setName(EXAMPLE_NAME);
+                      if (error) setError(null);
+                    }}
+                  >
                     <ClipboardList size={16} strokeWidth={1.75} aria-hidden />
                     Try an example list
                   </button>

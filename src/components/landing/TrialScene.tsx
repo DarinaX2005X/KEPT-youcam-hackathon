@@ -11,7 +11,10 @@ import styles from './TrialScene.module.css';
 
 /* ------------------------------------------------------------------ geometry */
 
-/** Print columns: three equal columns with a gap of GAP × row width. Must match .prints in the CSS. */
+/**
+ * Print columns: three equal columns with a gap of GAP × row width. Must match .prints in the CSS.
+ * Order: day 0, the simulated target (what Kept expects), day 56 (what happened).
+ */
 const GAP = 0.045;
 const COL = (1 - 2 * GAP) / 3;
 const CENTER = [COL / 2, COL * 1.5 + GAP, COL * 2.5 + 2 * GAP];
@@ -141,7 +144,7 @@ function Ruler({ data, g, fluid }: { data: HeroData; g: Geometry; fluid?: boolea
   const ty = y(data.target.acne);
   const axisY = g.height - 22;
   // The latest point starts at the bottom edge of its print and slides down the connector.
-  const startX = g.wide ? CENTER[1] * g.width : lx;
+  const startX = g.wide ? CENTER[2] * g.width : lx;
   const startY = g.wide ? 0 : -48;
 
   return (
@@ -150,12 +153,12 @@ function Ruler({ data, g, fluid }: { data: HeroData; g: Geometry; fluid?: boolea
       height={fluid ? undefined : g.height}
       viewBox={fluid ? `0 0 ${g.width} ${g.height}` : undefined}
       className={styles.ruler}
-      role="img" aria-label={`Acne score ${data.base.acne} on day 0 and ${latest.acne} on day ${latest.day}, inside the range expected for salicylic acid. Target ${data.target.acne}`}>
+      role="img" aria-label={`Acne score ${data.base.acne} on day 0 and ${latest.acne} on day ${latest.day}, above the target of ${data.target.acne} and inside the range expected for salicylic acid`}>
       {g.wide ? (
         <g className={styles.connectors}>
           <line x1={CENTER[0] * g.width} y1={0} x2={x(0)} y2={y(data.base.acne ?? 0)} />
-          <line x1={CENTER[1] * g.width} y1={0} x2={lx} y2={ly} />
-          <line x1={CENTER[2] * g.width} y1={0} x2={tx} y2={ty} className={styles.targetConnector} />
+          <line x1={CENTER[1] * g.width} y1={0} x2={tx} y2={ty} className={styles.targetConnector} data-target />
+          <line x1={CENTER[2] * g.width} y1={0} x2={lx} y2={ly} />
         </g>
       ) : null}
 
@@ -176,8 +179,8 @@ function Ruler({ data, g, fluid }: { data: HeroData; g: Geometry; fluid?: boolea
         <circle key={p.day} cx={x(p.day)} cy={y(p.value)} r={p.day === 0 ? 4.5 : 3.5} className={styles.dot} />
       ))}
 
-      <circle cx={tx} cy={ty} r={5} className={styles.targetDot} />
-      <text x={tx + 12} y={ty + 18} className={styles.targetLabel}>
+      <circle cx={tx} cy={ty} r={5} className={styles.targetDot} data-target />
+      <text x={tx + 12} y={ty + 18} className={styles.targetLabel} data-target>
         Target {data.target.acne}
       </text>
 
@@ -268,6 +271,7 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
       ['[data-point]', { x: 0, y: 0, opacity: 1 }, { duration: 0, at: 0 }],
       ['[data-ring]', { r: 7, opacity: 0 }, { duration: 0, at: 0 }],
       ['[data-segment]', { strokeDashoffset: 0 }, { duration: 0, at: 0 }],
+      ['[data-target]', { opacity: 1 }, { duration: 0, at: 0 }],
       ['[data-verdict]', { opacity: 1, y: 0 }, { duration: 0, at: 0 }],
       ['[data-verdict] li', { opacity: 1, y: 0 }, { duration: 0, at: 0 }],
       [count0, base, { duration: 0, at: 0 }],
@@ -277,6 +281,7 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
       ['[data-count]', { opacity: 0, y: 4 }, { duration: 0.35, at: 0.1 }],
       ['[data-point]', hide, { duration: 0.35, at: 0.1 }],
       ['[data-segment]', { strokeDashoffset: 1 }, { duration: 0.35, at: 0.1 }],
+      ['[data-target]', hide, { duration: 0.35, at: 0.1 }],
       // Hidden now: rewind everything to its starting place without showing it. Sequence keyframes interpolate
       // from the previous keyframe, so each jump is pinned by a hold just before it.
       ['[data-mask]', { clipPath: 'inset(0% 0% 0% 0%)' }, { duration: 0, at: 0.58 }],
@@ -299,6 +304,9 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
       [count0, base, { duration: scan, ease: 'easeInOut', at: 0.8 }],
       ['[data-count="base"]', { opacity: 1, y: 0 }, { duration: 0.25, at: 1.0 }],
       ['[data-scan="base"]', hide, { duration: 0.2, at: 2.0 }],
+
+      // 2.1 to 2.6: the simulated target sets the expectation for day 56.
+      ['[data-target]', { opacity: 1 }, { duration: 0.4, ease, at: 2.1 }],
 
       // 2.8 to 4: day 56, the same scan; the count starts at day 0's number and falls.
       ['[data-scan="latest"]', { opacity: 1 }, { duration: 0.12, at: 2.8 }],
@@ -360,17 +368,17 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
               className={styles.p0}
               aside={<Counter id="base" value={text0} tone="base" />}
             />
+            <ScenePrint id="target" src={data.target.photo} label={`Target for day ${data.target.day}`} target tilt={0} className={styles.p2} />
             <ScenePrint
               id="latest"
               src={data.latest.photo}
               mask={data.latest.mask}
               label={`Day ${data.latest.day}`}
-              tilt={0}
+              tilt={1.5}
               priority
               className={styles.p1}
               aside={<Counter id="latest" value={text1} tone="better" />}
             />
-            <ScenePrint id="target" src={data.target.photo} label={`Target for day ${data.target.day}`} target tilt={1.5} className={styles.p2} />
           </div>
           <div ref={rulerRef} className={styles.rulerBox}>
             <Ruler data={data} g={g} fluid={!measured} />
@@ -381,7 +389,7 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
           <p className={styles.product}>
             <span className={styles.productName}>2% salicylic acid serum</span>
             <span className="num">
-              {data.photos} photos over {data.latest.day} days
+              Target acne {data.target.acne} by day {data.target.day}, measured {data.latest.acne}
             </span>
           </p>
           <div className={clsx(styles.verdict)} data-verdict>

@@ -95,8 +95,10 @@ export function decisionText(trial: Trial, verdict: Verdict): string {
     return trial.decidedAt ? `${word} on ${formatLongDate(trial.decidedAt)}` : word;
   }
   if (trial.status === 'paused') return 'Paused';
-  if (verdict.next.date && verdict.next.action === 'checkin') return `Next check-in on ${formatLongDate(verdict.next.date)}`;
-  return verdict.next.label;
+  if (verdict.next.date && verdict.next.action === 'checkin') return `Check-in on ${formatLongDate(verdict.next.date)}`;
+  // Shown under the label «Next», so the label's own word is dropped from the start.
+  const label = verdict.next.label.replace(/^next\s+/i, '');
+  return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
 function change(rows: ZoneRow[]): string {

@@ -17,6 +17,7 @@ import {
 import { latestScan, mainChange, progressOf, tabOf } from '@/components/shelf/model';
 import type { ShelfItem } from '@/components/shelf';
 import type { TrialUrls } from '@/components/trial';
+import { VERDICT_FIXTURES } from '@/components/trial/fixtures';
 
 const manifest = manifestJson as unknown as DemoManifest;
 
@@ -79,8 +80,10 @@ export interface WorkspaceData {
 export interface VerdictRow {
   kind: VerdictKind;
   headline: string;
-  example: string;
+  summary: string;
+  reasons: Reason[];
   next: string;
+  /** Set when the example is a real verdict of a demo trial; otherwise it is the engine's example wording. */
   product?: string;
 }
 
@@ -92,6 +95,8 @@ export interface BuyCheckData {
 }
 
 export interface MechanismData {
+  /** Day of the check-in the camera and map fragments show. */
+  day: number;
   photo: string;
   ghost: string;
   maskPhoto: string;
@@ -130,23 +135,14 @@ function heroReasons(verdict: Verdict): Reason[] {
   return [...verdict.reasons].sort((a, b) => rank(a) - rank(b)).slice(0, 3);
 }
 
-/** Example lines for the verdict list. Three come from the demo trials, the rest are the engine's wording. */
-const FALLBACK: Record<VerdictKind, { example: string; next: string }> = {
-  too_early: {
-    example: 'Day 9 of 56. Salicylic acid usually shows first changes after 2 weeks',
-    next: 'Keep using it and check in on the next planned day',
-  },
-  on_track: {
-    example: 'Acne is 2 points ahead of the expected curve for day 28',
-    next: 'Keep going, the next check-in will tell more',
-  },
-  working: { example: '', next: '' },
-  purging: { example: '', next: '' },
-  reacting: {
-    example: 'Redness got 9 points worse since day 0. That often means the product is irritating your skin',
-    next: 'Use it every other night and check in a week later',
-  },
-  not_enough: { example: '', next: '' },
+/** Next steps without calendar dates, which would be relative to the demo's own clock. */
+const FALLBACK_NEXT: Record<VerdictKind, string> = {
+  too_early: 'Keep using it and check in on the next planned day',
+  on_track: 'Keep going, the next check-in will tell more',
+  working: 'Keep it on your shelf',
+  purging: 'Keep going, a purge usually settles within weeks',
+  reacting: 'Use it every other night and check in a week later',
+  not_enough: 'Stop it and spend the money on something else',
 };
 
 const NEXT_WORDS: Partial<Record<Verdict['next']['action'], string>> = {
@@ -204,40 +200,47 @@ export function buildLandingData(): LandingData {
     now: NOW.toISOString(),
   };
 
+  // The mechanism is told on the retinal trial, so the page does not repeat the salicylic story a third time.
+  const ret = byManifestId('sample-retinal') ?? sal;
+  const retScans = scansOf(ret);
+  const retBase = retScans.find((s) => s.kind === 'baseline') ?? retScans[0];
+  const retLast = retScans[retScans.length - 1];
+  const label = (c: Concern) => ({ acne: 'Acne', texture: 'Texture', redness: 'Redness', pore: 'Pores', oiliness: 'Oiliness', moisture: 'Hydration' })[c as string] ?? c;
   const mechanism: MechanismData = {
-    photo: refUrl(latest.photo),
-    ghost: refUrl(base.photo),
-    maskPhoto: refUrl(base.photo),
-    mask: refUrl(base.masks.acne),
-    scores: (['acne', 'pore', 'oiliness'] as Concern[])
-      .filter((c) => base.scores[c])
-      .map((c) => ({ concern: c, label: c === 'pore' ? 'Pores' : c === 'acne' ? 'Acne' : 'Oiliness', value: base.scores[c]!.ui })),
-    blemishes: base.maskStats.acne?.blemishCount ?? 0,
-    trial: sal,
-    scans: salScans,
-    verdict,
+    day: retLast.day,
+    photo: refUrl(retLast.photo),
+    ghost: refUrl(retBase.photo),
+    maskPhoto: refUrl(retLast.photo),
+    mask: refUrl(retLast.masks.acne),
+    scores: (['acne', 'texture', 'redness'] as Concern[])
+      .filter((c) => retLast.scores[c])
+      .map((c) => ({ concern: c, label: label(c), value: retLast.scores[c]!.ui })),
+    blemishes: retLast.maskStats.acne?.blemishCount ?? 0,
+    trial: ret,
+    scans: retScans,
+    verdict: computeVerdict(ret, retScans, NOW),
   };
 
-  // Verdict list: real verdicts of the three demo trials, engine wording for the other three.
+  // Verdict examples: real verdicts of the three demo trials, the engine's example wording for the other three.
   const real: Partial<Record<VerdictKind, VerdictRow>> = {};
   for (const t of sample.trials) {
     const scans = scansOf(t);
     if (!scans.length) continue;
     const v = computeVerdict(t, scans, NOW);
-    const lead = v.reasons.find((r) => r.tone !== 'info') ?? v.reasons[0];
     real[v.kind] = {
       kind: v.kind,
       headline: v.headline,
-      example: lead?.text ?? v.summary,
-      next: NEXT_WORDS[v.next.action] ?? v.next.label,
+      summary: v.summary,
+      reasons: v.reasons.slice(0, 3),
+      next: NEXT_WORDS[v.next.action] ?? FALLBACK_NEXT[v.kind],
       product: t.product.name,
     };
   }
-  const verdicts = ORDER.map((kind) => {
+  const verdicts = ORDER.map((kind): VerdictRow => {
     const r = real[kind];
     if (r) return r;
-    const f = FALLBACK[kind];
-    return { kind, headline: HEADLINES[kind], example: f.example, next: f.next };
+    const f = VERDICT_FIXTURES[kind];
+    return { kind, headline: HEADLINES[kind], summary: f.summary, reasons: f.reasons.slice(0, 3), next: FALLBACK_NEXT[kind] };
   });
 
   // Before you buy, against the demo shelf.

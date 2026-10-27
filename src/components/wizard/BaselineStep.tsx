@@ -137,7 +137,7 @@ export function BaselineStep({ zones, baseline, scan, captured, sample, targetSt
             </div>
             <p className={styles.memoSoft}>
               {active && statLine(active, baseline) ? `${statLine(active, baseline)}. ` : ''}
-              Scores run from 0 to 100; higher means healthier skin in that area.
+              Scores run from 1 to 100; higher means healthier skin in that area.
             </p>
             {targetStatus === 'running' ? (
               <p className={styles.next} role="status">

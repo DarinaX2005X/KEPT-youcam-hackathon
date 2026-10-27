@@ -79,7 +79,7 @@ describe('simulationFor', () => {
       pores: 0.7,
       oiliness: 0.7,
     });
-    expect(simulationFor(activesFor(['niacinamide']), ['redness'])).toEqual({ redness: 0.5 });
+    expect(simulationFor(activesFor(['niacinamide']), ['redness'])).toEqual({ redness: 0.3 });
   });
 });
 

@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
-import { CircleAlert, Minus, TrendingDown, TrendingUp, type LucideIcon } from 'lucide-react';
+import { Minus, RefreshCw, TrendingDown, TrendingUp, type LucideIcon } from 'lucide-react';
 import styles from './Chip.module.css';
 
 export type Tone = 'better' | 'worse' | 'flat' | 'reacting';
@@ -11,14 +11,15 @@ export const TONE_WORD: Record<Tone, string> = {
   better: 'Better',
   worse: 'Worse',
   flat: 'No change',
-  reacting: 'Reacting',
+  // Only an acne drop inside a likely purge gets this tone, so the word names the purge.
+  reacting: 'Purge',
 };
 
 const TONE_ICON: Record<Tone, LucideIcon> = {
   better: TrendingUp,
   worse: TrendingDown,
   flat: Minus,
-  reacting: CircleAlert,
+  reacting: RefreshCw,
 };
 
 export interface ChipProps extends Omit<ComponentPropsWithRef<'button'>, 'children'> {

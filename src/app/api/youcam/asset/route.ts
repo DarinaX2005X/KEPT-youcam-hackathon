@@ -20,8 +20,11 @@ export async function GET(req: NextRequest) {
     return fail(502, 'upstream', 'This YouCam image link has expired or is unavailable');
   }
 
+  const type = assetContentType(url, upstream.headers.get('content-type'));
+  if (!type) return fail(400, 'bad_request', 'Only YouCam result images can be loaded here');
   const headers = new Headers({
-    'Content-Type': assetContentType(url, upstream.headers.get('content-type')),
+    'Content-Type': type,
+    'Content-Security-Policy': "default-src 'none'; sandbox",
     'Cache-Control': 'private, max-age=3600',
     'X-Content-Type-Options': 'nosniff',
   });

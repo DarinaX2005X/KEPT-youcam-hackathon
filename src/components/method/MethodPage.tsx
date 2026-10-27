@@ -8,7 +8,6 @@ import {
   LIGHT_LOW,
   LIGHT_MEDIUM,
   MAX_REASONS,
-  SMOOTHING_GAP_DAYS,
   getActive,
   joinNouns,
   concernNoun,
@@ -189,9 +188,10 @@ export function MethodPage() {
                 strong one, which is what Kept looks for when deciding whether your skin is reacting.
               </p>
             </div>
-            <p className="num">
-              When the last two check-ins are within {SMOOTHING_GAP_DAYS} days of each other, Kept averages them before comparing with day 0, so one
-              unlucky photo moves the verdict less.
+            <p>
+              Every verdict compares your latest check-in with day 0, and the same number appears on the photo, the chart, the
+              verdict and the report. One unlucky photo is caught by the camera checks before it is taken, and by the confidence note
+              when the light differs from day 0.
             </p>
             <p>
               This was measured on variants of one photo, not on photos of a person taken on different days. Real repeat photos can differ more,

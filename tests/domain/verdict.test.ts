@@ -226,18 +226,14 @@ describe('computeVerdict', () => {
     expectCopyRules(v);
   });
 
-  it('averages the last two check-ins when they are 10 days apart or less', () => {
+  it('judges by the latest check-in only, so every screen shows the same number', () => {
     const trial = makeTrial(['niacinamide'], { targets: ['pore', 'oiliness'], watch: ['moisture'] });
     const base = makeScan(trial, 0, { pore: 70, oiliness: 65, moisture: 60 });
     const lucky = makeScan(trial, 56, { pore: 77, oiliness: 72, moisture: 60 });
-    // Alone, day 56 looks like +7 on both targets
-    expect(computeVerdict(trial, [base, makeScan(trial, 40, { pore: 70, oiliness: 65 }), lucky], at(trial, 56)).kind).toBe(
-      'working',
-    );
-    // With a day 50 photo at baseline level, the average is +3.5: within noise
-    expect(computeVerdict(trial, [base, makeScan(trial, 50, { pore: 70, oiliness: 65 }), lucky], at(trial, 56)).kind).toBe(
-      'not_enough',
-    );
+    const v = computeVerdict(trial, [base, makeScan(trial, 50, { pore: 70, oiliness: 65 }), lucky], at(trial, 56));
+    expect(v.kind).toBe('working');
+    expect(v.reasons.some((r) => r.text.includes('70 → 77'))).toBe(true);
+    expect(v.reasons.some((r) => r.text.includes('averaged'))).toBe(false);
   });
 
   it('confounded: a new product in the diary lowers confidence and says why', () => {

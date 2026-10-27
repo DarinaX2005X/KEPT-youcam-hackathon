@@ -46,7 +46,7 @@ describe('parseTaskRequest', () => {
 describe('asset allow-list', () => {
   it.each([
     'https://yce-us.s3-accelerate.amazonaws.com/ttl30/x/mask.png?X-Amz-Signature=1',
-    'https://s3-us-west-2.amazonaws.com/yce-us/results/resized_image.jpg',
+    'https://yce-us.s3.us-west-2.amazonaws.com/results/resized_image.jpg',
   ])('allows %s', (u) => expect(allowedAssetUrl(u)).not.toBeNull());
 
   it.each([
@@ -56,6 +56,10 @@ describe('asset allow-list', () => {
     'https://s3.amazonaws.com/other/yce-us/a.png',
     'https://yce-us.s3.amazonaws.com.evil.com/a.png',
     'https://localhost/yce-x/a.png',
+    // Anyone can create a bucket with the yce- prefix, so only YouCam's exact buckets pass.
+    'https://yce-attacker.s3.amazonaws.com/x.html',
+    'https://s3.amazonaws.com/yce-attacker/x.html',
+    'https://s3-us-west-2.amazonaws.com/yce-us/results/resized_image.jpg',
     'not a url',
     null,
   ])('blocks %s', (u) => expect(allowedAssetUrl(u)).toBeNull());
@@ -64,5 +68,10 @@ describe('asset allow-list', () => {
     const u = new URL('https://yce-us.s3.amazonaws.com/a/mask.png?sig=1');
     expect(assetContentType(u, 'binary/octet-stream')).toBe('image/png');
     expect(assetContentType(u, 'image/jpeg')).toBe('image/jpeg');
+  });
+
+  it('never serves a non-image type', () => {
+    expect(assetContentType(new URL('https://yce-us.s3.amazonaws.com/x.html'), 'text/html')).toBeNull();
+    expect(assetContentType(new URL('https://yce-us.s3.amazonaws.com/x'), 'binary/octet-stream')).toBeNull();
   });
 });

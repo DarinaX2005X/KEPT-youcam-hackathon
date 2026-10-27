@@ -130,7 +130,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 28,
     fullEffectDay: 84,
     irritation: 'low',
-    simulation: { redness: 0.7, acne: 0.7, spots: 0.5 },
+    simulation: { redness: 0.4, acne: 0.7, spots: 0.5 },
     note: 'Azelaic acid calms redness and breakouts and fades marks over a few months',
   },
   {
@@ -144,7 +144,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 28,
     fullEffectDay: 56,
     irritation: 'low',
-    simulation: { pores: 0.7, oiliness: 0.7, redness: 0.5 },
+    simulation: { pores: 0.7, oiliness: 0.7, redness: 0.3 },
     note: 'Niacinamide helps with oil, pores and uneven tone. Changes usually take about a month',
   },
   {
@@ -205,7 +205,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 7,
     fullEffectDay: 28,
     irritation: 'low',
-    simulation: { texture: 0.5, redness: 0.35 },
+    simulation: { texture: 0.5, redness: 0.2 },
     note: 'Ceramides and humectants hold water in the skin. Hydration often changes within a week',
   },
   {
@@ -219,7 +219,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 7,
     fullEffectDay: 28,
     irritation: 'low',
-    simulation: { redness: 0.7 },
+    simulation: { redness: 0.4 },
     note: 'Centella and allantoin calm irritated skin and can soften redness in a few weeks',
   },
   {
