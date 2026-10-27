@@ -30,6 +30,7 @@
 
 .photo {
   position: relative;
+  container-type: inline-size;
   overflow: hidden;
   border-radius: var(--r-photo);
   background: var(--sunk);
@@ -64,6 +65,17 @@
   line-height: 1;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+}
+
+/* Narrow prints, such as two side by side on a phone: the tag wraps instead of losing «YouCam». */
+@container (max-width: 200px) {
+  .simTag {
+    height: auto;
+    padding: 4px 7px;
+    white-space: normal;
+    line-height: 1.2;
+    text-overflow: clip;
+  }
 }
 
 .caption {

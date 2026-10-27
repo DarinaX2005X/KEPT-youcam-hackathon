@@ -245,67 +245,79 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
     const dx = Number(point?.dataset.dx ?? 0);
     const dy = Number(point?.dataset.dy ?? 0);
 
-    if (reduce) {
-      document.getElementById('kept-scene-start')?.remove();
-      return;
-    }
+    if (reduce) return;
 
     const ease = [0.2, 0.8, 0.2, 1] as const;
     const scan = 1.2;
     const hide = { opacity: 0 };
+    // The loop starts and ends on the finished trial (the server-rendered frame), so a first paint, a paused
+    // frame or a hidden tab always shows real numbers. It clears that state, re-runs the check-ins and settles.
     const seq: AnimationSequence = [
-      // Reset to the empty state.
-      ['[data-mask]', { clipPath: 'inset(0% 0% 100% 0%)', opacity: 1 }, { duration: 0, at: 0 }],
+      // 0 to 0.6: the finished state fades back to the bare prints.
+      ['[data-mask]', { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 }, { duration: 0, at: 0 }],
       ['[data-scan]', { y: '0%', opacity: 0 }, { duration: 0, at: 0 }],
-      ['[data-count]', { opacity: 0, y: 4 }, { duration: 0, at: 0 }],
-      ['[data-point]', { x: dx, y: dy, opacity: 0 }, { duration: 0, at: 0 }],
+      ['[data-count]', { opacity: 1, y: 0 }, { duration: 0, at: 0 }],
+      ['[data-point]', { x: 0, y: 0, opacity: 1 }, { duration: 0, at: 0 }],
       ['[data-ring]', { r: 7, opacity: 0 }, { duration: 0, at: 0 }],
-      ['[data-segment]', { strokeDashoffset: 1 }, { duration: 0, at: 0 }],
-      ['[data-verdict]', { opacity: 0, y: 12 }, { duration: 0, at: 0 }],
-      ['[data-verdict] li', { opacity: 0, y: 6 }, { duration: 0, at: 0 }],
-      [count0, 0, { duration: 0, at: 0 }],
-      [count1, base, { duration: 0, at: 0 }],
+      ['[data-segment]', { strokeDashoffset: 0 }, { duration: 0, at: 0 }],
+      ['[data-verdict]', { opacity: 1, y: 0 }, { duration: 0, at: 0 }],
+      ['[data-verdict] li', { opacity: 1, y: 0 }, { duration: 0, at: 0 }],
+      [count0, base, { duration: 0, at: 0 }],
+      [count1, last, { duration: 0, at: 0 }],
+      ['[data-verdict]', { opacity: 0, y: 6 }, { duration: 0.4, ease: 'easeIn', at: 0.05 }],
+      ['[data-mask]', hide, { duration: 0.45, ease: 'easeIn', at: 0.1 }],
+      ['[data-count]', { opacity: 0, y: 4 }, { duration: 0.35, at: 0.1 }],
+      ['[data-point]', hide, { duration: 0.35, at: 0.1 }],
+      ['[data-segment]', { strokeDashoffset: 1 }, { duration: 0.35, at: 0.1 }],
+      // Hidden now: rewind everything to its starting place without showing it. Sequence keyframes interpolate
+      // from the previous keyframe, so each jump is pinned by a hold just before it.
+      ['[data-mask]', { clipPath: 'inset(0% 0% 0% 0%)' }, { duration: 0, at: 0.58 }],
+      ['[data-point]', { x: 0, y: 0 }, { duration: 0, at: 0.58 }],
+      [count0, base, { duration: 0, at: 0.58 }],
+      [count1, last, { duration: 0, at: 0.58 }],
+      ['[data-mask]', { clipPath: 'inset(0% 0% 100% 0%)' }, { duration: 0, at: 0.6 }],
+      ['[data-mask]', { opacity: 1 }, { duration: 0, at: 0.62 }],
+      ['[data-point]', { x: dx, y: dy }, { duration: 0, at: 0.6 }],
+      ['[data-verdict] li', { opacity: 0, y: 6 }, { duration: 0, at: 0.6 }],
+      ['[data-verdict]', { y: 12 }, { duration: 0, at: 0.6 }],
+      [count0, 0, { duration: 0, at: 0.6 }],
+      [count1, base, { duration: 0, at: 0.6 }],
 
-      // 0.2 to 1.4: day 0 is scanned, the acne map appears behind the line, blemishes are counted.
-      ['[data-scan="base"]', { opacity: 1 }, { duration: 0.12, at: 0.2 }],
-      ['[data-scan="base"]', { y: '100%' }, { duration: scan, ease: 'easeInOut', at: 0.2 }],
-      ['[data-mask="base"]', { clipPath: 'inset(0% 0% 0% 0%)' }, { duration: scan, ease: 'easeInOut', at: 0.2 }],
-      ['[data-count="base"]', { opacity: 1, y: 0 }, { duration: 0.25, at: 0.3 }],
-      [count0, base, { duration: scan, ease: 'easeInOut', at: 0.2 }],
-      ['[data-scan="base"]', hide, { duration: 0.2, at: 1.4 }],
+      // 0.8 to 2: day 0 is scanned, the acne map appears behind the line, blemishes are counted.
+      // The chip shows up only once the count is under way.
+      ['[data-scan="base"]', { opacity: 1 }, { duration: 0.12, at: 0.8 }],
+      ['[data-scan="base"]', { y: '100%' }, { duration: scan, ease: 'easeInOut', at: 0.8 }],
+      ['[data-mask="base"]', { clipPath: 'inset(0% 0% 0% 0%)' }, { duration: scan, ease: 'easeInOut', at: 0.8 }],
+      [count0, base, { duration: scan, ease: 'easeInOut', at: 0.8 }],
+      ['[data-count="base"]', { opacity: 1, y: 0 }, { duration: 0.25, at: 1.0 }],
+      ['[data-scan="base"]', hide, { duration: 0.2, at: 2.0 }],
 
-      // 2.4 to 3.8: day 56, the same scan; the count starts at day 0's number and falls.
-      ['[data-scan="latest"]', { opacity: 1 }, { duration: 0.12, at: 2.4 }],
-      ['[data-scan="latest"]', { y: '100%' }, { duration: scan, ease: 'easeInOut', at: 2.4 }],
-      ['[data-mask="latest"]', { clipPath: 'inset(0% 0% 0% 0%)' }, { duration: scan, ease: 'easeInOut', at: 2.4 }],
-      ['[data-count="latest"]', { opacity: 1, y: 0 }, { duration: 0.25, at: 2.45 }],
-      [count1, last, { duration: scan, ease: 'easeInOut', at: 2.4 }],
-      ['[data-scan="latest"]', hide, { duration: 0.2, at: 3.6 }],
+      // 2.8 to 4: day 56, the same scan; the count starts at day 0's number and falls.
+      ['[data-scan="latest"]', { opacity: 1 }, { duration: 0.12, at: 2.8 }],
+      ['[data-scan="latest"]', { y: '100%' }, { duration: scan, ease: 'easeInOut', at: 2.8 }],
+      ['[data-mask="latest"]', { clipPath: 'inset(0% 0% 0% 0%)' }, { duration: scan, ease: 'easeInOut', at: 2.8 }],
+      [count1, last, { duration: scan, ease: 'easeInOut', at: 2.8 }],
+      ['[data-count="latest"]', { opacity: 1, y: 0 }, { duration: 0.25, at: 2.85 }],
+      ['[data-scan="latest"]', hide, { duration: 0.2, at: 4.0 }],
 
-      // 3.8 to 5: the day 56 score leaves the print and lands in the expected range.
-      ['[data-point]', { opacity: 1 }, { duration: 0.15, at: 3.8 }],
-      ['[data-point]', { x: 0, y: 0 }, { type: 'spring', stiffness: 300, damping: 22, at: 3.8 }],
-      ['[data-ring]', { r: [7, 22], opacity: [0.8, 0] }, { duration: 0.6, ease: 'easeOut', at: 4.3 }],
-      ['[data-segment]', { strokeDashoffset: 0 }, { duration: 0.4, ease, at: 4.3 }],
+      // 4.2 to 5.2: the day 56 score leaves the print and lands in the expected range.
+      ['[data-point]', { opacity: 1 }, { duration: 0.15, at: 4.2 }],
+      ['[data-point]', { x: 0, y: 0 }, { type: 'spring', stiffness: 300, damping: 22, at: 4.2 }],
+      ['[data-ring]', { r: [7, 22], opacity: [0.8, 0] }, { duration: 0.6, ease: 'easeOut', at: 4.7 }],
+      ['[data-segment]', { strokeDashoffset: 0 }, { duration: 0.4, ease, at: 4.7 }],
 
-      // 5 to 6: the verdict forms, one reason at a time.
-      ['[data-verdict]', { opacity: 1, y: 0 }, { duration: 0.36, ease, at: 5 }],
-      ['[data-verdict] li', { opacity: 1, y: 0 }, { duration: 0.3, ease, delay: stagger(0.07), at: 5.2 }],
-
-      // 8.4 to 9: soft reset.
-      ['[data-mask]', hide, { duration: 0.5, ease: 'easeIn', at: 8.4 }],
-      ['[data-count]', hide, { duration: 0.4, at: 8.45 }],
-      ['[data-point]', hide, { duration: 0.4, at: 8.45 }],
-      ['[data-segment]', { strokeDashoffset: 1 }, { duration: 0.4, at: 8.45 }],
-      ['[data-verdict]', { opacity: 0, y: 6 }, { duration: 0.45, at: 8.5 }],
-      ['[data-verdict]', { opacity: 0 }, { duration: 0.05, at: 8.95 }],
+      // 5.4 to 6.4: the verdict forms, one reason at a time; then it rests until the loop starts over.
+      ['[data-verdict]', { opacity: 1, y: 0 }, { duration: 0.36, ease, at: 5.4 }],
+      ['[data-verdict] li', { opacity: 1, y: 0 }, { duration: 0.3, ease, delay: stagger(0.07), at: 5.6 }],
+      ['[data-verdict]', { opacity: 1 }, { duration: 0.01, at: 8.99 }],
     ];
 
     const controls = animateIn(seq, { repeat: Infinity });
+    controls.pause();
     // Development hook for frame-by-frame review of the loop.
     if (process.env.NODE_ENV !== 'production') (window as unknown as { __scene?: typeof controls }).__scene = controls;
 
-    let visible = true;
+    let visible = false;
     const sync = () => {
       if (visible && document.visibilityState === 'visible') controls.play();
       else controls.pause();

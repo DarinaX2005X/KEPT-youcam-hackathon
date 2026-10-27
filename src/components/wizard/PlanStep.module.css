@@ -203,8 +203,10 @@
 }
 
 @media (max-width: 767.98px) {
+  /* Room for the tilted prints' corners inside the page gutter. */
   .pair {
     gap: 12px;
+    padding-inline: 6px;
   }
   .compare {
     max-width: none;
