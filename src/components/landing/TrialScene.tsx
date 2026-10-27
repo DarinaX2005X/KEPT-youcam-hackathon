@@ -125,7 +125,7 @@ function Counter({ id, value, tone }: { id: string; value: MotionValue<string>; 
   );
 }
 
-function Ruler({ data, g }: { data: HeroData; g: Geometry }) {
+function Ruler({ data, g, fluid }: { data: HeroData; g: Geometry; fluid?: boolean }) {
   const { x, y } = g;
   const full = data.fullEffectDay;
   const latest = data.latest;
@@ -145,7 +145,12 @@ function Ruler({ data, g }: { data: HeroData; g: Geometry }) {
   const startY = g.wide ? 0 : -48;
 
   return (
-    <svg width={g.width} height={g.height} className={styles.ruler} role="img" aria-label={`Acne score ${data.base.acne} on day 0 and ${latest.acne} on day ${latest.day}, inside the range expected for salicylic acid. Target ${data.target.acne}`}>
+    <svg
+      width={fluid ? '100%' : g.width}
+      height={fluid ? undefined : g.height}
+      viewBox={fluid ? `0 0 ${g.width} ${g.height}` : undefined}
+      className={styles.ruler}
+      role="img" aria-label={`Acne score ${data.base.acne} on day 0 and ${latest.acne} on day ${latest.day}, inside the range expected for salicylic acid. Target ${data.target.acne}`}>
       {g.wide ? (
         <g className={styles.connectors}>
           <line x1={CENTER[0] * g.width} y1={0} x2={x(0)} y2={y(data.base.acne ?? 0)} />
@@ -235,11 +240,14 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
     return () => mq.removeEventListener('change', on);
   }, []);
 
-  const g = rulerWidth ? geometry(rulerWidth, wide, data) : null;
+  // Before the box is measured (server render, first paint) the timeline is drawn at the desktop size and scaled.
+  const FALLBACK_WIDTH = 880;
+  const g = geometry(rulerWidth || FALLBACK_WIDTH, rulerWidth ? wide : true, data);
+  const measured = rulerWidth > 0;
 
   useEffect(() => {
     const root = scope.current;
-    if (!root || !g) return;
+    if (!root || !measured) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const point = root.querySelector<SVGGElement>('[data-point]');
     const dx = Number(point?.dataset.dx ?? 0);
@@ -335,7 +343,7 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
     };
     // Geometry changes only move the point's start; restart the loop when it does.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [g?.width, g?.wide]);
+  }, [measured, g.width, g.wide]);
 
   return (
     <div ref={scope} className={styles.scene} data-scene>
@@ -365,7 +373,7 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
             <ScenePrint id="target" src={data.target.photo} label={`Target for day ${data.target.day}`} target tilt={1.5} className={styles.p2} />
           </div>
           <div ref={rulerRef} className={styles.rulerBox}>
-            {g ? <Ruler data={data} g={g} /> : null}
+            <Ruler data={data} g={g} fluid={!measured} />
           </div>
         </div>
 
