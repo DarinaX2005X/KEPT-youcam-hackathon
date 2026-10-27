@@ -1,4 +1,4 @@
-import { activesFor, concernLabel, dayOf, type Concern, type Scan, type Trial } from '@/lib/domain';
+import { activesFor, concernLabel, dayOf, type Concern, type Scan, type Trial, type VerdictKind } from '@/lib/domain';
 import { deltaTone, formatDelta } from '@/components/trial';
 
 export type ShelfTab = 'testing' | 'kept' | 'stopped';
@@ -71,13 +71,19 @@ export interface MainChange {
 /**
  * The change a decided trial is remembered by: the target that moved most between day 0 and the
  * last photo. A stopped trial also looks at the areas it watched, since a reaction is why it stopped.
+ * When the product did not do enough, its main goal is what matters, even if it barely moved.
  */
-export function mainChange(trial: Trial, scans: readonly Scan[]): MainChange | undefined {
+export function mainChange(trial: Trial, scans: readonly Scan[], kind?: VerdictKind): MainChange | undefined {
   const sorted = [...scans].sort((a, b) => a.day - b.day);
   const base = sorted.find((s) => s.kind === 'baseline') ?? sorted[0];
   const latest = sorted[sorted.length - 1];
   if (!base || !latest || latest === base) return undefined;
-  const pool = trial.status === 'stopped' ? [...trial.targets, ...trial.watch] : trial.targets;
+  const pool =
+    kind === 'not_enough' && trial.targets.length
+      ? trial.targets.slice(0, 1)
+      : trial.status === 'stopped'
+        ? [...trial.targets, ...trial.watch]
+        : trial.targets;
   let best: { concern: Concern; delta: number } | undefined;
   for (const c of pool) {
     const a = base.scores[c]?.ui;

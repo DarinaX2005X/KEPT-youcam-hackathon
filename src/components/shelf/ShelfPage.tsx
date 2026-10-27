@@ -29,7 +29,7 @@ function writeTab(tab: ShelfTab) {
 function EmptyShelf() {
   return (
     <section className={styles.empty} aria-labelledby="empty-shelf">
-      <EmptyMark size={112} />
+      <EmptyMark size={128} />
       <div className={styles.emptyText}>
         <h2 id="empty-shelf" className={styles.emptyTitle}>
           Your shelf is empty
@@ -146,7 +146,7 @@ export function ShelfPage() {
       <header className={styles.head}>
         <h1 className={styles.title}>Your shelf</h1>
         {empty ? null : (
-          <Button href="/start" icon={Plus} className={styles.headCta}>
+          <Button href="/start" variant="secondary" icon={Plus} className={styles.headCta}>
             Start a trial
           </Button>
         )}

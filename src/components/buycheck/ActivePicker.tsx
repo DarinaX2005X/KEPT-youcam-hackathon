@@ -50,7 +50,7 @@ export function ActivePicker({ value, onChange, emptyState }: ActivePickerProps)
         getLabel={(a) => a.name}
         getDescription={(a) => (a.targets.length ? a.targets.map(concernLabel).join(', ') : a.prevention ? 'Sun protection' : undefined)}
         label="Active ingredients"
-        placeholder="Search, e.g. niacinamide or BHA"
+        placeholder="e.g. niacinamide or BHA"
         emptyState={emptyState}
       />
       {picked.length ? (

@@ -28,14 +28,15 @@ async function toItem(trial: Trial, scans: Scan[], now: Date): Promise<ShelfItem
   const prevention = isPrevention(trial);
   const last = latestScan(scans);
   const thumb = last ? await blobUrl(last.photo).catch(() => undefined) : undefined;
+  const verdict = prevention || !scans.length ? null : computeVerdict(trial, scans, now);
   return {
     trial,
     scans,
     tab: tabOf(trial),
-    verdict: prevention || !scans.length ? null : computeVerdict(trial, scans, now),
+    verdict,
     prevention,
     progress: progressOf(trial, scans, now),
-    change: trial.status === 'kept' || trial.status === 'stopped' ? mainChange(trial, scans) : undefined,
+    change: trial.status === 'kept' || trial.status === 'stopped' ? mainChange(trial, scans, verdict?.kind) : undefined,
     thumb,
     thumbDay: last?.day,
   };
