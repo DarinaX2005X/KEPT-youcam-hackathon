@@ -1,0 +1,177 @@
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 24px var(--gutter) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  font-size: var(--t-30);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tabs {
+  align-self: flex-start;
+}
+
+.tabsSkeleton {
+  width: 300px;
+  max-width: 100%;
+  height: 44px;
+  border-radius: var(--r-control);
+  background: var(--sunk);
+}
+
+.count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgb(23 34 29 / 0.07);
+  font-size: var(--t-13);
+  line-height: 20px;
+  text-align: center;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sampleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  padding: 6px 8px 6px 16px;
+  border-radius: var(--r-control);
+  background: var(--sunk);
+  font-size: var(--t-15);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.sampleBar p {
+  padding: 6px 0;
+}
+
+.sampleButton {
+  margin-left: auto;
+}
+
+/* Nothing on the shelf at all. */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 32px 24px 36px;
+  border-radius: var(--r-panel);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.emptyText {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 34ch;
+}
+
+.emptyTitle {
+  font-size: var(--t-30);
+}
+
+.emptyText p {
+  color: var(--ink-soft);
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* One tab with nothing in it. */
+.emptyTab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  border-radius: var(--r-card);
+  border: 1px dashed var(--line-strong);
+  color: var(--ink-soft);
+  max-width: 640px;
+}
+
+@media (max-width: 767.98px) {
+  .tabs {
+    display: flex;
+    align-self: stretch;
+  }
+
+  .tabs > button {
+    flex: 1 1 0;
+    padding: 0 10px;
+  }
+
+  .emptyActions {
+    flex-direction: column;
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-top: 40px;
+    gap: 32px;
+  }
+
+  .title {
+    font-size: var(--t-44);
+  }
+
+  .empty {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'mark text'
+      'mark actions';
+    column-gap: 40px;
+    row-gap: 24px;
+    align-items: center;
+    padding: 48px 56px;
+  }
+
+  .empty > svg {
+    grid-area: mark;
+  }
+
+  .emptyText {
+    grid-area: text;
+    align-self: end;
+  }
+
+  .emptyActions {
+    grid-area: actions;
+    align-self: start;
+  }
+}

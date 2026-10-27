@@ -18,8 +18,21 @@ let switching = false;
  * One Face Landmarker for the whole app, loaded on first use (WASM from jsDelivr, model from Google Storage).
  * Tries the GPU delegate and falls back to CPU. A failed load can be retried.
  */
+/** MediaPipe's WASM prints routine INFO lines through console.error, which the Next dev overlay reports as errors. */
+let filtered = false;
+function quietMediaPipeInfo() {
+  if (filtered || typeof console === 'undefined') return;
+  filtered = true;
+  const original = console.error.bind(console);
+  console.error = (...args: unknown[]) => {
+    if (typeof args[0] === 'string' && args[0].startsWith('INFO: Created TensorFlow Lite')) return;
+    original(...args);
+  };
+}
+
 export function loadLandmarker(): Promise<FaceLandmarker> {
   if (!instance) {
+    quietMediaPipeInfo();
     instance = (async () => {
       const { FilesetResolver, FaceLandmarker } = await import('@mediapipe/tasks-vision');
       const fileset = await FilesetResolver.forVisionTasks(WASM_ROOT);

@@ -25,10 +25,10 @@ function ellipsePath(cx: number, cy: number, rx: number, ry: number) {
   return `M${cx - rx} ${cy}a${rx} ${ry} 0 1 0 ${rx * 2} 0a${rx} ${ry} 0 1 0 ${-rx * 2} 0Z`;
 }
 
-/** Guide oval inside the 3:4 guide frame: 62 % of its width, a little above centre. */
+/** Guide oval inside the 3:4 guide frame: 62 % of its width (the middle of the Face size range), a little above centre. */
 function guideOval(ref: Rect) {
   const rx = ref.w * 0.31;
-  return ellipsePath(ref.x + ref.w / 2, ref.y + ref.h * 0.45, rx, rx * 1.34);
+  return ellipsePath(ref.x + ref.w / 2, ref.y + ref.h * 0.41, rx, rx * 1.36);
 }
 
 /**

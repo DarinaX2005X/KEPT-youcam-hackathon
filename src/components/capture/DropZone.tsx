@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { useRef, useState, type DragEvent } from 'react';
 import { ImageOff, ImagePlus } from 'lucide-react';
-import { Button } from '@/components/ui';
+import { Button, useMediaQuery } from '@/components/ui';
 import styles from './StillPane.module.css';
 
 export interface DropZoneProps {
@@ -18,6 +18,7 @@ export interface DropZoneProps {
 export function DropZone({ onFile, error, note }: DropZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [over, setOver] = useState(false);
+  const touch = useMediaQuery('(hover: none)');
 
   const open = () => inputRef.current?.click();
 
@@ -71,7 +72,9 @@ export function DropZone({ onFile, error, note }: DropZoneProps) {
       ) : (
         <>
           <p className={styles.zoneTitle}>{over ? 'Drop to check the photo' : 'Add a photo of your face'}</p>
-          <p className={styles.zoneHint}>Drop it here or choose a file. JPEG or PNG, taken straight on in even light, without filters.</p>
+          <p className={styles.zoneHint}>
+            {touch ? 'Pick one from your photos.' : 'Drop it here or choose a file.'} JPEG or PNG, taken straight on in even light, without filters.
+          </p>
         </>
       )}
       <Button variant={error ? 'primary' : 'secondary'} size="lg" onClick={open}>

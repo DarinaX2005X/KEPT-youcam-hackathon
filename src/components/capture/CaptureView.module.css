@@ -75,6 +75,11 @@
   inset: 0;
 }
 
+.cameraPlain {
+  background: var(--field);
+  box-shadow: none;
+}
+
 .side {
   grid-area: side;
   z-index: 2;
@@ -87,7 +92,7 @@
 .tabs {
   grid-area: tabs;
   z-index: 2;
-  padding: 10px 16px 14px;
+  padding: 8px 16px 12px;
 }
 
 .cameraMode .tabs :global([role='radiogroup']) {
@@ -98,11 +103,12 @@
 
 /* Shutter */
 .shutterRow {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding-top: 6px;
+  padding-top: 2px;
 }
 
 .shutterHint {
@@ -114,7 +120,10 @@
 
 .shutterHintLive {
   display: block;
-  order: -1;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
   padding: 4px 12px;
   border-radius: var(--r-chip);
   background: rgb(253 251 248 / 0.92);
@@ -395,7 +404,8 @@
   }
 
   .shutterHintLive {
-    order: 0;
+    position: static;
+    translate: none;
     background: none;
     padding: 0;
   }

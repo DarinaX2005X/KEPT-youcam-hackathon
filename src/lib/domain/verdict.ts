@@ -21,7 +21,7 @@ export const SMOOTHING_GAP_DAYS = 10;
 export const LIGHT_MEDIUM = 0.1;
 export const LIGHT_LOW = 0.18;
 /** Mean anchor distance (in interpupillary units) above which framing counts as off. */
-export const ALIGNMENT_LIMIT = 0.08;
+export const ALIGNMENT_LIMIT = 0.1;
 export const MAX_REASONS = 4;
 
 const GUARDS: Concern[] = ['redness', 'moisture'];

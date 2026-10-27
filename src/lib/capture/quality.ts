@@ -20,8 +20,11 @@ export const LIMITS = {
   roll: 8,
   light: { min: 90, max: 200, sideGap: 35 },
   align: ALIGN_OK,
-  /** Variance of the Laplacian on the face scaled to 256 px wide. Tuned on the sample faces: sharp ≈ 170–230, 2 px blur ≈ 25–35. */
-  sharpness: 60,
+  /**
+   * Variance of the Laplacian on the face scaled to 256 px wide, brightness-normalised.
+   * Tuned on the sample faces: sharp 158–185, 1 px Gaussian blur ≈ 60, 2 px ≈ 13.
+   */
+  sharpness: 40,
   /** A still photo must give at least this many pixels across the crop. */
   stillCropSide: 720,
 } as const;
@@ -245,7 +248,8 @@ export function patchLuma(source: CanvasImageSource, centers: Pt[], size: number
 
 /**
  * Variance of the 4-neighbour Laplacian over the central face (eyes to mouth, cheek to cheek, inset 15 %),
- * scaled to 256 px wide so the number does not depend on photo resolution.
+ * scaled to 256 px wide so the number does not depend on photo resolution, and normalised to a mid-grey face
+ * so it does not depend on exposure.
  */
 export function sharpness(source: CanvasImageSource, box: Rect): number {
   const inset = 0.15;
@@ -274,7 +278,12 @@ export function sharpness(source: CanvasImageSource, box: Rect): number {
     }
   }
   const mean = sum / n;
-  return Math.round((sum2 / n - mean * mean) * 10) / 10;
+  let level = 0;
+  for (let i = 0; i < w * h; i++) level += g[i];
+  level = Math.max(16, level / (w * h));
+  // The Laplacian scales with brightness; a dim photo is not a blurry one.
+  const norm = (128 / level) ** 2;
+  return Math.round((sum2 / n - mean * mean) * norm * 10) / 10;
 }
 
 /**

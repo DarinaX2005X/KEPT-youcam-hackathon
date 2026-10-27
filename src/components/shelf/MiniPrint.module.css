@@ -1,0 +1,51 @@
+.print {
+  display: block;
+  flex: none;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow-print), var(--highlight);
+  transform-origin: 50% 80%;
+}
+
+.md {
+  width: 64px;
+}
+
+.sm {
+  width: 44px;
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.photo {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--sunk);
+}
+
+.sm .photo {
+  border-radius: 5px;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--brand);
+  stroke-opacity: 0.35;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}

@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { CameraOff, X } from 'lucide-react';
-import { Button, IconButton, PhotoPrint, Segmented, Sheet, Skeleton, StepProgress } from '@/components/ui';
+import { Button, IconButton, MOBILE_QUERY, PhotoPrint, Segmented, Sheet, Skeleton, StepProgress, useMediaQuery } from '@/components/ui';
 import {
   COUNTDOWN_MS,
   STILL_MESSAGES,
@@ -22,6 +22,7 @@ import {
   type QualityCheck,
   type StillAnalysis,
 } from '@/lib/capture';
+import { ALIGN_OK } from '@/lib/capture/geometry';
 import { loadManifest } from '@/lib/store';
 import { CameraStage } from './CameraStage';
 import { ChecksList } from './ChecksList';
@@ -65,6 +66,7 @@ const FLASH_MS = 120;
  */
 export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', onCapture, onCancel }: CaptureViewProps) {
   const reduced = useReducedMotion();
+  const mobile = useMediaQuery(MOBILE_QUERY);
   const [tab, setTab] = useState<CaptureTab>(initialTab);
   const [taken, setTaken] = useState<{ result: CaptureResult; url: string } | null>(null);
   const [flash, setFlash] = useState(0);
@@ -219,7 +221,7 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
   const blocked = status === 'denied' || status === 'busy' || status === 'error';
   const loading = !taken && !blocked && (status === 'starting' || status === 'idle' || (live && guide.state.model === 'loading'));
   const ghostGuide = checkin && ghostState.guide?.oval ? ghostState.guide : null;
-  const match = guide.state.alignment === undefined ? 0 : (0.3 - guide.state.alignment) / (0.3 - 0.08);
+  const match = guide.state.alignment === undefined ? 0 : (0.3 - guide.state.alignment) / (0.3 - ALIGN_OK);
   const failing: QualityCheck[] =
     confirm === 'camera' ? guide.state.checks.filter((c) => c.state !== 'good') : upload.status === 'ready' ? upload.analysis.checks.filter((c) => c.state !== 'good') : [];
   const counting = guide.state.countdownStart !== null;
@@ -236,7 +238,7 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
         match={match}
         ready={guide.state.ready}
         dimmed={loading || Boolean(taken)}
-        className={styles.camera}
+        className={clsx(styles.camera, blocked && styles.cameraPlain)}
       >
         {loading ? (
           <div className={styles.loading}>
@@ -420,7 +422,7 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
       <nav className={styles.tabs}>
         <Segmented
           aria-label="Photo source"
-          size="lg"
+          size={mobile ? 'md' : 'lg'}
           value={tab}
           onChange={(v) => {
             setConfirm(null);

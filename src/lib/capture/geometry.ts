@@ -129,7 +129,8 @@ export function alignment(current: number[], base: number[]): number {
   return sum / n / eye;
 }
 
-export const ALIGN_OK = 0.08;
+// Mean anchor distance over the outer eye-corner span; 0.1 is roughly a 1 cm shift at arm's length.
+export const ALIGN_OK = 0.1;
 
 /**
  * Head angles in degrees from MediaPipe's facial transformation matrix (column-major 4 × 4).

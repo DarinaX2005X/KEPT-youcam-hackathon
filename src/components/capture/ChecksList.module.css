@@ -4,7 +4,7 @@
   backdrop-filter: blur(18px) saturate(1.2);
   border-radius: var(--r-card);
   box-shadow: var(--shadow-raised), var(--highlight);
-  padding: 6px 16px;
+  padding: 4px 16px;
 }
 
 .list {
@@ -17,8 +17,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: 40px;
-  padding: 6px 0;
+  min-height: 34px;
+  padding: 4px 0;
 }
 
 .row + .row {
