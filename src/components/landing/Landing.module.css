@@ -1,0 +1,130 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ---------------------------------------------------------------- hero */
+
+.hero {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 20px var(--gutter) 0;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.heroTitle {
+  font-size: 2.5rem;
+  max-width: 12em;
+}
+
+.heroLead {
+  max-width: 560px;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 4px;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  text-decoration-color: rgb(31 90 71 / 0.35);
+  transition: text-decoration-color var(--d-hover) var(--ease-out), color var(--d-hover) var(--ease-out);
+}
+
+.textLink:hover {
+  color: var(--brand-hover);
+  text-decoration-color: currentColor;
+}
+
+.onlyPhone {
+  display: inline-flex;
+}
+
+.notPhone {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding-top: 36px;
+  }
+  .heroText {
+    gap: 22px;
+    margin-bottom: 44px;
+  }
+  .heroTitle {
+    font-size: 3.5rem;
+    max-width: 13em;
+  }
+  .heroLead {
+    font-size: 1.125rem;
+  }
+  .onlyPhone {
+    display: none;
+  }
+  .notPhone {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 1180px) {
+  .hero {
+    padding-top: 40px;
+  }
+  /* Headline on the left, the explanation and the actions beside its last line. */
+  .heroText {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    grid-template-areas:
+      'title lead'
+      'title actions';
+    align-items: end;
+    column-gap: 56px;
+    row-gap: 24px;
+    margin-bottom: 48px;
+  }
+  .heroTitle {
+    grid-area: title;
+    font-size: var(--t-72);
+    max-width: 11.5em;
+  }
+  .heroLead {
+    grid-area: lead;
+    font-size: 1.125rem;
+  }
+  .heroActions {
+    grid-area: actions;
+    margin-top: 0;
+    padding-bottom: 6px;
+  }
+}

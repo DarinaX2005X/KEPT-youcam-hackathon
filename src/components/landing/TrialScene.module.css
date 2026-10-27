@@ -1,0 +1,375 @@
+/* Hero scene: prints on a sunk porcelain field that runs off the right edge of the page. */
+
+.scene {
+  position: relative;
+}
+
+.field {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 16px 24px;
+  margin: 0 calc(-1 * var(--gutter));
+  border-radius: 0;
+  background-color: var(--sunk);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .13 0 0 0 0 .1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");
+  box-shadow: inset 0 1px 0 rgb(40 34 26 / 0.04), inset 0 10px 24px -18px rgb(40 34 26 / 0.18);
+}
+
+.stage {
+  position: relative;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------- prints */
+
+.prints {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 4.5%;
+  align-items: start;
+}
+
+.print {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 10px 12px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-print), var(--highlight);
+  transform-origin: 50% 80%;
+}
+
+.target::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 2px;
+  border-radius: inherit;
+  background: var(--sheen);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: var(--r-photo);
+  background: var(--sunk);
+  isolation: isolate;
+}
+
+/* The demo frames are 3:4 portraits with room around the head; the scene shows the face. */
+.zoom {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.42);
+  transform-origin: 50% 3%;
+}
+
+.img {
+  object-fit: cover;
+  user-select: none;
+}
+
+.maskClip {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* The scanner: a 2 px Brand line with a soft Surface trail above it, moved by its own height. */
+.scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to bottom, rgb(253 251 248 / 0) 70%, rgb(253 251 248 / 0.4) 99%);
+  border-bottom: 2px solid var(--brand);
+  box-shadow: 0 1px 0 rgb(253 251 248 / 0.6);
+}
+
+.simTag {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--r-tag);
+  background: var(--plate);
+  color: var(--ink);
+  font-size: var(--t-13);
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 26px;
+  padding: 0 2px 0 4px;
+}
+
+.label {
+  font-size: var(--t-15);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: var(--r-tag);
+  font-size: var(--t-13);
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.base {
+  background: var(--worse-bg);
+  color: var(--worse);
+}
+
+.better {
+  background: var(--better-bg);
+  color: var(--better);
+}
+
+/* ---------------------------------------------------------------- ruler */
+
+.rulerBox {
+  position: relative;
+  min-height: 132px;
+}
+
+.ruler {
+  display: block;
+  overflow: visible;
+}
+
+.connectors line {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.connectors .targetConnector {
+  stroke-dasharray: 3 4;
+}
+
+.band {
+  fill: var(--better-bg);
+}
+
+.expected {
+  fill: none;
+  stroke: var(--better);
+  stroke-width: 1.25;
+  stroke-dasharray: 4 5;
+  opacity: 0.7;
+}
+
+.fact {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dot {
+  fill: var(--brand);
+  stroke: var(--sunk);
+  stroke-width: 2;
+}
+
+.targetDot {
+  fill: var(--surface);
+  stroke: var(--better);
+  stroke-width: 2;
+}
+
+.targetLabel,
+.chartLabel,
+.dayLabel {
+  font-size: 13px;
+  font-family: var(--font-sans);
+  fill: var(--ink-soft);
+}
+
+.targetLabel {
+  font-weight: 600;
+  fill: var(--better);
+}
+
+.chartLabel {
+  font-weight: 500;
+}
+
+.point {
+  fill: var(--brand);
+  stroke: var(--surface);
+  stroke-width: 3;
+}
+
+.pointLabel {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  fill: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 2;
+}
+
+.axis {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.tick {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+/* ---------------------------------------------------------------- side column */
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+
+.productName {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.verdict {
+  position: relative;
+  z-index: 4;
+}
+
+.credit {
+  margin-top: 14px;
+  font-size: var(--t-13);
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------- phone: two prints overlap, target behind */
+
+@media (max-width: 767px) {
+  .prints {
+    display: block;
+    height: calc((100vw - 32px) * 0.62 * 4 / 3 + 70px);
+  }
+  .print {
+    position: absolute;
+    width: 62%;
+  }
+  .p0 {
+    left: 0;
+    top: 22px;
+    z-index: 2;
+  }
+  .p1 {
+    right: 0;
+    top: 36px;
+    z-index: 3;
+  }
+  .p2 {
+    right: 10%;
+    top: -6px;
+    width: 40%;
+    z-index: 1;
+    padding: 6px 6px 8px;
+  }
+  .p2 .caption {
+    display: none;
+  }
+  .p2 .simTag {
+    font-size: 11px;
+    height: 20px;
+    padding: 0 6px;
+  }
+  .count {
+    padding: 0 7px;
+  }
+  .label {
+    font-size: var(--t-13);
+  }
+}
+
+/* ---------------------------------------------------------------- tablet and up */
+
+@media (min-width: 768px) {
+  .field {
+    margin: 0 calc(-1 * var(--gutter)) 0 0;
+    padding: 36px 40px 28px;
+    border-radius: var(--r-panel) 0 0 var(--r-panel);
+  }
+  .rulerBox {
+    min-height: 156px;
+  }
+  .side {
+    max-width: 420px;
+    margin: -64px 0 -72px auto;
+  }
+}
+
+@media (min-width: 1180px) {
+  .field {
+    grid-template-columns: minmax(0, 880px) minmax(300px, 350px);
+    justify-content: start;
+    column-gap: clamp(32px, 3vw, 48px);
+    margin-right: calc(-1 * (100vw - min(100vw, var(--page-max))) / 2 - var(--gutter));
+    padding: 36px var(--gutter) 28px 40px;
+  }
+  .side {
+    margin: 64px 0 -96px;
+    max-width: none;
+  }
+}

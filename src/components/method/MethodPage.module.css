@@ -1,0 +1,517 @@
+/* /how-it-works: one readable column, a sticky contents list beside it on wide screens. */
+
+.page {
+  padding: 32px var(--gutter) 96px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 720px);
+  grid-template-areas:
+    'intro'
+    'aside'
+    'body';
+  justify-content: center;
+}
+
+.intro {
+  grid-area: intro;
+}
+
+.aside {
+  grid-area: aside;
+  margin: 28px 0 8px;
+}
+
+.body {
+  grid-area: body;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-top: 56px;
+  }
+}
+
+@media (min-width: 1120px) {
+  .layout {
+    grid-template-columns: 220px minmax(0, 720px);
+    grid-template-areas:
+      '. intro'
+      'aside body';
+    column-gap: 72px;
+  }
+
+  .aside {
+    margin: 0;
+  }
+}
+
+/* ---------- Type ---------- */
+
+.h1 {
+  font-size: clamp(2rem, 1.4rem + 2.6vw, var(--t-44));
+  margin-bottom: 16px;
+}
+
+.lead {
+  font-size: var(--t-17);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 640px;
+}
+
+@media (min-width: 768px) {
+  .lead {
+    font-size: var(--t-22);
+    line-height: 1.45;
+  }
+}
+
+.section {
+  margin-top: 64px;
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
+
+.section:first-child {
+  margin-top: 48px;
+}
+
+@media (min-width: 1120px) {
+  .section:first-child {
+    margin-top: 56px;
+  }
+}
+
+.h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, var(--t-30));
+  margin-bottom: 20px;
+}
+
+.h3 {
+  font-size: var(--t-22);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 40px 0 12px;
+}
+
+.section p + p {
+  margin-top: 16px;
+}
+
+.textLink {
+  color: var(--brand);
+  font-weight: 600;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+.textLink:hover {
+  color: var(--brand-hover);
+}
+
+.closing {
+  margin-top: 32px !important;
+}
+
+/* ---------- Contents ---------- */
+
+.index {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 16px 12px 12px;
+}
+
+.indexTitle {
+  font-size: var(--t-15);
+  font-weight: 600;
+  padding: 0 12px 6px;
+}
+
+.indexList {
+  display: grid;
+  gap: 2px;
+}
+
+.indexLink {
+  display: block;
+  padding: 7px 12px;
+  border-radius: var(--r-chip);
+  font-size: var(--t-15);
+  line-height: 1.35;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition:
+    color var(--d-hover) var(--ease-out),
+    background-color var(--d-hover) var(--ease-out);
+}
+
+.indexLink:hover {
+  color: var(--ink);
+  background: var(--field);
+}
+
+.indexLinkActive,
+.indexLinkActive:hover {
+  color: var(--ink);
+  font-weight: 600;
+  background: var(--sunk);
+}
+
+@media (min-width: 1120px) {
+  .index {
+    position: sticky;
+    top: calc(var(--header-h) + 40px);
+    background: none;
+    border: 0;
+    padding: 0;
+    margin-top: 56px;
+  }
+}
+
+/* ---------- Tables ---------- */
+
+.tableWrap {
+  margin: 24px 0 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-15);
+  line-height: 1.45;
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding-top: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.table tbody tr:nth-child(even) {
+  background: var(--field);
+}
+
+.rowHead {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.table tfoot tr:first-child > * {
+  border-top: 1px solid var(--line-strong);
+}
+
+.table tfoot .rowHead {
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.table tfoot td {
+  font-weight: 600;
+}
+
+.numCol {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.dayCol {
+  white-space: nowrap;
+}
+
+.subline {
+  display: block;
+  color: var(--ink-soft);
+}
+
+.spanCell {
+  color: var(--ink-soft);
+}
+
+.adviceCell {
+  min-width: 12rem;
+}
+
+.advice {
+  display: inline-block;
+  margin: 0 6px 6px 0;
+  padding: 2px 8px;
+  border-radius: var(--r-tag);
+  background: var(--sunk);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* Narrow screens: every table row becomes a block of label and value pairs. */
+@media (max-width: 719px) {
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .table,
+  .table tbody,
+  .table tfoot,
+  .table tr,
+  .table th,
+  .table td {
+    display: block;
+  }
+
+  .table tr {
+    padding: 14px 16px;
+  }
+
+  .table th,
+  .table td {
+    padding: 0;
+  }
+
+  .table .rowHead {
+    font-size: var(--t-17);
+    margin-bottom: 6px;
+  }
+
+  .table td {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 3px 0;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  .table td.spanCell {
+    display: block;
+  }
+
+  .table td.spanCell::before {
+    content: none;
+  }
+
+  .dayCol {
+    white-space: normal;
+  }
+
+  .adviceCell {
+    min-width: 0;
+  }
+
+  .advice {
+    white-space: normal;
+  }
+
+  /* Text-heavy rows read better with the label above the value. */
+  .tableStacked td {
+    display: block;
+    padding: 6px 0 2px;
+  }
+
+  .tableStacked td::before {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Score rows: a three-column grid of area and score. */
+  .tableNumeric tr {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 12px;
+  }
+
+  .tableNumeric .rowHead {
+    grid-column: 1 / -1;
+  }
+
+  .tableNumeric td,
+  .tableNumeric .numCol {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left !important;
+  }
+
+  .table tfoot tr:first-child > * {
+    border-top: 0;
+  }
+
+  .table tfoot tr:first-child {
+    border-top: 1px solid var(--line-strong);
+  }
+}
+
+/* ---------- Noise figure ---------- */
+
+.noiseFigure {
+  margin: 0 0 28px;
+}
+
+.noisePlot {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 16px 20px 8px;
+}
+
+.noiseRow {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  align-items: center;
+  height: 56px;
+}
+
+.noiseLabel {
+  font-size: var(--t-15);
+  font-weight: 500;
+}
+
+.noiseTrack {
+  position: relative;
+  height: 100%;
+}
+
+.noiseTrack::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--line);
+}
+
+.noiseBand {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: var(--r-tag);
+  background: var(--brand-tint);
+}
+
+.noiseZero {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.noiseDot {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--brand);
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.noiseAxis {
+  position: relative;
+  height: 100%;
+}
+
+.noiseTick {
+  position: absolute;
+  top: 6px;
+  transform: translateX(-50%);
+  font-size: var(--t-13);
+  color: var(--ink-soft);
+}
+
+.caption {
+  margin-top: 10px;
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}
+
+@media (max-width: 479px) {
+  .noisePlot {
+    padding: 12px 14px 4px;
+  }
+
+  .noiseRow {
+    grid-template-columns: 5.25rem minmax(0, 1fr);
+  }
+}
+
+/* ---------- The key rule ---------- */
+
+.rule {
+  margin: 24px 0;
+  padding: 18px 22px;
+  border-radius: var(--r-card);
+  background: var(--brand-tint);
+  font-weight: 500;
+}
+
+/* ---------- Verdict rules ---------- */
+
+.rules {
+  display: grid;
+  gap: 22px;
+  margin: 24px 0 28px;
+}
+
+.ruleItem {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: start;
+}
+
+.ruleIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.ruleIcon[data-tone='better'] {
+  background: var(--better-bg);
+  color: var(--better);
+}
+
+.ruleIcon[data-tone='worse'] {
+  background: var(--worse-bg);
+  color: var(--worse);
+}
+
+.ruleIcon[data-tone='reacting'] {
+  background: var(--reacting-bg);
+  color: var(--reacting);
+}
+
+.ruleIcon[data-tone='flat'] {
+  background: var(--flat-bg);
+  color: var(--flat);
+}
+
+.ruleTitle {
+  font-size: var(--t-17);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin: 8px 0 4px;
+}

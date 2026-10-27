@@ -49,7 +49,7 @@ describe('actives', () => {
     expect(s.targets).toEqual(['acne', 'pore', 'oiliness']);
     expect([s.onsetDay, s.fullEffectDay]).toEqual([14, 56]);
     expect(s.purge).toEqual({ fromDay: 7, toDay: 42 });
-    expect(s.simulation).toEqual({ acne: 0.6, pores: 0.4, oiliness: 0.4 });
+    expect(s.simulation).toEqual({ acne: 1, pores: 0.7, oiliness: 0.7 });
     const r = getActive('retinal')!;
     expect(r.onsetDay).toBe(21);
     expect(r.purge).toEqual(getActive('retinol')!.purge);

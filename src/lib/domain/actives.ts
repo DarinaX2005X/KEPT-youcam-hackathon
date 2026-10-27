@@ -15,7 +15,7 @@ export const ACTIVES: Active[] = [
     fullEffectDay: 56,
     purge: { fromDay: 7, toDay: 42 },
     irritation: 'medium',
-    simulation: { acne: 0.6, pores: 0.4, oiliness: 0.4 },
+    simulation: { acne: 1, pores: 0.7, oiliness: 0.7 },
     note: 'Salicylic acid clears inside pores. First changes usually show after two to four weeks',
   },
   {
@@ -29,7 +29,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 14,
     fullEffectDay: 56,
     irritation: 'high',
-    simulation: { acne: 0.6 },
+    simulation: { acne: 1 },
     note: 'Benzoyl peroxide kills acne bacteria. It can dry and bleach fabric, so start every other day',
   },
   {
@@ -44,7 +44,7 @@ export const ACTIVES: Active[] = [
     fullEffectDay: 84,
     purge: { fromDay: 14, toDay: 49 },
     irritation: 'high',
-    simulation: { acne: 0.6, texture: 0.4, pores: 0.3 },
+    simulation: { acne: 1, texture: 0.7, pores: 0.5 },
     note: `Adapalene is a retinoid made for acne. ${RETINOID_NOTE_TAIL}`,
   },
   {
@@ -59,7 +59,7 @@ export const ACTIVES: Active[] = [
     fullEffectDay: 84,
     purge: { fromDay: 14, toDay: 42 },
     irritation: 'high',
-    simulation: { texture: 0.5, wrinkle: 0.4, spots: 0.3, acne: 0.4 },
+    simulation: { texture: 0.85, wrinkle: 0.7, spots: 0.5, acne: 0.7 },
     note: `Retinol speeds up skin renewal for smoother texture and fewer fine lines. ${RETINOID_NOTE_TAIL}`,
   },
   {
@@ -74,7 +74,7 @@ export const ACTIVES: Active[] = [
     fullEffectDay: 84,
     purge: { fromDay: 14, toDay: 42 },
     irritation: 'high',
-    simulation: { texture: 0.5, wrinkle: 0.4, spots: 0.3, acne: 0.4 },
+    simulation: { texture: 0.85, wrinkle: 0.7, spots: 0.5, acne: 0.7 },
     note: `Retinal works one step faster than retinol. ${RETINOID_NOTE_TAIL}`,
   },
   {
@@ -88,7 +88,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 28,
     fullEffectDay: 84,
     irritation: 'low',
-    simulation: { texture: 0.3, wrinkle: 0.3 },
+    simulation: { texture: 0.5, wrinkle: 0.5 },
     note: 'Gentle retinoids and bakuchiol smooth skin slowly with little irritation',
   },
   {
@@ -103,7 +103,7 @@ export const ACTIVES: Active[] = [
     fullEffectDay: 42,
     purge: { fromDay: 7, toDay: 28 },
     irritation: 'medium',
-    simulation: { texture: 0.4, radiance: 0.4, spots: 0.3 },
+    simulation: { texture: 0.7, radiance: 0.7, spots: 0.5 },
     note: 'Glycolic acid loosens dead skin for a smoother, brighter surface',
   },
   {
@@ -117,7 +117,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 14,
     fullEffectDay: 42,
     irritation: 'low',
-    simulation: { texture: 0.3, radiance: 0.3 },
+    simulation: { texture: 0.5, radiance: 0.5 },
     note: 'Lactic and mandelic acids exfoliate gently and suit sensitive skin',
   },
   {
@@ -130,7 +130,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 28,
     fullEffectDay: 84,
     irritation: 'low',
-    simulation: { redness: 0.4, acne: 0.4, spots: 0.3 },
+    simulation: { redness: 0.7, acne: 0.7, spots: 0.5 },
     note: 'Azelaic acid calms redness and breakouts and fades marks over a few months',
   },
   {
@@ -144,7 +144,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 28,
     fullEffectDay: 56,
     irritation: 'low',
-    simulation: { pores: 0.4, oiliness: 0.4, redness: 0.3 },
+    simulation: { pores: 0.7, oiliness: 0.7, redness: 0.5 },
     note: 'Niacinamide helps with oil, pores and uneven tone. Changes usually take about a month',
   },
   {
@@ -166,7 +166,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 28,
     fullEffectDay: 84,
     irritation: 'medium',
-    simulation: { radiance: 0.4, spots: 0.4 },
+    simulation: { radiance: 0.7, spots: 0.7 },
     note: 'Vitamin C brightens dull skin and fades dark spots over two to three months',
   },
   {
@@ -180,7 +180,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 42,
     fullEffectDay: 84,
     irritation: 'low',
-    simulation: { spots: 0.5, radiance: 0.3 },
+    simulation: { spots: 0.85, radiance: 0.5 },
     note: 'Tranexamic acid, arbutin and kojic acid fade dark spots slowly and gently',
   },
   {
@@ -205,7 +205,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 7,
     fullEffectDay: 28,
     irritation: 'low',
-    simulation: { texture: 0.3, redness: 0.2 },
+    simulation: { texture: 0.5, redness: 0.35 },
     note: 'Ceramides and humectants hold water in the skin. Hydration often changes within a week',
   },
   {
@@ -219,7 +219,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 7,
     fullEffectDay: 28,
     irritation: 'low',
-    simulation: { redness: 0.4 },
+    simulation: { redness: 0.7 },
     note: 'Centella and allantoin calm irritated skin and can soften redness in a few weeks',
   },
   {
@@ -240,7 +240,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 56,
     fullEffectDay: 84,
     irritation: 'low',
-    simulation: { wrinkle: 0.3 },
+    simulation: { wrinkle: 0.5 },
     note: 'Peptides support firmness slowly. Give them at least two months',
   },
   {
@@ -254,7 +254,7 @@ export const ACTIVES: Active[] = [
     onsetDay: 14,
     fullEffectDay: 56,
     irritation: 'low',
-    simulation: { eye_bags: 0.3, dark_circle: 0.3 },
+    simulation: { eye_bags: 0.5, dark_circle: 0.5 },
     note: 'Caffeine can reduce puffiness under the eyes for a few hours after use',
   },
   {
@@ -337,4 +337,14 @@ export function searchActives(query: string): Active[] {
     ranked.push({ a, rank, i });
   });
   return ranked.sort((x, y) => x.rank - y.rank || x.i - y.i).map((r) => r.a);
+}
+
+/**
+ * Verb agreeing with an active's name: «Salicylic acid (BHA) shows», «Ceramides and hydrators show».
+ * `base` is the plural form, e.g. 'show', 'need', 'reach'.
+ */
+export function verb(active: Pick<Active, 'name'>, base: string): string {
+  const bare = active.name.replace(/\s*\(.*\)\s*$/, '').trim();
+  const plural = /and/i.test(bare) || /s$/i.test(bare);
+  return plural ? base : base.endsWith('s') || base.endsWith('sh') || base.endsWith('ch') ? `${base}es` : `${base}s`;
 }

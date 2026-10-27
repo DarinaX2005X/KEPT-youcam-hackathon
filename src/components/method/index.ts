@@ -1,0 +1,1 @@
+export { MethodPage } from './MethodPage';

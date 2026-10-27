@@ -1,26 +1,14 @@
 'use client';
 
 import clsx from 'clsx';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Camera, RotateCcw } from 'lucide-react';
 import { Button, StepProgress } from '@/components/ui';
 import { CaptureView, type CaptureResult } from '@/components/capture';
-import { isAbortError, isScanError, SCAN_MESSAGES as MESSAGES, prepareImage, runAging, type ScanStep } from '@/lib/scan';
 import { EmptyPrint } from '@/components/wizard/EmptyPrint';
-import { AgingViewer, type AgingFrame } from './AgingViewer';
+import { AgingViewer } from './AgingViewer';
+import { AGING_STEPS, useAging } from './useAging';
 import styles from './Prevention.module.css';
-
-const AGING_STEPS: { id: Exclude<ScanStep, 'done'>; label: string }[] = [
-  { id: 'uploading', label: 'Uploading photo' },
-  { id: 'analyzing', label: 'Aging the photo with YouCam' },
-  { id: 'downloading', label: 'Saving the frames' },
-];
-
-type Run =
-  | { status: 'idle' }
-  | { status: 'running'; step: ScanStep | null }
-  | { status: 'done'; age: number; frames: AgingFrame[] }
-  | { status: 'error'; message: string; limit: boolean };
 
 export interface PreventionStepProps {
   productName: string;
@@ -35,39 +23,17 @@ export interface PreventionStepProps {
  */
 export function PreventionStep({ productName, saving, onAddToShelf }: PreventionStepProps) {
   const [capturing, setCapturing] = useState(false);
-  const [run, setRun] = useState<Run>({ status: 'idle' });
   const [sample, setSample] = useState(false);
-  const ctrl = useRef<AbortController | null>(null);
-  const urls = useRef<string[]>([]);
+  const { run, start } = useAging();
 
-  useEffect(
-    () => () => {
-      ctrl.current?.abort();
-      urls.current.forEach((u) => URL.revokeObjectURL(u));
+  const age = useCallback(
+    (result: CaptureResult) => {
+      setCapturing(false);
+      setSample(result.meta.source === 'sample');
+      void start(result.blob);
     },
-    [],
+    [start],
   );
-
-  const age = useCallback(async (result: CaptureResult) => {
-    setCapturing(false);
-    setSample(result.meta.source === 'sample');
-    ctrl.current?.abort();
-    const c = new AbortController();
-    ctrl.current = c;
-    setRun({ status: 'running', step: 'uploading' });
-    try {
-      const prepared = await prepareImage(result.blob);
-      const out = await runAging(prepared.blob, (step) => !c.signal.aborted && setRun({ status: 'running', step }), { signal: c.signal });
-      urls.current.forEach((u) => URL.revokeObjectURL(u));
-      const frames = out.frames.map((f) => ({ age: f.age, url: URL.createObjectURL(f.image) }));
-      urls.current = frames.map((f) => f.url);
-      setRun({ status: 'done', age: out.age, frames });
-    } catch (err) {
-      if (isAbortError(err)) return;
-      const message = isScanError(err) ? err.message : MESSAGES.upstream;
-      setRun({ status: 'error', message, limit: isScanError(err) && err.code === 'limit' });
-    }
-  }, []);
 
   const running = run.status === 'running';
 

@@ -219,7 +219,7 @@ describe('computeVerdict', () => {
     const v = computeVerdict(trial, scans, at(trial, 56));
     expect(v.kind).toBe('not_enough');
     expect(v.headline).toBe('Not doing enough');
-    expect(v.reasons.map((r) => r.text)).toContain('Pores stayed within ±4 points (70 → 71) after 56 days');
+    expect(v.reasons.map((r) => r.text)).toContain('Pores stayed within ±4 points after 56 days (70 → 71)');
     expect(v.reasons.every((r) => r.tone === 'flat' || r.tone === 'info')).toBe(true);
     expect(v.summary).toBe('After 56 days your pores and oiliness changed no more than repeat photos do.');
     expect(v.next).toEqual({ action: 'decide_stop', label: 'Time to stop this product' });

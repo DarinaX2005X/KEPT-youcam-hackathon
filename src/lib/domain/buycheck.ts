@@ -1,4 +1,4 @@
-import { activeNoun, activesFor } from './actives';
+import { activeNoun, activesFor, verb } from './actives';
 import { concernIsPlural, concernNoun, joinNouns } from './concerns';
 import { dayOf, spanText, toTime } from './dates';
 import { parseInci } from './inci';
@@ -102,9 +102,11 @@ export function buyCheck(
 
   for (const a of actives) {
     // 1) already on the shelf
-    const owner = trials.find(
+    // A kept product is the strongest evidence, so it wins over one still being tested.
+    const owners = trials.filter(
       (t) => (t.status === 'testing' || t.status === 'kept' || t.status === 'paused') && t.product.actives.includes(a.id),
     );
+    const owner = owners.find((t) => t.status === 'kept') ?? owners[0];
     if (owner) {
       covered.add(a.id);
       findings.push({
@@ -113,7 +115,6 @@ export function buyCheck(
         text: `You already use ${activeNoun(a)} in ${owner.product.name} (${trialState(owner, scansOf(owner), now)})`,
         trialId: owner.id,
       });
-      continue;
     }
 
     // 2) tried and stopped
@@ -148,7 +149,7 @@ export function buyCheck(
     }
     if (failedBefore) doubt = true;
 
-    if (a.prevention) continue;
+    if (a.prevention || owner) continue;
 
     // 3) and 4) by the latest scores
     const scored = a.targets.filter((c) => scores[c] !== undefined);
@@ -171,7 +172,7 @@ export function buyCheck(
         findings.push({
           tone: 'better',
           title: 'Room to improve',
-          text: `${cap(scoreText(low[0], scores[low[0]] as number, false))} on your last scan, so there is room for a visible change. ${a.name} usually shows first changes after ${spanText(a.onsetDay)}`,
+          text: `${cap(scoreText(low[0], scores[low[0]] as number, false))} on your last scan, so there is room for a visible change. ${a.name} usually ${verb(a, 'show')} first changes after ${spanText(a.onsetDay)}`,
         });
       }
     }
@@ -213,10 +214,11 @@ export function buyCheck(
       findings.push({
         tone: 'info',
         title: 'New for your skin',
-        text: `${lead.name} usually shows first changes after ${spanText(lead.onsetDay)}. A trial will show if it works for you`,
+        text: `${lead.name} usually ${verb(lead, 'show')} first changes after ${spanText(lead.onsetDay)}. A trial will show if it works for you`,
       });
     }
   }
 
   return { actives, findings, verdict };
 }
+

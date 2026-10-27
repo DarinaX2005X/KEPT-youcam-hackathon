@@ -75,11 +75,11 @@ describe('simulationFor', () => {
   it('takes the strongest intensity per target and skips areas with no simulation', () => {
     const actives = activesFor(['salicylic', 'niacinamide']);
     expect(simulationFor(actives, ['acne', 'pore', 'oiliness', 'moisture'])).toEqual({
-      acne: 0.6,
-      pores: 0.4,
-      oiliness: 0.4,
+      acne: 1,
+      pores: 0.7,
+      oiliness: 0.7,
     });
-    expect(simulationFor(activesFor(['niacinamide']), ['redness'])).toEqual({ redness: 0.3 });
+    expect(simulationFor(activesFor(['niacinamide']), ['redness'])).toEqual({ redness: 0.5 });
   });
 });
 

@@ -1,4 +1,4 @@
-import { activeNoun, activesFor } from './actives';
+import { activeNoun, activesFor, verb } from './actives';
 import { concernLabel, concernNoun, joinNouns } from './concerns';
 import { addDays, dayOf, formatShortDate, sameLocalDay, spanText, toTime } from './dates';
 import { expectedScore } from './expectation';
@@ -94,7 +94,12 @@ export function computeVerdict(trial: Trial, scans: Scan[], now: Date, options: 
   function changeReason(ch: Change, style: 'lead' | 'plain'): Reason {
     const label = concernLabel(ch.concern);
     const from = whole(ch.base);
-    const to = whole(ch.current);
+    const latestScore = whole(ch.base + ch.latestDelta);
+    // When two close check-ins are averaged, say so, so the text matches the photo and chart.
+    const to =
+      whole(ch.current) === latestScore
+        ? `${latestScore}`
+        : `${whole(ch.current)} averaged over your last two photos, ${latestScore} on the latest`;
     const base = { concern: ch.concern, delta: round1(ch.delta) };
     if (ch.delta > noise) {
       const text =
@@ -108,7 +113,7 @@ export function computeVerdict(trial: Trial, scans: Scan[], now: Date, options: 
     }
     return {
       ...base,
-      text: `${label} stayed within ±${noise} points (${from} → ${to}) after ${evidenceDay} days`,
+      text: `${label} stayed within ±${noise} points after ${evidenceDay} days (${from} → ${to})`,
       tone: 'flat',
     };
   }
@@ -155,8 +160,8 @@ export function computeVerdict(trial: Trial, scans: Scan[], now: Date, options: 
     let text: string;
     if (!lead) text = d > full ? `Day ${d}. The plan covered ${full} days` : `Day ${d} of ${full}`;
     else if (d < plan.onsetDay)
-      text = `Day ${d} of ${full}. ${lead.name} usually shows first changes after ${spanText(plan.onsetDay)}`;
-    else if (d < full) text = `Day ${d} of ${full}. ${lead.name} usually reaches its full effect by ${spanText(full)}`;
+      text = `Day ${d} of ${full}. ${lead.name} usually ${verb(lead, 'show')} first changes after ${spanText(plan.onsetDay)}`;
+    else if (d < full) text = `Day ${d} of ${full}. ${lead.name} usually ${verb(lead, 'reach')} ${verb(lead, 'reach') === 'reach' ? 'their' : 'its'} full effect by ${spanText(full)}`;
     else if (d === full) text = `Day ${d} of ${full}. That's the full course for ${activeNoun(lead)}`;
     else text = `Day ${d}. The full course for ${activeNoun(lead)} is ${full} days`;
     return { text, tone: 'info' };
@@ -412,9 +417,19 @@ export function computeVerdict(trial: Trial, scans: Scan[], now: Date, options: 
   primary.push(...[...targetChanges].sort((a, b) => b.delta - a.delta).map((c) => changeReason(c, 'plain')));
   primary.push(...maskReasons());
   primary.push(dayInfo());
-  const summary =
-    meanDelta > 0
-      ? 'Your skin is moving the right way, though not yet past the difference between repeat photos.'
-      : `No clear change yet, which is normal before day ${plan.fullEffectDay}.`;
-  return finish('on_track', summary, primary, checkinStep());
+  // «On track» needs some movement the right way; flat or slipping targets before full effect are «too early».
+  if (meanDelta >= 1) {
+    return finish(
+      'on_track',
+      'Your skin is moving the right way, though not yet past the difference between repeat photos.',
+      primary,
+      checkinStep(),
+    );
+  }
+  return finish(
+    'too_early',
+    `No clear change yet, which is normal before day ${plan.fullEffectDay}.`,
+    primary,
+    checkinStep(),
+  );
 }

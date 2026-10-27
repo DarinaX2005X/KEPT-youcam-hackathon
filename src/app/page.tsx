@@ -1,3 +1,7 @@
+import { buildLandingData } from '@/components/landing/data';
+import { Landing } from '@/components/landing';
+
 export default function Home() {
-  return <main>Kept</main>;
+  const data = buildLandingData();
+  return <Landing data={data} />;
 }
