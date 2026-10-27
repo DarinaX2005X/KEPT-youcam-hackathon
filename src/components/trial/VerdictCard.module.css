@@ -1,0 +1,228 @@
+/* The verdict is an object, not a panel: it gets the print shadow. */
+.card {
+  position: relative;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-print), var(--highlight);
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 24px 20px;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--surface);
+  box-shadow: var(--shadow-rest);
+}
+
+.headline {
+  font-size: var(--t-30);
+  line-height: 1.08;
+}
+
+.better {
+  background: var(--better-bg);
+  color: var(--better);
+}
+.worse {
+  background: var(--worse-bg);
+  color: var(--worse);
+}
+.reacting {
+  background: var(--reacting-bg);
+  color: var(--reacting);
+}
+.flat {
+  background: var(--flat-bg);
+  color: var(--ink);
+}
+.flat .icon {
+  color: var(--flat);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px 24px 22px;
+}
+
+.summary {
+  font-size: var(--t-17);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reason {
+  border-radius: var(--r-chip);
+  transition: background-color 600ms var(--ease-out);
+}
+
+.fresh {
+  animation: fresh 2.4s var(--ease-out);
+}
+
+@keyframes fresh {
+  0%,
+  40% {
+    background: var(--brand-tint);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.reasonRow,
+.reasonButton {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  font-size: var(--t-15);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.reasonButton {
+  margin: -4px -6px;
+  padding: 4px 6px;
+  width: calc(100% + 12px);
+  border-radius: var(--r-chip);
+  transition: background-color var(--d-hover) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .reasonButton:hover {
+    background: var(--sunk);
+  }
+}
+
+.reasonText {
+  min-width: 0;
+}
+
+.dot {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.r_better {
+  background: var(--better-bg);
+  color: var(--better);
+}
+.r_worse {
+  background: var(--worse-bg);
+  color: var(--worse);
+}
+.r_flat {
+  background: var(--flat-bg);
+  color: var(--flat);
+}
+.r_info {
+  background: var(--sunk);
+  color: var(--ink-soft);
+}
+
+.confidence {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-control);
+  background: var(--sunk);
+  font-size: var(--t-15);
+  line-height: 1.45;
+}
+
+.confIcon {
+  flex: none;
+  margin-top: 2px;
+  color: var(--reacting);
+}
+
+.next {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--t-17);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.step svg {
+  flex: none;
+  color: var(--brand);
+}
+
+.decided {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 10px;
+}
+
+@media (max-width: 479.98px) {
+  .decided > button {
+    grid-column: 2;
+    justify-self: start;
+    margin-left: -18px;
+  }
+}
+
+.decidedIcon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.decidedText {
+  font-size: var(--t-17);
+  font-weight: 600;
+}
+
+.disclaimer {
+  font-size: var(--t-13);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 767.98px) {
+  .head {
+    padding: 18px 18px 16px;
+  }
+  .body {
+    padding: 18px 18px 20px;
+  }
+}

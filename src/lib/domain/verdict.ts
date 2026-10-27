@@ -316,15 +316,13 @@ export function computeVerdict(trial: Trial, scans: Scan[], now: Date, options: 
     primary.push(...targetChanges.filter((c) => c.concern !== 'acne').map((c) => changeReason(c, 'plain')));
     primary.push(dayInfo());
 
-    const resumeDay = Math.min(plan.purge.toDay + 7, plan.fullEffectDay);
-    const next: Verdict['next'] =
-      resumeDay > nowDay
-        ? {
-            action: 'keep_going',
-            label: `Keep going and check in on day ${resumeDay}`,
-            date: addDays(trial.startedAt, resumeDay),
-          }
-        : checkinStep();
+    // Keep the regular schedule: the next check-ins show whether the purge is settling.
+    const step = checkinStep();
+    const next: Verdict['next'] = {
+      action: 'keep_going',
+      label: step.date ? `Keep going. ${step.label}` : 'Keep going and check in next week',
+      date: step.date,
+    };
     return finish(
       'purging',
       'A short breakout is common at this stage and usually settles as your skin adjusts.',

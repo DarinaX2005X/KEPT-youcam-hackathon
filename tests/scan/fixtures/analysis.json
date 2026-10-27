@@ -1,0 +1,18 @@
+{
+  "_note": "AnalysisResult as /api/youcam/task/analysis/{taskId} returns it for research/probe/a0.json (normalizeAnalysis), with shortened asset links.",
+  "scores": {
+    "texture": { "ui": 71, "raw": 57.924455404281616 },
+    "pore": { "ui": 70, "raw": 56.53700006008148 },
+    "redness": { "ui": 62, "raw": 37.973426818847656 },
+    "acne": { "ui": 70, "raw": 54.77824 }
+  },
+  "overall": 68.25,
+  "skinAge": 37,
+  "masks": {
+    "texture": "/api/youcam/asset?u=https%3A%2F%2Fyce-us.s3-accelerate.amazonaws.com%2Fttl30%2Fx%2F489b8558_texture_output.png",
+    "pore": "/api/youcam/asset?u=https%3A%2F%2Fyce-us.s3-accelerate.amazonaws.com%2Fttl30%2Fx%2F489b8558_pore_output.png",
+    "redness": "/api/youcam/asset?u=https%3A%2F%2Fyce-us.s3-accelerate.amazonaws.com%2Fttl30%2Fx%2F489b8558_redness_output.png",
+    "acne": "/api/youcam/asset?u=https%3A%2F%2Fyce-us.s3-accelerate.amazonaws.com%2Fttl30%2Fx%2F489b8558_acne_output.png"
+  },
+  "image": "/api/youcam/asset?u=https%3A%2F%2Fyce-us.s3-accelerate.amazonaws.com%2Fttl30%2Fx%2F489b8558_resize_image.png"
+}

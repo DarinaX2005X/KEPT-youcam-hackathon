@@ -1,0 +1,155 @@
+.root {
+  position: relative;
+  min-width: 0;
+}
+
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  /* Room for the lifted print and its shadow, and the focus ring. */
+  margin: -12px calc(-1 * var(--strip-bleed, 0px));
+  padding: 12px var(--strip-bleed, 0px) 8px;
+  scroll-padding-inline: var(--strip-bleed, 0px);
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.list {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  padding: 0 2px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  scroll-snap-align: start;
+}
+
+.print {
+  --w: 78px;
+  position: relative;
+  display: block;
+  width: var(--w);
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow-rest), var(--highlight);
+  transition:
+    transform var(--d-mask) var(--ease-out),
+    box-shadow var(--d-mask) var(--ease-out);
+}
+
+button.print {
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  button.print:hover:not(.selected) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-print), var(--highlight);
+  }
+}
+
+button.print:active {
+  transform: scale(0.97);
+}
+
+.selected {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 2px var(--brand), var(--shadow-print);
+}
+
+.selected:active {
+  transform: translateY(-6px) scale(0.97);
+}
+
+.photo {
+  display: block;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--sunk);
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.target::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: var(--sheen);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+.target.selected::before {
+  display: none;
+}
+
+/* A planned check-in: an empty frame with its date. A hint, not a control. */
+.future {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 3.9;
+  background: transparent;
+  box-shadow: none;
+  border: 1.5px dashed var(--line-strong);
+}
+
+.futureToday {
+  border-color: var(--brand);
+  background: var(--brand-tint);
+}
+
+.futureToday .futureDate {
+  color: var(--brand);
+}
+
+.futureDate {
+  font-size: var(--t-13);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.label {
+  font-size: var(--t-13);
+  font-weight: 500;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.labelSelected {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+@media (max-width: 767.98px) {
+  .print {
+    --w: 66px;
+  }
+  .list {
+    gap: 10px;
+  }
+}

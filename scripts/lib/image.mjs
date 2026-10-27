@@ -70,6 +70,8 @@ export async function luminance(input) {
  * acne: 8-connected components of alpha > 40, components under 12 px dropped.
  * redness: share of pixels with alpha > 60, percent of the frame, rounded to 0.1.
  */
+// The app counts overlapping rings separately (src/lib/scan/mask-core.ts). After seeding, run
+// `node --experimental-strip-types scripts/recount-masks.mjs` so the manifest uses the app's numbers.
 export async function maskStats(concern, input) {
   const { data, info } = await sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h, channels } = info;

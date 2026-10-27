@@ -1,0 +1,61 @@
+.stage {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  isolation: isolate;
+}
+
+.frame {
+  position: absolute;
+  /* The preview is a mirror, like a bathroom mirror; the saved photo is not. */
+  transform: scaleX(-1);
+  transition: opacity var(--d-enter) var(--ease-out);
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  overflow: visible;
+}
+
+.scrim {
+  fill: rgb(23 34 29 / 0.55);
+}
+
+.ghost {
+  opacity: 0.35;
+}
+
+.halo {
+  fill: none;
+  stroke: rgb(253 251 248 / 0.45);
+  stroke-width: 6;
+}
+
+.outline {
+  fill: none;
+  stroke-width: 2.5;
+  transition:
+    stroke var(--d-mask) var(--ease-out),
+    stroke-width var(--d-mask) var(--ease-out);
+}
+
+.outlineReady {
+  stroke-width: 3.5;
+}

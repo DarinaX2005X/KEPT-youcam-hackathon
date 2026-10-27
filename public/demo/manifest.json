@@ -420,7 +420,7 @@
           "skinAge": 36,
           "maskStats": {
             "acne": {
-              "blemishCount": 42
+              "blemishCount": 49
             },
             "redness": {
               "areaPct": 5.6
@@ -476,7 +476,7 @@
           "skinAge": 34,
           "maskStats": {
             "acne": {
-              "blemishCount": 28
+              "blemishCount": 29
             },
             "redness": {
               "areaPct": 3.4
@@ -532,7 +532,7 @@
           "skinAge": 33,
           "maskStats": {
             "acne": {
-              "blemishCount": 24
+              "blemishCount": 26
             },
             "redness": {
               "areaPct": 2.1
@@ -588,7 +588,7 @@
           "skinAge": 32,
           "maskStats": {
             "acne": {
-              "blemishCount": 17
+              "blemishCount": 15
             },
             "redness": {
               "areaPct": 0.8
@@ -824,7 +824,7 @@
           "skinAge": 30,
           "maskStats": {
             "acne": {
-              "blemishCount": 16
+              "blemishCount": 17
             },
             "redness": {
               "areaPct": 0.8
@@ -880,7 +880,7 @@
           "skinAge": 30,
           "maskStats": {
             "acne": {
-              "blemishCount": 37
+              "blemishCount": 34
             },
             "redness": {
               "areaPct": 0.8

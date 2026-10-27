@@ -1,0 +1,429 @@
+/* Phone first: one column, the camera fills the screen and the controls float over it. */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    'top'
+    'stage'
+    'side'
+    'tabs';
+  height: 100dvh;
+  background: var(--field);
+  padding-bottom: env(safe-area-inset-bottom);
+  overflow: hidden;
+}
+
+.top {
+  grid-area: top;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: max(12px, env(safe-area-inset-top)) 16px 8px;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--r-control);
+  font-size: var(--t-15);
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.cameraMode .title {
+  background: rgb(253 251 248 / 0.92);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-rest);
+}
+
+.intro {
+  display: none;
+}
+
+.stage {
+  grid-area: stage;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 4px 16px 12px;
+}
+
+.stageBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.cameraMode .stage {
+  grid-area: 1 / 1 / -1 / -1;
+  padding: 0;
+}
+
+.camera {
+  position: absolute;
+  inset: 0;
+}
+
+.side {
+  grid-area: side;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px 4px;
+}
+
+.tabs {
+  grid-area: tabs;
+  z-index: 2;
+  padding: 10px 16px 14px;
+}
+
+.cameraMode .tabs :global([role='radiogroup']) {
+  background: rgb(239 233 225 / 0.92);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+/* Shutter */
+.shutterRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.shutterHint {
+  display: none;
+  font-size: var(--t-15);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.shutterHintLive {
+  display: block;
+  order: -1;
+  padding: 4px 12px;
+  border-radius: var(--r-chip);
+  background: rgb(253 251 248 / 0.92);
+  color: var(--better);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sideNote {
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}
+
+.modelError {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 0;
+  font-size: var(--t-15);
+  line-height: 1.45;
+}
+
+.modelError button {
+  margin-left: -18px;
+}
+
+/* Loading */
+.loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.loadingBone {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.16;
+}
+
+.loadingPlate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 22px;
+  border-radius: var(--r-card);
+  background: rgb(253 251 248 / 0.92);
+  box-shadow: var(--shadow-raised);
+}
+
+.loadingHint {
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}
+
+/* Camera refused or busy */
+.blocked {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 96px 24px 24px;
+  text-align: center;
+  background: var(--field);
+}
+
+.blockedWell {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--reacting-bg);
+  color: var(--reacting);
+}
+
+.blockedTitle {
+  max-width: 22ch;
+  font-size: var(--t-30);
+}
+
+.blockedText {
+  max-width: 36ch;
+  color: var(--ink-soft);
+}
+
+.blockedActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(320px, 100%);
+  margin-top: 8px;
+}
+
+/* After the shot */
+.taken {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 72px 24px 200px;
+  background: var(--ink);
+}
+
+.takenImg {
+  max-height: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--r-photo);
+  box-shadow: var(--shadow-overlay);
+}
+
+.takenPlate {
+  position: absolute;
+  top: 50%;
+  padding: 8px 16px;
+  border-radius: var(--r-chip);
+  background: rgb(253 251 248 / 0.92);
+  font-weight: 600;
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--surface);
+  pointer-events: none;
+  animation: flash 120ms linear forwards;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.sheetActions {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.sheetChecks {
+  box-shadow: none;
+  background: var(--field);
+}
+
+@media (max-width: 767.98px) {
+  .sheetActions > * {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    display: none;
+  }
+}
+
+/* Desktop: video 3:4 in the middle, guidance on the left, checks on the right. */
+@media (min-width: 1024px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'top top top'
+      'intro stage side'
+      '. tabs .';
+    column-gap: 48px;
+    padding: 0 32px 20px;
+  }
+
+  .top {
+    padding: 14px 0 10px;
+  }
+
+  .cameraMode .title {
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .title {
+    font-size: var(--t-17);
+    padding: 0 4px;
+  }
+
+  .intro {
+    grid-area: intro;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-self: end;
+    align-self: center;
+    max-width: 300px;
+  }
+
+  .introTitle {
+    font-size: var(--t-30);
+  }
+
+  .introList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--ink-soft);
+  }
+
+  .introList li {
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .introList li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.62em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brand);
+  }
+
+  .stage,
+  .cameraMode .stage {
+    grid-area: stage;
+    padding: 0;
+    align-items: center;
+  }
+
+  .stageBox {
+    width: auto;
+    height: min(80vh, calc(100dvh - 160px));
+    aspect-ratio: 3 / 4;
+  }
+
+  .camera {
+    border-radius: var(--r-panel);
+    box-shadow: var(--shadow-print);
+  }
+
+  .side {
+    grid-area: side;
+    justify-self: start;
+    align-self: center;
+    width: min(380px, 100%);
+    gap: 20px;
+    padding: 0;
+  }
+
+  .shutterRow {
+    flex-direction: row;
+    gap: 20px;
+    padding: 8px 0 0 8px;
+  }
+
+  .shutterHint {
+    display: block;
+    max-width: 24ch;
+  }
+
+  .shutterHintLive {
+    order: 0;
+    background: none;
+    padding: 0;
+  }
+
+  .tabs {
+    grid-area: tabs;
+    padding: 16px 0 0;
+  }
+
+  .cameraMode .tabs :global([role='radiogroup']) {
+    background: var(--sunk);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .blocked {
+    padding: 32px;
+    border-radius: var(--r-panel);
+  }
+
+  .taken {
+    padding: 0;
+  }
+
+  .takenImg {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}

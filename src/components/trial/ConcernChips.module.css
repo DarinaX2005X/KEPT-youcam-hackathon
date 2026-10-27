@@ -1,0 +1,47 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--t-13);
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding-left: 2px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  height: 44px;
+}
+
+.delta {
+  margin-left: 2px;
+  font-weight: 700;
+}
+
+.better {
+  color: var(--better);
+}
+.worse {
+  color: var(--worse);
+}
+.flat {
+  color: var(--flat);
+}
+.reacting {
+  color: var(--reacting);
+}

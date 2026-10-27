@@ -1,0 +1,161 @@
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 32px var(--gutter) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 760px;
+}
+
+.h1 {
+  font-size: var(--t-44);
+}
+
+.h2 {
+  font-size: var(--t-22);
+  margin-top: 8px;
+}
+
+.lead {
+  font-size: var(--t-17);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 32px 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  align-items: flex-start;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.preview {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--r-photo);
+  background: var(--sunk);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meta {
+  font-size: var(--t-13);
+  color: var(--ink-soft);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.file {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-control);
+  font-size: var(--t-15);
+  cursor: pointer;
+}
+
+.file input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file:focus-within {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.timings {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 4px 24px;
+  font-size: var(--t-15);
+}
+
+.timings dt {
+  color: var(--ink-soft);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-15);
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 8px 12px 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.table th {
+  font-size: var(--t-13);
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: var(--r-card);
+  background: var(--worse-bg);
+  color: var(--ink);
+}
+
+.frames {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,95 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px 22px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.title {
+  font-size: var(--t-22);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 -10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 22px 64px 64px 1fr;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: var(--r-chip);
+  font-size: var(--t-15);
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--better-bg);
+  color: var(--better);
+}
+
+.open {
+  background: transparent;
+  border: 1.5px solid var(--line-strong);
+}
+
+.day {
+  font-weight: 600;
+}
+
+.date {
+  color: var(--ink-soft);
+}
+
+.status {
+  justify-self: end;
+  color: var(--ink-soft);
+  font-size: var(--t-13);
+}
+
+.done .day {
+  color: var(--ink-soft);
+}
+
+.next {
+  background: var(--brand-tint);
+}
+
+.next .open {
+  border-color: var(--brand);
+  border-width: 2px;
+}
+
+.next .day,
+.next .date,
+.next .status {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.note {
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}

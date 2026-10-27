@@ -1,0 +1,111 @@
+.root {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 16px var(--gutter) 96px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'head'
+    'left'
+    'right';
+  gap: 24px;
+}
+
+.head {
+  grid-area: head;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.headTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 24px;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+}
+
+.aside {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: -10px -8px -10px 0;
+}
+
+.title {
+  font-size: var(--t-30);
+  line-height: 1.05;
+}
+
+.meta {
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}
+
+.left {
+  grid-area: left;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.stageWrap {
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
+.strip {
+  --strip-bleed: var(--gutter);
+}
+
+.right {
+  grid-area: right;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--t-44);
+  }
+  .stageWrap {
+    max-width: 620px;
+  }
+}
+
+/* Desktop: the face on the left at the height of the window, the verdict column beside it. */
+@media (min-width: 1024px) {
+  .root {
+    --stage-col: clamp(500px, calc((100dvh - var(--header-h) - 40px) * 0.75 + 20px), 60%);
+    grid-template-columns: var(--stage-col) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'left head'
+      'left right';
+    column-gap: clamp(32px, 4vw, 56px);
+    row-gap: 24px;
+    padding-top: 12px;
+  }
+  .head {
+    padding-top: 8px;
+  }
+  .stageWrap {
+    max-width: none;
+  }
+  .strip {
+    --strip-bleed: 0px;
+  }
+  .right {
+    align-self: start;
+  }
+}

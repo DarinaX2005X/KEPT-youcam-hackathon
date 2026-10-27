@@ -1,0 +1,52 @@
+.page {
+  width: 100%;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 8px var(--gutter) 0;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 32px 0;
+}
+
+.note {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 32px var(--gutter);
+}
+
+.kinds {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 48px var(--gutter) 96px;
+  border-top: 1px solid var(--line);
+}
+
+.kindsTitle {
+  font-size: var(--t-30);
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

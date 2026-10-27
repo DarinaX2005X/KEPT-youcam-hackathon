@@ -125,11 +125,10 @@ describe('computeVerdict', () => {
       concern: 'acne',
       delta: -6,
     });
-    expect(v.next).toEqual({
-      action: 'keep_going',
-      label: 'Keep going and check in on day 49',
-      date: addDays(START, 49),
-    });
+    // A purge keeps the regular schedule; the day 21 slot is due on the test date.
+    expect(v.next.action).toBe('keep_going');
+    expect(v.next.label).toBe('Keep going. Check in today');
+    expect(v.next.date).toBe(addDays(START, 21));
     expectCopyRules(v);
   });
 
