@@ -115,8 +115,9 @@ export function PlanStep({ baseline, target, phase, actives, targets, watch, pla
               aria-label="Compare day 0 with the target"
             />
             <figcaption className={styles.compareCaption}>
-              <span>Day 0 and the {week.toLowerCase()} target</span>
-              <span className={styles.simNote}>Simulated with YouCam</span>
+              <span>
+                Drag to compare day 0 with the {week.toLowerCase()} target <span className={styles.simNote}>simulated with YouCam</span>
+              </span>
             </figcaption>
           </figure>
         ) : (

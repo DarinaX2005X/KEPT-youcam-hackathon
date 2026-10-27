@@ -156,10 +156,15 @@
 }
 
 .strip {
-  display: grid;
-  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  display: flex;
   gap: 8px;
   padding: 4px 0 2px;
+}
+
+.strip > li {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 76px;
 }
 
 .strip::-webkit-scrollbar {
@@ -172,8 +177,6 @@
   align-items: center;
   gap: 4px;
   width: 100%;
-  max-width: 76px;
-  margin: 0 auto;
   padding: 4px 4px 6px;
   border-radius: 12px;
   background: var(--surface);
@@ -210,9 +213,18 @@
 .track {
   position: relative;
   height: 36px;
-  margin: 0 calc((100% - (var(--n) - 1) * 8px) / var(--n) / 2);
+  margin: 0 13px;
   touch-action: none;
   cursor: pointer;
+}
+
+.trackEnds {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -6px;
+  font-size: var(--t-13);
+  font-weight: 500;
+  color: var(--ink-soft);
 }
 
 .rail,
@@ -232,7 +244,7 @@
 
 .fill {
   background: var(--brand);
-  transition: width 200ms var(--ease-out);
+  transition: width 120ms var(--ease-out);
 }
 
 .stop {
@@ -259,7 +271,7 @@
   background: var(--surface);
   border: 2px solid var(--brand);
   box-shadow: var(--shadow-raised);
-  transition: left 200ms var(--ease-out);
+  transition: left 120ms var(--ease-out);
 }
 
 @media (min-width: 900px) {
@@ -275,7 +287,7 @@
     max-width: min(100%, calc((100dvh - var(--header-h) - 170px) * 0.75));
   }
   .viewer {
-    max-width: min(100%, calc((100dvh - var(--header-h) - 340px) * 0.75));
+    max-width: min(100%, calc((100dvh - var(--header-h) - 380px) * 0.75));
   }
 }
 

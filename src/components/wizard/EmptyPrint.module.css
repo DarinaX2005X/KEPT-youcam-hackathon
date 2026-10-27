@@ -117,6 +117,10 @@
     border-radius: 12px;
     font-size: var(--t-13);
   }
+  .inner p {
+    font-size: var(--t-13);
+    line-height: 1.4;
+  }
   .inner li {
     min-height: 32px;
     gap: 8px;

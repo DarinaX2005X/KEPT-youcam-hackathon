@@ -16,7 +16,9 @@ export interface AgingViewerProps {
   sample?: boolean;
 }
 
-function closest(frames: AgingFrame[], age: number): number {
+const STRIP_MAX = 5;
+
+function closestTo(frames: AgingFrame[], age: number): number {
   let best = 0;
   frames.forEach((f, i) => {
     if (Math.abs(f.age - age) < Math.abs(frames[best].age - age)) best = i;
@@ -24,32 +26,46 @@ function closest(frames: AgingFrame[], age: number): number {
   return best;
 }
 
-/** One face across the years: a large print of the chosen age, the frames as a strip, and a slider by age. */
+/**
+ * Frames for the strip. YouCam returns about 16 ages; the strip keeps up to five, starting at the
+ * person's own age and stepping about a decade each (30, 40, 50, 60).
+ */
+function stripIndices(frames: AgingFrame[], startIndex: number): number[] {
+  if (frames.length <= STRIP_MAX + 1) return frames.map((_, i) => i);
+  const start = frames[startIndex].age;
+  const last = frames[frames.length - 1].age;
+  const step = (last - start) / (STRIP_MAX - 1) > 12 ? 15 : 10;
+  const out: number[] = [];
+  for (let a = start; out.length < STRIP_MAX && a <= last + step / 2; a += step) {
+    const i = closestTo(frames, a);
+    if (!out.includes(i)) out.push(i);
+  }
+  return out;
+}
+
+/** One face across the years: a large print of the chosen age, a strip of decades, and a slider over every age YouCam made. */
 export function AgingViewer({ frames, age, sample }: AgingViewerProps) {
-  const [index, setIndex] = useState(() => closest(frames, age));
+  const start = useMemo(() => closestTo(frames, age), [frames, age]);
+  const [index, setIndex] = useState(start);
   const trackRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const current = frames[Math.min(index, frames.length - 1)];
+  const strip = useMemo(() => stripIndices(frames, start), [frames, start]);
 
   useEffect(() => {
-    setIndex(closest(frames, age));
-  }, [frames, age]);
+    setIndex(start);
+  }, [start]);
 
-  const minAge = frames[0]?.age ?? 0;
-  const maxAge = frames[frames.length - 1]?.age ?? 0;
-  // Stops sit under the thumbnails, one per frame, evenly spaced.
-  const positions = useMemo(() => frames.map((_, i) => (frames.length > 1 ? (i / (frames.length - 1)) * 100 : 50)), [frames]);
+  const last = Math.max(frames.length - 1, 1);
+  const pos = (i: number) => (frames.length > 1 ? (i / last) * 100 : 50);
+  const dense = frames.length > 8;
 
   function fromPointer(e: PointerEvent<HTMLDivElement>) {
     const rect = trackRef.current?.getBoundingClientRect();
     if (!rect || rect.width === 0) return;
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    let best = 0;
-    positions.forEach((p, i) => {
-      if (Math.abs(p - x) < Math.abs(positions[best] - x)) best = i;
-    });
-    setIndex(best);
+    const x = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+    setIndex(Math.round(x * last));
   }
 
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
@@ -73,7 +89,7 @@ export function AgingViewer({ frames, age, sample }: AgingViewerProps) {
           {frames.map((f, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              key={f.age}
+              key={`${f.age}-${i}`}
               src={f.url}
               alt={i === index ? `Your face simulated at age ${f.age}` : ''}
               aria-hidden={i !== index || undefined}
@@ -91,18 +107,21 @@ export function AgingViewer({ frames, age, sample }: AgingViewerProps) {
         </figcaption>
       </figure>
 
-      <div className={styles.controls} style={{ ['--n' as string]: frames.length }}>
+      <div className={styles.controls}>
         <ul className={styles.strip} aria-label="Ages">
-          {frames.map((f, i) => (
-            <li key={f.age}>
-              <button type="button" className={clsx(styles.thumb, i === index && styles.thumbOn)} aria-pressed={i === index} onClick={() => setIndex(i)}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={f.url} alt="" draggable={false} />
-                <span className="num">{f.age}</span>
-                <span className="visually-hidden"> years</span>
-              </button>
-            </li>
-          ))}
+          {strip.map((i) => {
+            const f = frames[i];
+            return (
+              <li key={`${f.age}-${i}`}>
+                <button type="button" className={clsx(styles.thumb, i === index && styles.thumbOn)} aria-pressed={i === index} onClick={() => setIndex(i)}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={f.url} alt="" draggable={false} />
+                  <span className="num">{f.age}</span>
+                  <span className="visually-hidden"> years</span>
+                </button>
+              </li>
+            );
+          })}
         </ul>
 
         <div
@@ -120,23 +139,27 @@ export function AgingViewer({ frames, age, sample }: AgingViewerProps) {
           onPointerCancel={() => (dragging.current = false)}
         >
           <span className={styles.rail} aria-hidden />
-          <span className={styles.fill} style={{ width: `${positions[index]}%` }} aria-hidden />
-          {positions.map((p, i) => (
-            <span key={frames[i].age} className={clsx(styles.stop, i <= index && styles.stopOn)} style={{ left: `${p}%` }} aria-hidden />
-          ))}
+          <span className={styles.fill} style={{ width: `${pos(index)}%` }} aria-hidden />
+          {!dense
+            ? frames.map((f, i) => <span key={`${f.age}-${i}`} className={clsx(styles.stop, i <= index && styles.stopOn)} style={{ left: `${pos(i)}%` }} aria-hidden />)
+            : null}
           <div
             ref={handleRef}
             role="slider"
             tabIndex={0}
             aria-label="Age"
-            aria-valuemin={minAge}
-            aria-valuemax={maxAge}
+            aria-valuemin={frames[0].age}
+            aria-valuemax={frames[frames.length - 1].age}
             aria-valuenow={current.age}
             aria-valuetext={`Age ${current.age}`}
             className={styles.handle}
-            style={{ left: `${positions[index]}%` }}
+            style={{ left: `${pos(index)}%` }}
             onKeyDown={onKeyDown}
           />
+        </div>
+        <div className={clsx(styles.trackEnds, 'num')} aria-hidden>
+          <span>{frames[0].age}</span>
+          <span>{frames[frames.length - 1].age}</span>
         </div>
       </div>
     </div>
