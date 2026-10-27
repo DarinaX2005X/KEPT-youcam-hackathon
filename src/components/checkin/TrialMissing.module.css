@@ -1,0 +1,40 @@
+.root {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 72px var(--gutter) 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.art {
+  margin: 0 0 8px;
+}
+
+.title {
+  font-size: var(--t-30);
+  line-height: 1.08;
+}
+
+.text {
+  max-width: 46ch;
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+@media (min-width: 768px) {
+  .root {
+    padding-top: 120px;
+  }
+  .title {
+    font-size: var(--t-44);
+  }
+}

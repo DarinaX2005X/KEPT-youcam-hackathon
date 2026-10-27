@@ -24,6 +24,8 @@ export interface TrialWorkspaceProps {
   onDecision?: (trial: Trial) => void;
   /** Right end of the trial header, e.g. the trial menu button. */
   headerAside?: ReactNode;
+  /** Rendered right under the verdict card, e.g. the «Ask about this trial» panel. */
+  belowVerdict?: ReactNode;
   className?: string;
 }
 
@@ -48,7 +50,7 @@ function firstConcern(trial: Trial): Concern {
  * schedule on the right. Stage 03 mounts it on /trial/[id] with the data from `useTrialData`.
  * Toasts go to the nearest ToastProvider (the app's viewport region from the root layout).
  */
-export function TrialWorkspace({ data, onRunCheckin, onDecision, headerAside, className }: TrialWorkspaceProps) {
+export function TrialWorkspace({ data, onRunCheckin, onDecision, headerAside, belowVerdict, className }: TrialWorkspaceProps) {
   const { trial, scans, verdict, urls, now, reload } = data;
   const toast = useToast();
   const frames = useMemo(() => buildFrames(trial, scans, urls), [trial, scans, urls]);
@@ -189,6 +191,7 @@ export function TrialWorkspace({ data, onRunCheckin, onDecision, headerAside, cl
           onReasonSelect={showOnPhoto}
           highlight={fresh}
         />
+        {belowVerdict}
         <TrendChart
           trial={trial}
           scans={scans}

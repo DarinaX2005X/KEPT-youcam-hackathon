@@ -1,0 +1,136 @@
+.ruler {
+  --dot: 12px;
+  position: relative;
+  padding: 0 6px;
+}
+
+.notes {
+  position: relative;
+  height: 22px;
+}
+
+.note {
+  position: absolute;
+  bottom: 6px;
+  transform: translateX(-6px);
+  font-size: var(--t-13);
+  font-weight: 600;
+  color: var(--better);
+  white-space: nowrap;
+}
+
+.track {
+  position: relative;
+  height: 28px;
+}
+
+/* The day line. */
+.track::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--line-strong);
+}
+
+/* From first changes to full effect: the stretch where the product should show. */
+.effect {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgb(31 107 79 / 0.08), var(--better-bg) 60%, rgb(31 107 79 / 0.32));
+}
+
+.purge {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 8px;
+  background: var(--reacting-bg);
+  box-shadow: inset 0 0 0 1px rgb(154 91 18 / 0.18);
+}
+
+.onset {
+  position: absolute;
+  top: -6px;
+  bottom: 50%;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: var(--better);
+}
+
+.dot {
+  position: absolute;
+  top: 50%;
+  width: var(--dot);
+  height: var(--dot);
+  margin: calc(var(--dot) / -2) 0 0 calc(var(--dot) / -2);
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--brand);
+}
+
+.start {
+  background: var(--brand);
+}
+
+.end {
+  --dot: 16px;
+  background: var(--better);
+  border-color: var(--better);
+  box-shadow: 0 0 0 3px var(--better-bg);
+}
+
+.labels {
+  position: relative;
+  height: 22px;
+  margin-top: 4px;
+}
+
+.day {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: var(--t-13);
+  font-weight: 500;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.first {
+  transform: translateX(-6px);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.last {
+  transform: translateX(calc(-100% + 8px));
+  color: var(--better);
+  font-weight: 600;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: var(--t-13);
+  color: var(--reacting);
+  font-weight: 500;
+}
+
+.swatch {
+  width: 18px;
+  height: 10px;
+  border-radius: 4px;
+  background: var(--reacting-bg);
+  box-shadow: inset 0 0 0 1px rgb(154 91 18 / 0.18);
+}

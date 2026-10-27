@@ -1,0 +1,260 @@
+/* A working panel: flat Surface on Field with a line, like the schedule card. */
+.panel {
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.heading {
+  font-size: var(--t-22);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 64px;
+  padding: 18px 24px;
+  border-radius: var(--r-card);
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: inherit;
+}
+
+.chevron {
+  flex: none;
+  color: var(--ink-soft);
+  transition: transform var(--d-hover) var(--ease-out);
+}
+
+.open .chevron {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .toggle:hover .chevron {
+    color: var(--ink);
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 24px 24px;
+}
+
+.body[hidden] {
+  display: none;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestion {
+  min-height: 40px;
+  padding: 9px 14px;
+  border-radius: var(--r-chip);
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  font-size: var(--t-15);
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--d-hover) var(--ease-out),
+    border-color var(--d-hover) var(--ease-out),
+    transform var(--d-press) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .suggestion:hover:not(:disabled) {
+    border-color: var(--line-strong);
+    background: #fff;
+  }
+}
+
+.suggestion:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.suggestion:disabled {
+  cursor: not-allowed;
+  color: var(--ink-soft);
+}
+
+.form {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-control);
+  background: var(--surface);
+  font-size: var(--t-17);
+  box-shadow: inset 0 1px 2px rgb(40 34 26 / 0.04);
+  transition:
+    border-color var(--d-hover) var(--ease-out),
+    box-shadow var(--d-hover) var(--ease-out);
+}
+
+.input::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-tint);
+}
+
+.input:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.photos {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Switch drawn on a real checkbox, so keyboard and screen readers get native behaviour. */
+.switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 24px;
+  margin: 1px 0 0;
+  border-radius: 12px;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: background-color var(--d-hover) var(--ease-out);
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(40 34 26 / 0.2);
+  transition: transform var(--d-hover) var(--ease-out);
+}
+
+.switch:checked {
+  background: var(--brand);
+}
+
+.switch:checked::after {
+  transform: translateX(16px);
+}
+
+.photosLabel {
+  display: block;
+  font-size: var(--t-15);
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.photosHint {
+  font-size: var(--t-13);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.answer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px 20px;
+  border-radius: var(--r-control);
+  background: var(--field);
+}
+
+.asked {
+  font-size: var(--t-15);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.tool {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--t-13);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.toolIcon {
+  flex: none;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: var(--t-17);
+  line-height: 1.55;
+  animation: enter var(--d-enter) var(--ease-out);
+}
+
+.error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  font-size: var(--t-15);
+  font-weight: 500;
+  color: var(--worse);
+}
+
+.error > p {
+  flex: 1 1 200px;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .toggle {
+    padding: 16px 18px;
+  }
+  .body {
+    padding: 0 18px 20px;
+  }
+  .answer {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,86 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+/* Trial menu */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: -6px -12px 0;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--r-control);
+  text-align: left;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background-color var(--d-hover) var(--ease-out);
+}
+
+.row:hover {
+  background: var(--sunk);
+}
+
+.row:active {
+  background: var(--line);
+}
+
+.rowIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sunk);
+  color: var(--brand);
+}
+
+.row:hover .rowIcon {
+  background: var(--surface);
+}
+
+.rowIconDanger {
+  color: var(--worse);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.rowLabel {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.rowHint {
+  font-size: var(--t-15);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.danger {
+  color: var(--worse);
+}
+
+/* Doubled class: wins over the primary variant's own hover rule. */
+.dangerButton.dangerButton {
+  background: var(--worse);
+  color: var(--on-brand);
+}
+
+.dangerButton.dangerButton.dangerButton:hover:not(:disabled) {
+  background: #9c3d30;
+}
