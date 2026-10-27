@@ -52,8 +52,5 @@ export function useAging() {
     }
   }, []);
 
-  /** Marks the run as failed before it reached YouCam, e.g. when the stored photo is missing. */
-  const fail = useCallback((message: string) => setRun({ status: 'error', message, limit: false }), []);
-
-  return { run, start, fail };
+  return { run, start };
 }

@@ -33,10 +33,29 @@ function statLine(concern: Concern, b: BaselineData): string | null {
   return null;
 }
 
+/** Maps that draw clear marks on a face; moisture, radiance and the like are faint washes. */
+const CLEAR_MAPS: readonly Concern[] = ['acne', 'redness', 'pore', 'wrinkle', 'texture', 'oiliness', 'age_spot'];
+
+function hasVisibleMask(c: Concern, b: BaselineData): boolean {
+  if (!b.masks[c]) return false;
+  const st = b.maskStats[c];
+  if (c === 'acne' && st?.blemishCount !== undefined) return st.blemishCount > 0;
+  if (c === 'redness' && st?.areaPct !== undefined) return st.areaPct > 0;
+  return CLEAR_MAPS.includes(c);
+}
+
+/** The chip selected when the result arrives: the first goal whose map shows something on the photo. */
+function defaultZone(b: BaselineData | null, zones: Concern[]): Concern | null {
+  if (!b) return zones[0] ?? null;
+  return b.zones.find((c) => hasVisibleMask(c, b)) ?? b.zones.find((c) => b.masks[c]) ?? b.zones[0] ?? null;
+}
+
 export function BaselineStep({ zones, baseline, scan, captured, sample, targetStatus, targetLabel, onTakePhoto, onContinue }: BaselineStepProps) {
   const urls = useBlobUrls<string>(baseline ? { photo: baseline.photo, ...baseline.masks } : null);
   const capturedUrl = useObjectUrl(captured);
-  const [selected, setSelected] = useState<Concern | null>(zones[0] ?? null);
+  // undefined until the person picks a chip: then the default follows the maps that came back.
+  const [picked, setPicked] = useState<Concern | null | undefined>(undefined);
+  const selected = picked === undefined ? defaultZone(baseline, zones) : picked;
 
   const phase = baseline ? 'done' : scan.status === 'running' ? 'running' : scan.status === 'error' ? 'error' : 'intro';
   const error = scan.error;
@@ -106,7 +125,7 @@ export function BaselineStep({ zones, baseline, scan, captured, sample, targetSt
                     key={c}
                     selected={c === active}
                     count={score !== undefined ? Math.round(score) : undefined}
-                    onClick={() => setSelected(c === active ? null : c)}
+                    onClick={() => setPicked(c === active ? null : c)}
                     className={styles.chip}
                     style={{ animationDelay: `${i * 70}ms` }}
                     aria-label={`${concernLabel(c)}${score !== undefined ? `, score ${Math.round(score)}` : ''}. Show the map`}

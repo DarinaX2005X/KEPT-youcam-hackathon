@@ -30,7 +30,11 @@ export function TrialSheet({ name, activeIds }: TrialSheetProps) {
           </>
         ) : (
           <>
-            <EmptyPrint label={weekLabel(plan.fullEffectDay)} sublabel="Target" variant="target" tilt={2.5} className={styles.back} />
+            {hasPlan ? (
+              <EmptyPrint label={weekLabel(plan.fullEffectDay)} sublabel="Target" variant="target" tilt={2.5} className={styles.back} />
+            ) : (
+              <EmptyPrint label="Target" variant="target" tilt={2.5} className={styles.back} />
+            )}
             <EmptyPrint label="Day 0" sublabel="Your photo" tilt={-2} className={styles.front} />
           </>
         )}

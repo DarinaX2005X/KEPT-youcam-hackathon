@@ -96,14 +96,16 @@
   z-index: 2;
   display: inline-flex;
   align-items: center;
-  height: 28px;
-  padding: 0 10px;
+  /* Each label stays in its own half, clear of the divider and its handle: long ones wrap. */
+  max-width: calc(50% - 30px);
+  min-height: 28px;
+  padding: 6px 10px;
   border-radius: var(--r-chip);
   background: var(--plate);
   color: var(--ink);
   font-size: var(--t-13);
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.2;
   pointer-events: none;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -116,4 +118,5 @@
 
 .cornerRight {
   right: 12px;
+  text-align: right;
 }

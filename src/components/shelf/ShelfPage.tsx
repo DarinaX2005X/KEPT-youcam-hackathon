@@ -145,11 +145,6 @@ export function ShelfPage() {
     <main className={styles.page}>
       <header className={styles.head}>
         <h1 className={styles.title}>Your shelf</h1>
-        {empty ? null : (
-          <Button href="/start" variant="secondary" icon={Plus} className={styles.headCta}>
-            Start a trial
-          </Button>
-        )}
       </header>
 
       {shelf.status === 'loading' ? (
@@ -175,7 +170,8 @@ export function ShelfPage() {
 
       {ready && !empty ? (
         <div className={styles.body}>
-          {samples.length ? (
+          {/* Only a shelf of samples needs the explanation; mixed in with real trials, each sample row carries its own tag. */}
+          {samples.length && samples.length === items.length ? (
             <div className={styles.sampleBar}>
               <p>These are sample trials. Your own trials appear here too.</p>
               <Button variant="quiet" onClick={removeSamples} loading={removing} className={styles.sampleButton}>

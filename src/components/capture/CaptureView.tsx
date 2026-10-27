@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
-import { CameraOff, X } from 'lucide-react';
+import { CameraOff, ImageOff, X } from 'lucide-react';
 import { Button, IconButton, MOBILE_QUERY, PhotoPrint, Segmented, Sheet, Skeleton, StepProgress, useMediaQuery } from '@/components/ui';
 import {
   COUNTDOWN_MS,
@@ -27,6 +27,7 @@ import { loadManifest } from '@/lib/store';
 import { CameraStage } from './CameraStage';
 import { ChecksList } from './ChecksList';
 import { DropZone } from './DropZone';
+import { decoded, relaxStill } from './stillChecks';
 import { Shutter } from './Shutter';
 import styles from './CaptureView.module.css';
 import still from './StillPane.module.css';
@@ -155,7 +156,8 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
     try {
       const bitmap = await decodeImage(file);
       try {
-        const analysis = await analyzeStill(bitmap, 'upload', await ghostAnchors());
+        const analysis = relaxStill(await analyzeStill(bitmap, 'upload', await ghostAnchors()));
+        await decoded(analysis.previewUrl);
         if (token !== uploadToken.current) URL.revokeObjectURL(analysis.previewUrl);
         else setUpload({ status: 'ready', analysis });
       } finally {
@@ -184,7 +186,8 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
         const url = checkin ? manifest.samplePhotos.checkin : manifest.samplePhotos.baseline;
         const bitmap = await loadBitmap(url);
         try {
-          const analysis = await analyzeStill(bitmap, 'sample', await ghostAnchors());
+          const analysis = relaxStill(await analyzeStill(bitmap, 'sample', await ghostAnchors()));
+          await decoded(analysis.previewUrl);
           if (!alive.current) URL.revokeObjectURL(analysis.previewUrl);
           else setSample({ status: 'ready', analysis });
         } finally {
@@ -331,7 +334,10 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
     } else {
       stage = (
         <div className={clsx(still.zone, still.zoneError)} role="alert">
-          <p className={still.zoneTitle}>{s.status === 'error' ? s.message : ''}</p>
+          <span className={clsx(still.well, still.wellError)} aria-hidden>
+            <ImageOff size={26} strokeWidth={1.75} />
+          </span>
+          <p className={still.zoneMessage}>{s.status === 'error' ? s.message : ''}</p>
           <Button size="lg" onClick={() => setSample({ status: 'empty' })}>
             Try again
           </Button>

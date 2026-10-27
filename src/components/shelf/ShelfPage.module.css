@@ -123,11 +123,6 @@
 }
 
 @media (max-width: 767.98px) {
-  /* The header already carries Start a trial on phones. */
-  .headCta {
-    display: none;
-  }
-
   .tabs {
     display: flex;
     align-self: stretch;

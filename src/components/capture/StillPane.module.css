@@ -72,6 +72,16 @@
   pointer-events: none;
 }
 
+.zoneMessage {
+  max-width: 32ch;
+  margin-bottom: 4px;
+  font-size: var(--t-17);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--ink);
+  pointer-events: none;
+}
+
 .zoneHint {
   max-width: 32ch;
   margin-bottom: 8px;

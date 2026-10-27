@@ -1,8 +1,11 @@
 'use client';
 
 import clsx from 'clsx';
-import { useEffect, useRef, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { IconButton } from '@/components/ui';
 import { formatShortDate, sameLocalDay, type CheckinSlot } from '@/lib/domain';
+import { ThumbImage } from '@/components/ui/thumbnail';
 import type { Frame } from './model';
 import styles from './CheckinStrip.module.css';
 
@@ -30,6 +33,39 @@ export function CheckinStrip({ frames, upcoming = [], maxUpcoming = 2, now, valu
   const order = target ? [...taken, target] : taken;
   const refs = useRef<Record<string, HTMLButtonElement | null>>({});
   const scroller = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLUListElement>(null);
+  // Which sides have prints out of view: they get a soft fade and, with a mouse, an arrow.
+  const [cut, setCut] = useState({ left: false, right: false });
+
+  const measure = useCallback(() => {
+    const box = scroller.current;
+    if (!box) return;
+    const max = box.scrollWidth - box.clientWidth;
+    const left = box.scrollLeft > 2;
+    const right = box.scrollLeft < max - 2;
+    setCut((c) => (c.left === left && c.right === right ? c : { left, right }));
+  }, []);
+
+  useEffect(() => {
+    const box = scroller.current;
+    if (!box) return;
+    measure();
+    box.addEventListener('scroll', measure, { passive: true });
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
+    ro?.observe(box);
+    if (list.current) ro?.observe(list.current);
+    return () => {
+      box.removeEventListener('scroll', measure);
+      ro?.disconnect();
+    };
+  }, [measure]);
+
+  function page(dir: -1 | 1) {
+    const box = scroller.current;
+    if (!box) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    box.scrollBy({ left: dir * Math.max(120, box.clientWidth * 0.7), behavior: reduce ? 'auto' : 'smooth' });
+  }
 
   // Keep the selected print in view when the selection changes from elsewhere.
   useEffect(() => {
@@ -73,10 +109,7 @@ export function CheckinStrip({ frames, upcoming = [], maxUpcoming = 2, now, valu
           onKeyDown={(e) => onKeyDown(e, f.id)}
         >
           <span className={styles.photo}>
-            {f.photo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={f.photo} alt="" loading="lazy" decoding="async" draggable={false} />
-            ) : null}
+            {f.photo ? <ThumbImage src={f.photo} sizes="80px" /> : null}
           </span>
         </button>
         <span className={clsx(styles.label, selected && styles.labelSelected)} aria-hidden>
@@ -87,9 +120,9 @@ export function CheckinStrip({ frames, upcoming = [], maxUpcoming = 2, now, valu
   }
 
   return (
-    <div className={clsx(styles.root, className)}>
+    <div className={clsx(styles.root, cut.left && styles.cutLeft, cut.right && styles.cutRight, className)}>
       <div ref={scroller} className={styles.scroller}>
-        <ul className={styles.list} aria-label="Trial photos">
+        <ul ref={list} className={styles.list} aria-label="Trial photos">
           {taken.map(print)}
           {upcoming.slice(0, maxUpcoming).map((slot) => {
             const today = now ? sameLocalDay(slot.date, now) : false;
@@ -108,6 +141,11 @@ export function CheckinStrip({ frames, upcoming = [], maxUpcoming = 2, now, valu
           {target ? print(target) : null}
         </ul>
       </div>
+      <span className={clsx(styles.fade, styles.fadeLeft)} aria-hidden />
+      <span className={clsx(styles.fade, styles.fadeRight)} aria-hidden />
+      {/* Mouse users get arrows; touch and keyboard already scroll the strip. */}
+      <IconButton icon={ChevronLeft} label="Earlier photos" variant="secondary" tabIndex={-1} className={clsx(styles.arrow, styles.arrowLeft)} onClick={() => page(-1)} />
+      <IconButton icon={ChevronRight} label="Later photos" variant="secondary" tabIndex={-1} className={clsx(styles.arrow, styles.arrowRight)} onClick={() => page(1)} />
     </div>
   );
 }

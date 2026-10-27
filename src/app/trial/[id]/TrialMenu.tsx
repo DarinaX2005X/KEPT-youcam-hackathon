@@ -14,6 +14,8 @@ import styles from './trialPage.module.css';
 
 export interface TrialMenuProps {
   data: ReadyTrialData;
+  /** Lists «Download report». Off for sunscreen, which has no verdict to report. */
+  report?: boolean;
 }
 
 function Row({ icon: Icon, label, text, danger, ...rest }: { icon: LucideIcon; label: string; text: string; danger?: boolean } & ({ href: string; onClick?: undefined } | { href?: undefined; onClick: () => void })) {
@@ -44,7 +46,7 @@ function Row({ icon: Icon, label, text, danger, ...rest }: { icon: LucideIcon; l
 }
 
 /** Three-dot menu on the trial header: report, pause or resume, delete with Undo. */
-export function TrialMenu({ data }: TrialMenuProps) {
+export function TrialMenu({ data, report = true }: TrialMenuProps) {
   const { trial, scans, reload } = data;
   const router = useRouter();
   const toast = useToast();
@@ -137,7 +139,9 @@ export function TrialMenu({ data }: TrialMenuProps) {
       >
         {confirming ? null : (
           <ul className={styles.menu}>
-            <Row icon={FileText} label="Download report" text="One page with the photos, scores and verdict, ready to print or save as PDF" href={`/trial/${trial.id}/report`} />
+            {report ? (
+              <Row icon={FileText} label="Download report" text="One page with the photos, scores and verdict, ready to print or save as PDF" href={`/trial/${trial.id}/report`} />
+            ) : null}
             {canPause ? (
               paused ? (
                 <Row icon={CirclePlay} label="Resume trial" text="Back to testing. Your day count carries on from the start date" onClick={() => void setStatus('testing')} />

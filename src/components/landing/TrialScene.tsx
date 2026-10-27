@@ -87,7 +87,17 @@ function ScenePrint({
     <figure className={clsx(styles.print, target && styles.target, className)} style={{ rotate: `${tilt}deg` }} data-print={id}>
       <div className={styles.photo}>
         <div className={styles.zoom}>
-          <Image src={src} alt="" fill priority={priority} sizes="(max-width: 767px) 92vw, 400px" className={styles.img} draggable={false} />
+          <Image
+            src={src}
+            alt=""
+            fill
+            preload={priority}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : undefined}
+            sizes="(max-width: 767px) 80vw, 380px"
+            className={styles.img}
+            draggable={false}
+          />
         </div>
         {mask ? (
           <div className={clsx(styles.maskClip)} data-mask={id}>
@@ -111,7 +121,6 @@ function Counter({ id, value, tone }: { id: string; value: MotionValue<string>; 
   return (
     <span className={clsx(styles.count, styles[tone])} data-count={id}>
       <motion.span className="num">{value}</motion.span>
-      {' '}blemishes
     </span>
   );
 }
@@ -188,8 +197,8 @@ function Ruler({ data, g }: { data: HeroData; g: Geometry }) {
       <text x={x(full)} y={axisY + 18} textAnchor="middle" className={styles.dayLabel}>
         Day {full}
       </text>
-      <text x={x(0)} y={g.top - 16} className={styles.chartLabel}>
-        Acne score, with the range Kept expects
+      <text x={x(0) + 10} y={y((data.expected[0] ?? 0) + data.noise) - 8} className={styles.chartLabel}>
+        Expected acne score
       </text>
     </svg>
   );
@@ -211,8 +220,12 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
   const last = data.latest.blemishes ?? 0;
   const count0 = useMotionValue(base);
   const count1 = useMotionValue(last);
-  const text0 = useTransform(count0, (v) => String(Math.round(v)));
-  const text1 = useTransform(count1, (v) => String(Math.round(v)));
+  const blemishes = (v: number) => {
+    const n = Math.round(v);
+    return `${n} ${n === 1 ? 'blemish' : 'blemishes'}`;
+  };
+  const text0 = useTransform(count0, blemishes);
+  const text1 = useTransform(count1, blemishes);
 
   useLayoutEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)');
@@ -289,10 +302,8 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
     ];
 
     const controls = animateIn(seq, { repeat: Infinity });
-    (window as unknown as { __sceneStarts?: number[] }).__sceneStarts = [
-      ...((window as unknown as { __sceneStarts?: number[] }).__sceneStarts ?? []),
-      performance.now(),
-    ];
+    // Development hook for frame-by-frame review of the loop.
+    if (process.env.NODE_ENV !== 'production') (window as unknown as { __scene?: typeof controls }).__scene = controls;
 
     let visible = true;
     const sync = () => {

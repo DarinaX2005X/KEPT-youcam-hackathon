@@ -87,13 +87,16 @@ function ShelfContext({ items, loading }: { items: ShelfItem[]; loading: boolean
       </section>
     );
   }
+  // Decided trials are the evidence a check leans on, so they come first; testing ones follow.
+  const decided = (it: ShelfItem) => it.trial.status === 'kept' || it.trial.status === 'stopped';
+  const ordered = [...items.filter(decided), ...items.filter((it) => !decided(it))];
   return (
     <section className={styles.context} aria-labelledby="ctx-head">
       <h2 id="ctx-head" className={styles.contextHead}>
         Checked against your shelf
       </h2>
       <ul className={styles.contextList}>
-        {items.slice(0, 5).map((it, i) => (
+        {ordered.slice(0, 5).map((it, i) => (
           <li key={it.trial.id} className={styles.contextRow}>
             <MiniPrint src={it.thumb} size="sm" tilt={i % 2 ? 1.5 : -1.5} />
             <span className={styles.contextName}>

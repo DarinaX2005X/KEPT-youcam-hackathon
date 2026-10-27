@@ -116,3 +116,8 @@
   color: var(--worse);
   font-size: var(--t-15);
 }
+
+/* Visible next to the trial menu, quieter than the verdict's actions. */
+.reportButton {
+  flex: none;
+}

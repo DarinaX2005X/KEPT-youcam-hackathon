@@ -79,7 +79,7 @@ export function GoalsStep({ state, actives, dispatch, onContinue }: GoalsStepPro
   const full = zones.length >= MAX_ZONES_HARD;
   const ready = state.targets.length > 0;
 
-  function target(c: Concern, i: number) {
+  function target(c: Concern) {
     const selected = state.targets.includes(c);
     return (
       <Chip
@@ -87,8 +87,6 @@ export function GoalsStep({ state, actives, dispatch, onContinue }: GoalsStepPro
         selected={selected}
         disabled={!selected && full}
         onClick={() => dispatch({ type: 'toggleTarget', concern: c })}
-        style={{ animationDelay: `${i * 40}ms` }}
-        className={styles.chip}
       >
         {concernLabel(c)}
       </Chip>
@@ -134,7 +132,7 @@ export function GoalsStep({ state, actives, dispatch, onContinue }: GoalsStepPro
 
         <fieldset className={styles.group}>
           <legend className={layout.smallHead}>More areas</legend>
-          <div className={styles.chips}>{more.map((c, i) => target(c, i + main.length))}</div>
+          <div className={styles.chips}>{more.map(target)}</div>
         </fieldset>
 
         <p className={clsx(styles.zones, zones.length > MAX_DEFAULT_ZONES && styles.slow)} aria-live="polite">

@@ -16,6 +16,23 @@
   min-width: 0;
 }
 
+.stageEnter {
+  animation: stage-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stageEnter {
+    animation: none;
+  }
+}
+
 /* Two columns: the step on the left, the trial taking shape on the right. */
 .split {
   display: grid;

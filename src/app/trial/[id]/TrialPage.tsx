@@ -3,11 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useReducedMotion } from 'motion/react';
+import { FileText } from 'lucide-react';
 import { computeVerdict } from '@/lib/domain';
-import { useToast } from '@/components/ui';
+import { Button, useToast } from '@/components/ui';
 import { TrialWorkspace, TrialWorkspaceSkeleton, useTrialData, type ReadyTrialData } from '@/components/trial';
 import { FROM_TRIAL_KEY, TrialMissing } from '@/components/checkin';
 import { CoachPanel } from '@/components/coach';
+import { PreventionTrial } from '@/components/prevention';
+import { isPrevention } from '@/components/shelf/model';
 import { TrialMenu } from './TrialMenu';
 import { CreateTarget } from './CreateTarget';
 import styles from './trialPage.module.css';
@@ -83,6 +86,14 @@ export function TrialPage({ trialId, newScanId }: TrialPageProps) {
     );
   }
 
+  if (shown && isPrevention(shown.trial)) {
+    return (
+      <main className={styles.main}>
+        <PreventionTrial key={shown.trial.id} trial={shown.trial} scans={shown.scans} headerAside={<TrialMenu data={shown} report={false} />} />
+      </main>
+    );
+  }
+
   return (
     <main className={styles.main}>
       {shown ? (
@@ -90,7 +101,14 @@ export function TrialPage({ trialId, newScanId }: TrialPageProps) {
           key={shown.trial.id}
           data={shown}
           onRunCheckin={runCheckin}
-          headerAside={<TrialMenu data={shown} />}
+          headerAside={
+            <>
+              <Button variant="quiet" icon={FileText} href={`/trial/${encodeURIComponent(shown.trial.id)}/report`} className={styles.reportButton}>
+                Download report
+              </Button>
+              <TrialMenu data={shown} />
+            </>
+          }
           belowVerdict={
             <>
               <CreateTarget trial={shown.trial} scans={shown.scans} onCreated={() => void data.reload()} />

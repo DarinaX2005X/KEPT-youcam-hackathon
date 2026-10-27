@@ -66,7 +66,7 @@ export function DropZone({ onFile, error, note }: DropZoneProps) {
         {error ? <ImageOff size={26} strokeWidth={1.75} /> : <ImagePlus size={26} strokeWidth={1.75} />}
       </span>
       {error ? (
-        <p className={styles.zoneTitle} role="alert">
+        <p className={styles.zoneMessage} role="alert">
           {error}
         </p>
       ) : (

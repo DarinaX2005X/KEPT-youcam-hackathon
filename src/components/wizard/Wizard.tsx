@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AnimatePresence, motion } from 'motion/react';
+import clsx from 'clsx';
 import { Skeleton, useToast } from '@/components/ui';
 import { CaptureView, type CaptureResult } from '@/components/capture';
 import { downloadCalendar } from '@/components/trial';
@@ -108,6 +108,15 @@ export function Wizard() {
   const steps = prevention ? PREVENTION_STEPS : TRIAL_STEPS;
   const step: StepId = prevention && (state.step === 'baseline' || state.step === 'plan') ? 'goals' : state.step;
   const busy = scan.status === 'running';
+
+  // The step shown on arrival appears as is; every later step rises in.
+  const stepKey = `${step}-${prevention}`;
+  const [shownKey, setShownKey] = useState<string | null>(null);
+  const [riseIn, setRiseIn] = useState(false);
+  if (hydrated && shownKey !== stepKey) {
+    setShownKey(stepKey);
+    if (shownKey !== null) setRiseIn(true);
+  }
   const sample = (state.baseline?.capture.source ?? captured?.meta.source) === 'sample';
 
   const startTarget = useCallback(
@@ -313,18 +322,10 @@ export function Wizard() {
   return (
     <main className={styles.page}>
       <WizardSteps steps={steps} current={step} canOpen={canOpen} onOpen={(id) => dispatch({ type: 'goto', step: id })} className={styles.steps} />
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={`${step}-${prevention}`}
-          className={styles.stage}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8, transition: { duration: 0.14 } }}
-          transition={{ duration: 0.36, ease: [0.2, 0.8, 0.2, 1] }}
-        >
-          {content}
-        </motion.div>
-      </AnimatePresence>
+      {/* The next step mounts at once and rises in with CSS: no waiting for the old one to leave. */}
+      <div key={stepKey} className={clsx(styles.stage, riseIn && styles.stageEnter)}>
+        {content}
+      </div>
       {capturing ? <CaptureView mode="baseline" onCapture={(r) => void onCapture(r)} onCancel={() => setCapturing(false)} /> : null}
     </main>
   );

@@ -232,7 +232,8 @@
 }
 
 .chartLabel {
-  font-weight: 500;
+  font-weight: 600;
+  fill: var(--better);
 }
 
 .point {
@@ -250,6 +251,7 @@
 }
 
 .ring {
+  opacity: 0;
   fill: none;
   stroke: var(--brand);
   stroke-width: 2;
@@ -302,28 +304,29 @@
 /* ---------------------------------------------------------------- phone: two prints overlap, target behind */
 
 @media (max-width: 767px) {
+  /* Day 56 on top at the right, day 0 lower at the left with its caption clear of day 56, the target behind. */
   .prints {
     display: block;
-    height: calc((100vw - 32px) * 0.62 * 4 / 3 + 70px);
+    height: calc((100vw - 32px) * 0.58 * 4 / 3 + 168px);
   }
   .print {
     position: absolute;
-    width: 62%;
+    width: 58%;
   }
   .p0 {
     left: 0;
-    top: 22px;
+    top: 112px;
     z-index: 2;
   }
   .p1 {
     right: 0;
-    top: 36px;
+    top: 58px;
     z-index: 3;
   }
   .p2 {
-    right: 10%;
-    top: -6px;
-    width: 40%;
+    right: 4%;
+    top: 0;
+    width: 44%;
     z-index: 1;
     padding: 6px 6px 8px;
   }
@@ -331,6 +334,8 @@
     display: none;
   }
   .p2 .simTag {
+    left: 6px;
+    top: 6px;
     font-size: 11px;
     height: 20px;
     padding: 0 6px;

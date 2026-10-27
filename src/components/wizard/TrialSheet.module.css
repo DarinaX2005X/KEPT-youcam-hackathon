@@ -40,8 +40,9 @@
   overflow-wrap: anywhere;
 }
 
+/* «Your product» until a name is typed: a heading waiting for its words, not a disabled one. */
 .placeholder {
-  color: var(--line-strong);
+  color: var(--ink);
 }
 
 .actives {

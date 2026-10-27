@@ -20,17 +20,6 @@
   gap: 8px;
 }
 
-.chip {
-  animation: enter var(--d-enter) var(--ease-out) both;
-}
-
-@keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
 .watch {
   padding: 18px 20px 20px;
   border-radius: var(--r-card);
@@ -108,8 +97,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .chip {
-    animation: none;
-  }
-}

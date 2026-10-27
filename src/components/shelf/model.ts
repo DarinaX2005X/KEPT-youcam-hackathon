@@ -69,28 +69,32 @@ export interface MainChange {
 }
 
 /**
- * The change a decided trial is remembered by: the target that moved most between day 0 and the
- * last photo. A stopped trial also looks at the areas it watched, since a reaction is why it stopped.
- * When the product did not do enough, its main goal is what matters, even if it barely moved.
+ * The change a decided trial is remembered by: its first target (what the product was bought for,
+ * e.g. Acne for salicylic acid) between day 0 and the last photo. When that area has no score on
+ * either photo, the target that moved most stands in; a stopped trial also looks at what it watched.
  */
 export function mainChange(trial: Trial, scans: readonly Scan[], kind?: VerdictKind): MainChange | undefined {
+  void kind;
   const sorted = [...scans].sort((a, b) => a.day - b.day);
   const base = sorted.find((s) => s.kind === 'baseline') ?? sorted[0];
   const latest = sorted[sorted.length - 1];
   if (!base || !latest || latest === base) return undefined;
-  const pool =
-    kind === 'not_enough' && trial.targets.length
-      ? trial.targets.slice(0, 1)
-      : trial.status === 'stopped'
-        ? [...trial.targets, ...trial.watch]
-        : trial.targets;
-  let best: { concern: Concern; delta: number } | undefined;
-  for (const c of pool) {
+  const deltaOf = (c: Concern): number | undefined => {
     const a = base.scores[c]?.ui;
     const b = latest.scores[c]?.ui;
-    if (a === undefined || b === undefined) continue;
-    const delta = b - a;
-    if (!best || Math.abs(delta) > Math.abs(best.delta)) best = { concern: c, delta };
+    return a === undefined || b === undefined ? undefined : b - a;
+  };
+  let best: { concern: Concern; delta: number } | undefined;
+  const first = trial.targets[0];
+  const firstDelta = first ? deltaOf(first) : undefined;
+  if (first && firstDelta !== undefined) best = { concern: first, delta: firstDelta };
+  else {
+    const pool = trial.status === 'stopped' ? [...trial.targets, ...trial.watch] : trial.targets;
+    for (const c of pool) {
+      const delta = deltaOf(c);
+      if (delta === undefined) continue;
+      if (!best || Math.abs(delta) > Math.abs(best.delta)) best = { concern: c, delta };
+    }
   }
   if (!best) return undefined;
   const days = latest.day;

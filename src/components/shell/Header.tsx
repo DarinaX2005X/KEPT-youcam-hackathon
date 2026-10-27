@@ -31,6 +31,7 @@ export function Header() {
   }, []);
 
   if (isChromeless(pathname)) return null;
+  const onStart = pathname === '/start';
 
   return (
     <header className={clsx(styles.header, scrolled && styles.scrolled, 'no-print')}>
@@ -48,9 +49,12 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <Button href="/start" variant="primary" size="md" className={styles.cta}>
-            Start a trial
-          </Button>
+          {/* On /start the wizard is the trial being started; a second way in would only restart it. */}
+          {onStart ? null : (
+            <Button href="/start" variant="primary" size="md" className={styles.cta}>
+              Start a trial
+            </Button>
+          )}
           <IconButton icon={Menu} label="Open menu" className={styles.menuButton} aria-haspopup="dialog" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)} />
         </div>
       </div>
@@ -66,9 +70,11 @@ export function Header() {
             How Kept measures
           </Link>
         </nav>
-        <Button href="/start" variant="primary" size="lg" block icon={Plus} className={styles.sheetCta} onClick={() => setMenuOpen(false)}>
-          Start a trial
-        </Button>
+        {onStart ? null : (
+          <Button href="/start" variant="primary" size="lg" block icon={Plus} className={styles.sheetCta} onClick={() => setMenuOpen(false)}>
+            Start a trial
+          </Button>
+        )}
       </Sheet>
     </header>
   );

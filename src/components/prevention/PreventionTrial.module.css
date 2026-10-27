@@ -1,0 +1,218 @@
+/* A sunscreen on the shelf: the face on the left, what it does and the simulation on the right. */
+.root {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 16px var(--gutter) 96px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'head'
+    'visual'
+    'body';
+  gap: 28px;
+}
+
+.head {
+  grid-area: head;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.headTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 24px;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+}
+
+.aside {
+  display: flex;
+  align-items: center;
+  margin: -10px -8px -10px 0;
+}
+
+.title {
+  font-size: var(--t-30);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.protection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--t-17);
+  font-weight: 600;
+  color: var(--better);
+}
+
+.shield {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--better-bg);
+}
+
+.since {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.actives {
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}
+
+.visual {
+  grid-area: visual;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.print {
+  width: 100%;
+  max-width: 420px;
+}
+
+.printBusy img {
+  filter: saturate(0.6);
+}
+
+.progressPlate {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: calc(100% - 32px);
+  max-width: 280px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--plate);
+  box-shadow: var(--shadow-rest);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  translate: -50% -50%;
+}
+
+.body {
+  grid-area: body;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.explain {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 52ch;
+}
+
+.explainTitle {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: var(--t-22);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.explainTitle svg {
+  flex: none;
+  margin-top: 3px;
+  color: var(--brand);
+}
+
+.soft {
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}
+
+.error {
+  padding: 14px 16px;
+  border-radius: var(--r-control);
+  background: var(--worse-bg);
+  color: var(--worse);
+  max-width: 52ch;
+}
+
+.limit {
+  background: var(--reacting-bg);
+  color: var(--reacting);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--t-44);
+  }
+}
+
+@media (min-width: 1024px) {
+  .root {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'visual head'
+      'visual body';
+    column-gap: clamp(40px, 5vw, 80px);
+    row-gap: 32px;
+    padding-top: 12px;
+    align-items: start;
+  }
+  .head {
+    padding-top: 8px;
+  }
+  .visual {
+    justify-content: flex-start;
+    position: sticky;
+    top: calc(var(--header-h) + 8px);
+  }
+  .print {
+    max-width: min(100%, calc((100dvh - var(--header-h) - 120px) * 0.75));
+  }
+  /* The viewer adds its strip and slider under the print. */
+  .visual > :global(*) {
+    max-width: min(100%, calc((100dvh - var(--header-h) - 300px) * 0.75));
+  }
+  .visual > .print {
+    max-width: min(100%, calc((100dvh - var(--header-h) - 120px) * 0.75));
+  }
+}
+
+@media (max-width: 767.98px) {
+  .actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    flex-direction: column;
+    margin: 0 calc(var(--gutter) * -1);
+    padding: 12px var(--gutter) calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgb(248 244 239 / 0) 0, var(--field) 18px);
+  }
+  .primary {
+    width: 100%;
+  }
+  .print {
+    max-width: 320px;
+  }
+}

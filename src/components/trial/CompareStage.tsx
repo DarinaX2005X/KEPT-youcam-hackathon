@@ -181,7 +181,11 @@ export function CompareStage({
         </div>
         <div className={styles.tools}>
           <span className={clsx(styles.date, 'num')}>
-            {single ? formatShortDate(baseline.date) : `${formatShortDate(baseline.date)} and ${formatShortDate(frame.date)}`}
+            {single
+              ? formatShortDate(baseline.date)
+              : frame.kind === 'target'
+                ? 'Day 0 and Target (simulated)'
+                : `${formatShortDate(baseline.date)} and ${formatShortDate(frame.date)}`}
           </span>
           {hasMask ? (
             <IconButton

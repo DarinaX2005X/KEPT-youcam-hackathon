@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { computeVerdict, type Scan, type Trial, type Verdict } from '@/lib/domain';
-import { blobUrl, listScansByTrial, listTrials } from '@/lib/store';
+import { listScansByTrial, listTrials } from '@/lib/store';
+import { thumbUrl } from '@/components/ui/thumbnail';
 import { isPrevention, latestScan, mainChange, progressOf, tabOf, type MainChange, type Progress, type ShelfTab } from './model';
 
 export interface ShelfItem {
@@ -27,7 +28,7 @@ export type ShelfState =
 async function toItem(trial: Trial, scans: Scan[], now: Date): Promise<ShelfItem> {
   const prevention = isPrevention(trial);
   const last = latestScan(scans);
-  const thumb = last ? await blobUrl(last.photo).catch(() => undefined) : undefined;
+  const thumb = last ? await thumbUrl(last.photo).catch(() => undefined) : undefined;
   const verdict = prevention || !scans.length ? null : computeVerdict(trial, scans, now);
   return {
     trial,

@@ -104,12 +104,12 @@
   /* Headline on the left, the explanation and the actions beside its last line. */
   .heroText {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    grid-template-columns: minmax(0, 1fr) 356px;
     grid-template-areas:
       'title lead'
       'title actions';
     align-items: end;
-    column-gap: 56px;
+    column-gap: 36px;
     row-gap: 24px;
     margin-bottom: 48px;
   }
@@ -124,6 +124,8 @@
   }
   .heroActions {
     grid-area: actions;
+    flex-wrap: nowrap;
+    gap: 12px;
     margin-top: 0;
     padding-bottom: 6px;
   }
