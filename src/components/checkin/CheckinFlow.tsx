@@ -71,7 +71,7 @@ export function CheckinFlow({ trialId }: CheckinFlowProps) {
 
   const trial = loaded.status === 'ready' ? loaded.trial : undefined;
   useEffect(() => {
-    if (trial) document.title = `${trial.product.name} check-in · Kept`;
+    if (trial) document.title = `${trial.product.name} check-in | Kept`;
   }, [trial]);
 
   useEffect(() => () => (shot ? URL.revokeObjectURL(shot.url) : undefined), [shot]);

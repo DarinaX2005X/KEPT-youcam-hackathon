@@ -9,6 +9,7 @@ import { TrialWorkspace, TrialWorkspaceSkeleton, useTrialData, type ReadyTrialDa
 import { FROM_TRIAL_KEY, TrialMissing } from '@/components/checkin';
 import { CoachPanel } from '@/components/coach';
 import { TrialMenu } from './TrialMenu';
+import { CreateTarget } from './CreateTarget';
 import styles from './trialPage.module.css';
 
 export interface TrialPageProps {
@@ -62,7 +63,7 @@ export function TrialPage({ trialId, newScanId }: TrialPageProps) {
 
   const name = ready?.trial.product.name;
   useEffect(() => {
-    if (name) document.title = `${name} · Kept`;
+    if (name) document.title = `${name} | Kept`;
   }, [name, newScanId]);
 
   function runCheckin() {
@@ -90,7 +91,12 @@ export function TrialPage({ trialId, newScanId }: TrialPageProps) {
           data={shown}
           onRunCheckin={runCheckin}
           headerAside={<TrialMenu data={shown} />}
-          belowVerdict={<CoachPanel trial={shown.trial} scans={shown.scans} verdict={shown.verdict} now={shown.now} />}
+          belowVerdict={
+            <>
+              <CreateTarget trial={shown.trial} scans={shown.scans} onCreated={() => void data.reload()} />
+              <CoachPanel trial={shown.trial} scans={shown.scans} verdict={shown.verdict} now={shown.now} />
+            </>
+          }
         />
       ) : (
         <TrialWorkspaceSkeleton />

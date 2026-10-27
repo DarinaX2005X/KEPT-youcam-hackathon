@@ -57,7 +57,7 @@ export function ReportPage({ trialId }: ReportPageProps) {
   const ready = data.status === 'ready' ? data : null;
 
   useEffect(() => {
-    if (ready) document.title = `${ready.trial.product.name} report · Kept`;
+    if (ready) document.title = `${ready.trial.product.name} report | Kept`;
   }, [ready]);
 
   // If a long product name or many areas push the page past one A4 sheet, print it slightly smaller.
