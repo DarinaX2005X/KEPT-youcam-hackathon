@@ -1,0 +1,41 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--r-tag);
+  font-size: var(--t-13);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.brand {
+  background: var(--brand-tint);
+  color: var(--brand);
+}
+
+.better {
+  background: var(--better-bg);
+  color: var(--better);
+}
+
+.worse {
+  background: var(--worse-bg);
+  color: var(--worse);
+}
+
+.reacting {
+  background: var(--reacting-bg);
+  color: var(--reacting);
+}
+
+.flat {
+  background: var(--flat-bg);
+  color: var(--flat);
+}
+
+.neutral {
+  background: var(--sunk);
+  color: var(--ink-soft);
+}

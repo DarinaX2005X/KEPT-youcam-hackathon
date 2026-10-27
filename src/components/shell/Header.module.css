@@ -1,0 +1,132 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--d-hover) var(--ease-out),
+    border-color var(--d-hover) var(--ease-out),
+    backdrop-filter var(--d-hover) var(--ease-out);
+}
+
+.scrolled {
+  background: rgb(253 251 248 / 0.9);
+  border-bottom-color: var(--line);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: var(--header-h);
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.home {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding-right: 4px;
+  border-radius: var(--r-chip);
+  text-decoration: none;
+  flex: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 16px;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: var(--r-chip);
+  color: var(--ink-soft);
+  font-size: var(--t-15);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    color var(--d-hover) var(--ease-out),
+    background-color var(--d-hover) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--ink);
+    background: rgb(23 34 29 / 0.05);
+  }
+}
+
+.link[aria-current='page'] {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.menuButton {
+  display: none;
+}
+
+.sheetNav {
+  display: flex;
+  flex-direction: column;
+  margin: 0 -8px;
+}
+
+.sheetLink {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 8px;
+  border-radius: var(--r-control);
+  font-size: var(--t-22);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.sheetLink[aria-current='page'] {
+  color: var(--brand);
+}
+
+@media (hover: hover) {
+  .sheetLink:hover {
+    background: var(--sunk);
+  }
+}
+
+.sheetCta {
+  margin-top: 20px;
+}
+
+@media (max-width: 767.98px) {
+  .inner {
+    --header-h: 64px;
+    gap: 12px;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .menuButton {
+    display: inline-grid;
+    margin-right: -8px;
+  }
+}

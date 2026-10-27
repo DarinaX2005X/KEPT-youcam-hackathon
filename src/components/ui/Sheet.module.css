@@ -1,0 +1,140 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+}
+
+.layerDialog {
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.layerSheet {
+  align-items: flex-end;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+}
+
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  box-shadow: var(--shadow-overlay);
+  outline: none;
+}
+
+.dialog {
+  max-height: min(760px, calc(100dvh - 48px));
+  border-radius: var(--r-panel);
+}
+
+.sheet {
+  width: 100%;
+  max-height: calc(100dvh - 24px);
+  border-radius: var(--r-panel) var(--r-panel) 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  touch-action: none;
+}
+
+.sheet::after {
+  /* Fills the gap under the sheet while it springs past its resting point. */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 120px;
+  background: var(--surface);
+}
+
+.grabZone {
+  display: grid;
+  place-items: center;
+  height: 24px;
+  cursor: grab;
+  touch-action: none;
+  flex: none;
+}
+
+.handle {
+  width: 40px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 20px 0 28px;
+  flex: none;
+}
+
+.sheet .header {
+  padding: 4px 12px 0 20px;
+  touch-action: none;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--t-22);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  color: var(--ink-soft);
+  font-size: var(--t-15);
+  line-height: 1.45;
+}
+
+.close {
+  margin-top: 0;
+  flex: none;
+}
+
+.body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 28px 28px;
+  touch-action: pan-y;
+}
+
+.sheet .body {
+  padding: 16px 20px 24px;
+}
+
+.footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding: 16px 28px 24px;
+  border-top: 1px solid var(--line);
+  flex: none;
+}
+
+.sheet .footer {
+  padding: 12px 20px 16px;
+}
+
+.sheet .footer > * {
+  flex: 1 1 auto;
+}

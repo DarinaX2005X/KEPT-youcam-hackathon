@@ -1,0 +1,182 @@
+{
+  "generatedAt": "2026-10-27T07:12:33.277Z",
+  "method": "Five photos of the same face (original + 4 repeat-photo variants), SD skin analysis. NOISE = ceil(max over zones of 2 × sample σ of ui scores), at least 3.",
+  "photos": [
+    {
+      "id": "original",
+      "label": "original X"
+    },
+    {
+      "id": "shift-scale",
+      "label": "shift 3 %, scale 0.97",
+      "params": {
+        "dx": 0.03,
+        "dy": 0.01,
+        "scale": 0.97
+      }
+    },
+    {
+      "id": "bright-up",
+      "label": "brightness +6 %",
+      "params": {
+        "brightness": 1.06
+      }
+    },
+    {
+      "id": "bright-down-rot",
+      "label": "brightness -6 %, rotate 1.5°",
+      "params": {
+        "brightness": 0.94,
+        "rotate": 1.5
+      }
+    },
+    {
+      "id": "blur",
+      "label": "blur 0.6 px",
+      "params": {
+        "blur": 0.6
+      }
+    }
+  ],
+  "scores": {
+    "original": {
+      "acne": 66,
+      "redness": 64,
+      "pore": 69,
+      "texture": 74
+    },
+    "shift-scale": {
+      "acne": 66,
+      "redness": 63,
+      "pore": 66,
+      "texture": 75
+    },
+    "bright-up": {
+      "acne": 66,
+      "redness": 64,
+      "pore": 68,
+      "texture": 74
+    },
+    "bright-down-rot": {
+      "acne": 66,
+      "redness": 64,
+      "pore": 70,
+      "texture": 73
+    },
+    "blur": {
+      "acne": 66,
+      "redness": 64,
+      "pore": 69,
+      "texture": 77
+    }
+  },
+  "zones": {
+    "acne": {
+      "values": [
+        66,
+        66,
+        66,
+        66,
+        66
+      ],
+      "mean": 66,
+      "range": 0,
+      "sd": 0,
+      "twoSigma": 0
+    },
+    "redness": {
+      "values": [
+        64,
+        63,
+        64,
+        64,
+        64
+      ],
+      "mean": 63.8,
+      "range": 1,
+      "sd": 0.45,
+      "twoSigma": 0.89
+    },
+    "pore": {
+      "values": [
+        69,
+        66,
+        68,
+        70,
+        69
+      ],
+      "mean": 68.4,
+      "range": 4,
+      "sd": 1.52,
+      "twoSigma": 3.03
+    },
+    "texture": {
+      "values": [
+        74,
+        75,
+        74,
+        73,
+        77
+      ],
+      "mean": 74.6,
+      "range": 4,
+      "sd": 1.52,
+      "twoSigma": 3.03
+    }
+  },
+  "noise": 4,
+  "extra": {
+    "note": "oiliness and moisture were measured on the same five photos because the demo trials watch them; they are not part of the NOISE definition.",
+    "scores": {
+      "original": {
+        "oiliness": 76,
+        "moisture": 67
+      },
+      "shift-scale": {
+        "oiliness": 77,
+        "moisture": 67
+      },
+      "bright-up": {
+        "oiliness": 76,
+        "moisture": 67
+      },
+      "bright-down-rot": {
+        "oiliness": 79,
+        "moisture": 68
+      },
+      "blur": {
+        "oiliness": 77,
+        "moisture": 68
+      }
+    },
+    "zones": {
+      "oiliness": {
+        "values": [
+          76,
+          77,
+          76,
+          79,
+          77
+        ],
+        "mean": 77,
+        "range": 3,
+        "sd": 1.22,
+        "twoSigma": 2.45
+      },
+      "moisture": {
+        "values": [
+          67,
+          67,
+          67,
+          68,
+          68
+        ],
+        "mean": 67.4,
+        "range": 1,
+        "sd": 0.55,
+        "twoSigma": 1.1
+      }
+    },
+    "noiseAllSixZones": 4
+  }
+}

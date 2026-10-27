@@ -1,0 +1,31 @@
+.bone {
+  display: block;
+  background-color: var(--sunk);
+  background-image: linear-gradient(100deg, transparent 20%, rgb(253 251 248 / 0.75) 50%, transparent 80%);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  background-position: 160% 0;
+  animation: sheen 1.6s var(--ease-out) infinite;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+}
+
+@keyframes sheen {
+  0% {
+    background-position: 160% 0;
+  }
+  100% {
+    background-position: -60% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bone {
+    animation: none !important;
+    background-image: none;
+  }
+}

@@ -1,0 +1,248 @@
+/* Kept design tokens. The only place colours, radii, shadows and type sizes are defined. */
+
+:root {
+  /* Surfaces */
+  --field: #f8f4ef;
+  --surface: #fdfbf8;
+  --sunk: #efe9e1;
+  --line: #e3dbd1;
+  --line-strong: #d3c9bd;
+
+  /* Text */
+  --ink: #17221d;
+  --ink-soft: #4f5b55;
+
+  /* Brand */
+  --brand: #1f5a47;
+  --brand-hover: #184a3a;
+  --on-brand: #fdfbf8;
+  --brand-tint: rgb(31 90 71 / 0.1);
+
+  /* Semantic */
+  --better: #1f6b4f;
+  --better-bg: #dcefe5;
+  --worse: #b4493a;
+  --worse-bg: #f6e0da;
+  --reacting: #9a5b12;
+  --reacting-bg: #f7e7cf;
+  --flat: #5a6470;
+  --flat-bg: #e7e9ec;
+
+  /* Photo overlays */
+  --mask-tint: #e0563f;
+  --sheen: linear-gradient(135deg, #f4cdb8 0%, #c9e6d6 55%, #d6d9f0 100%);
+  --scrim: rgb(23 34 29 / 0.4);
+  --plate: rgb(253 251 248 / 0.85);
+
+  /* Radii */
+  --r-panel: 28px;
+  --r-card: 20px;
+  --r-control: 14px;
+  --r-chip: 10px;
+  --r-tag: 6px;
+  --r-photo: 12px;
+
+  /* Light from the top left */
+  --shadow-rest: 0 1px 1px rgb(40 34 26 / 0.06), 0 2px 6px rgb(40 34 26 / 0.06);
+  --shadow-raised: 0 1px 2px rgb(40 34 26 / 0.08), 0 8px 24px -6px rgb(40 34 26 / 0.16);
+  --shadow-print: 0 1px 2px rgb(40 34 26 / 0.1), 0 12px 28px -8px rgb(40 34 26 / 0.22);
+  --shadow-overlay: 0 2px 4px rgb(40 34 26 / 0.08), 0 24px 64px -12px rgb(40 34 26 / 0.28);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.7);
+
+  /* Type scale */
+  --t-13: 0.8125rem;
+  --t-15: 0.9375rem;
+  --t-17: 1.0625rem;
+  --t-22: 1.375rem;
+  --t-30: 1.875rem;
+  --t-44: 2.75rem;
+  --t-72: 4.5rem;
+  --font-sans: var(--font-onest), 'Onest', system-ui, sans-serif;
+  --track-display: -0.03em;
+  --lh-display: 1.02;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --d-press: 100ms;
+  --d-hover: 160ms;
+  --d-mask: 240ms;
+  --d-enter: 360ms;
+  --stagger: 50ms;
+
+  /* Layout */
+  --gutter: 16px;
+  --page-max: 1280px;
+  --header-h: 72px;
+
+  color-scheme: light;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --gutter: 48px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--field);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--t-17);
+  line-height: 1.55;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ol,
+ul,
+dl,
+dd {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  letter-spacing: var(--track-display);
+  line-height: var(--lh-display);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--better-bg);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--r-control);
+  background: var(--ink);
+  color: var(--surface);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform var(--d-hover) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.shell-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property: opacity, color, background-color, border-color, box-shadow !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

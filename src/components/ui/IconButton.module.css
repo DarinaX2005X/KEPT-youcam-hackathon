@@ -1,0 +1,59 @@
+.iconButton {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-control);
+  border: 1px solid transparent;
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--d-hover) var(--ease-out),
+    box-shadow var(--d-hover) var(--ease-out),
+    background-color var(--d-hover) var(--ease-out);
+}
+
+.quiet {
+  background: transparent;
+}
+
+.secondary {
+  background: var(--surface);
+  border-color: var(--line);
+  box-shadow: var(--shadow-rest), var(--highlight);
+}
+
+.primary {
+  background: var(--brand);
+  color: var(--on-brand);
+  box-shadow: var(--shadow-rest);
+}
+
+@media (hover: hover) {
+  .quiet:hover:not(:disabled) {
+    background: var(--sunk);
+  }
+
+  .secondary:hover:not(:disabled),
+  .primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-raised);
+  }
+
+  .primary:hover:not(:disabled) {
+    background: var(--brand-hover);
+  }
+}
+
+.iconButton:active:not(:disabled) {
+  transform: scale(0.94);
+  transition-duration: var(--d-press);
+}
+
+.iconButton:disabled {
+  cursor: not-allowed;
+  color: var(--ink-soft);
+  opacity: 0.55;
+  box-shadow: none;
+}

@@ -1,0 +1,109 @@
+.container {
+  position: relative;
+}
+
+.region {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 70;
+}
+
+.viewport {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+}
+
+.anchored {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(520px, 100%);
+  min-height: 52px;
+  padding: 8px 8px 8px 14px;
+  border-radius: var(--r-control);
+  background: var(--ink);
+  color: var(--surface);
+  box-shadow: var(--shadow-overlay);
+  font-size: var(--t-15);
+  line-height: 1.4;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex: none;
+  background: rgb(253 251 248 / 0.12);
+}
+
+.better .icon {
+  background: var(--better-bg);
+  color: var(--better);
+}
+
+.worse .icon {
+  background: var(--worse-bg);
+  color: var(--worse);
+}
+
+.reacting .icon {
+  background: var(--reacting-bg);
+  color: var(--reacting);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+}
+
+.action {
+  flex: none;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-chip);
+  background: rgb(253 251 248 / 0.12);
+  color: var(--surface);
+  font-weight: 600;
+  transition: background-color var(--d-hover) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .action:hover {
+    background: rgb(253 251 248 / 0.2);
+  }
+
+  .dismiss:hover {
+    background: rgb(253 251 248 / 0.12);
+    color: var(--surface);
+  }
+}
+
+.dismiss {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-chip);
+  color: rgb(253 251 248 / 0.7);
+}
+
+.toast :focus-visible {
+  outline-color: var(--surface);
+}

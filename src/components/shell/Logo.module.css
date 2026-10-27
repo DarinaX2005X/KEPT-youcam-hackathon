@@ -1,0 +1,15 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--logo-size) * 0.22);
+  color: var(--ink);
+}
+
+.word {
+  font-weight: 700;
+  font-size: calc(var(--logo-size) * 0.92);
+  letter-spacing: -0.035em;
+  line-height: 1;
+  /* Optical baseline: lift the lowercase word to sit centred on the ovals. */
+  transform: translateY(-0.06em);
+}

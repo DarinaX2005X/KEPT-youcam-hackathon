@@ -56,6 +56,10 @@ export interface Active {
   simulation: Partial<Record<SimConcern, number>>;
   /** One sentence for the interface. */
   note: string;
+  /** Extra words for search only, never matched in INCI lists (for example "bha", "vitamin c"). */
+  searchTerms?: string[];
+  /** Aliases that count only when they appear among the first 5 ingredients (for example glycerin). */
+  leadingOnly?: string[];
 }
 
 export interface Product {
@@ -147,4 +151,54 @@ export interface Verdict {
     label: string;
     date?: string;
   };
+}
+
+// Additions by 01.3 (domain). Nothing above is renamed or removed.
+
+export interface InciMatch {
+  activeId: string;
+  token: string;
+}
+
+export interface ParsedInci {
+  actives: string[];
+  matched: InciMatch[];
+}
+
+export interface BuyCheckFinding {
+  tone: 'better' | 'worse' | 'flat' | 'info';
+  title: string;
+  text: string;
+  trialId?: string;
+}
+
+export interface BuyCheckResult {
+  actives: Active[];
+  findings: BuyCheckFinding[];
+  verdict: 'worth_trying' | 'think_twice' | 'already_covered';
+}
+
+export interface BuyCheckInput {
+  inci?: string;
+  activeIds?: string[];
+}
+
+/** A planned check-in: trial day and its ISO date. */
+export interface CheckinSlot {
+  day: number;
+  date: string;
+}
+
+/**
+ * public/demo/manifest.json. Inside, trial.startedAt is an offset like "-21d" (days before import);
+ * trial.decidedAt may be "-Nd" (before import), "+Nd" (after startedAt) or an ISO date.
+ * Scan.takenAt is recomputed on import as startedAt + day.
+ */
+export interface DemoManifest {
+  generatedAt: string;
+  noise: number;
+  face: { credit: string };
+  trials: { trial: Trial; scans: Scan[] }[];
+  samplePhotos: { baseline: string; checkin: string };
+  hero: { trialId: string; frames: string[]; verdict: Verdict | null };
 }

@@ -9,3 +9,4 @@ scripts/.cache/
 .DS_Store
 .vercel
 .claude/
+*.tsbuildinfo

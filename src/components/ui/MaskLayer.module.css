@@ -1,0 +1,22 @@
+.mask {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+  background: var(--mask-fill);
+  opacity: var(--mask-opacity);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-mode: alpha;
+  transition: opacity var(--d-mask) var(--ease-out);
+  animation: appear var(--d-mask) var(--ease-out);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
