@@ -23,7 +23,7 @@ Kept turns a new skincare product into a fair trial on your own face: the same p
 ## Demo video
 
 <!-- VIDEO PLAYER: drag kept-demo.mp4 into this README on github.com and keep the https://github.com/user-attachments/assets/… line GitHub inserts here -->
-**Video:** YouTube link will be added here when the video is published.
+**Video:** [Watch the 2:46 demo (MP4, 55 MB)](docs/video/kept-demo.mp4). The YouTube version will be linked here once it is published.
 <!-- YOUTUBE: replace the line above with [Watch the 2:30 demo on YouTube](https://www.youtube.com/watch?v=…) -->
 
 ![Day 0 against day 56 of a salicylic acid serum trial, with the YouCam acne map on both halves and the Working verdict](docs/readme/trial-compare.png)
