@@ -6,7 +6,7 @@
 
 Kept turns a new skincare product into a fair trial on your own face: the same photo at every check-in, YouCam Skin AI on every photo, and a verdict on whether the product deserves a place on your shelf.
 
-**[Live app](https://kept-skin.vercel.app)** &nbsp;&nbsp; **[Demo video](#demo-video)** &nbsp;&nbsp; **[How Kept measures](https://kept-skin.vercel.app/how-it-works)**
+**[Live app](https://kept-skin.vercel.app)** &nbsp;&nbsp; **[Demo video](#demo-video)** &nbsp;&nbsp; **[How Kept measures](https://kept-skin.vercel.app/how-it-works)** &nbsp;&nbsp; **[Pitch deck](docs/deck/kept-deck.pdf)**
 <!-- DEVPOST: add the Devpost project page link to the row above once the submission is published -->
 
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-111?logo=nextdotjs&logoColor=white)
