@@ -1,9 +1,6 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/readme/logo-dark.svg">
-  <img src="public/brand/logo.svg" alt="Kept" width="220">
-</picture>
+<img src="docs/readme/logo-card.png" alt="Kept" width="300">
 
 ### Keep what works for your skin
 
