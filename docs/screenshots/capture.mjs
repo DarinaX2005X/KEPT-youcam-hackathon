@@ -69,23 +69,25 @@ async function document_fonts(page) {
 }
 
 /** Saves the @2x frame and the exact-size file. */
-async function shoot(page, name, { fullPage = false } = {}) {
+async function shoot(page, name, { fullPage = false, exact = true } = {}) {
   const vp = page.viewportSize();
   const big = join(FULL, `${name}@2x.png`);
   await page.screenshot({ path: big, fullPage });
-  if (!fullPage) {
+  if (!fullPage && exact) {
     await sharp(big).resize(vp.width, vp.height, { kernel: 'lanczos3' }).png({ compressionLevel: 9 }).toFile(join(HERE, `${name}.png`));
   }
   log('  saved', name, fullPage ? '(full page)' : '');
 }
 
-/** The sticky site header stays in place so element crops are not covered by it. */
+/** Hides the sticky site header so element crops are not covered by it. */
 async function unstick(page) {
   await page.evaluate(() => {
     for (const el of document.querySelectorAll('body *')) {
       const pos = getComputedStyle(el).position;
-      if ((pos === 'sticky' || pos === 'fixed') && el.getBoundingClientRect().top <= 0) el.style.position = 'static';
+      if ((pos === 'sticky' || pos === 'fixed') && el.getBoundingClientRect().top <= 1) el.style.visibility = 'hidden';
     }
+    const head = [...document.querySelectorAll('a')].find((a) => a.textContent.trim() === 'Start a trial')?.closest('header');
+    if (head) head.style.visibility = 'hidden';
   });
 }
 
@@ -149,6 +151,11 @@ const SHOTS = {
       await settled(s.page, 1500);
       await shoot(s.page, name);
       if (device === DESKTOP) {
+        // A taller frame keeps the whole hero scene, for the gallery thumbnail.
+        await s.page.setViewportSize({ width: 1440, height: 1100 });
+        await settled(s.page, 1200);
+        await shoot(s.page, '01-hero-tall', { exact: false });
+        await s.page.setViewportSize(DESKTOP.viewport);
         // Landing sections below the hero reveal on scroll.
         for (let y = 0; y < 6000; y += 400) {
           await s.page.mouse.wheel(0, 400);
@@ -156,9 +163,7 @@ const SHOTS = {
         }
         await settled(s.page, 1200);
         await unstick(s.page);
-        await part(s.page, sectionOf(s.page, 'What a trial looks like'), 'landing-trial');
         await part(s.page, sectionOf(s.page, 'How Kept measures'), 'landing-measures');
-        await part(s.page, sectionOf(s.page, 'Verdicts you can act on'), 'landing-verdicts');
       }
       await s.browser.close();
     }
@@ -170,12 +175,7 @@ const SHOTS = {
       const ids = await loadSamples(s.page);
       await openTrial(s.page, ids.salicylic);
       await shoot(s.page, name);
-      await shoot(s.page, `${name}-page`, { fullPage: true });
-      if (device === DESKTOP) {
-        await unstick(s.page);
-        await part(s.page, sectionOf(s.page, 'Working'), '02-verdict');
-        await part(s.page, sectionOf(s.page, 'Acne score by day'), '02-chart');
-      }
+      if (device === DESKTOP) await shoot(s.page, `${name}-page`, { fullPage: true });
       await s.browser.close();
     }
   },
@@ -238,7 +238,6 @@ const SHOTS = {
     await s.page.waitForTimeout(500);
     await s.page.getByRole('button', { name: 'Check ingredients' }).click();
     await settled(s.page, 1500);
-    await shoot(s.page, '07-buy-check-page', { fullPage: true });
     await s.page.evaluate(() => window.scrollTo(0, 0));
     await s.page.waitForTimeout(400);
     await shoot(s.page, '07-buy-check');
@@ -259,7 +258,6 @@ const SHOTS = {
     const s = await session(DESKTOP);
     await s.page.goto(`${BASE}/how-it-works`);
     await settled(s.page, 1000);
-    await shoot(s.page, '09-how-it-works');
     await unstick(s.page);
     await part(s.page, s.page.locator('section#real-change'), '09-real-change');
     await s.browser.close();
@@ -267,46 +265,63 @@ const SHOTS = {
 
   /** One real run: sample face, YouCam Skin Analysis, then Skin Simulation for the target. */
   async wizard() {
-    if (!live) {
-      log('  wizard skipped: it spends YouCam units, run it with --live');
-      return;
-    }
-    const s = await session(DESKTOP, { allowYouCam: true });
+    // Without --live this is a rehearsal: every YouCam request is blocked and it stops before the scan.
+    const s = await session(DESKTOP, { allowYouCam: live });
     const { page } = s;
-    await page.goto(`${BASE}/start`);
-    await settled(page, 800);
-    await page.getByLabel('Product name').fill('2% BHA liquid exfoliant');
-    await page.getByRole('combobox').fill('salicylic');
-    await page.getByRole('option', { name: /salicylic/i }).first().click();
-    await page.waitForTimeout(400);
-    await page.getByRole('button', { name: 'Continue' }).click();
-    await page.waitForTimeout(800);
-    await page.getByRole('button', { name: 'Continue' }).click();
-    await page.waitForTimeout(800);
-    await page.getByRole('button', { name: 'Take baseline photo' }).click();
-    await page.getByRole('radio', { name: 'Sample face' }).or(page.getByRole('tab', { name: 'Sample face' })).or(page.getByRole('button', { name: 'Sample face' })).first().click();
-    const use = page.getByRole('button', { name: 'Use the sample face' });
-    await use.waitFor({ timeout: 45000 });
-    await page.waitForTimeout(600);
-    await use.click();
-    await page.getByRole('button', { name: 'See your plan' }).waitFor({ timeout: 180000 });
-    await page.getByText(/target is ready/).waitFor({ timeout: 240000 }).catch(() => log('  target not ready yet'));
-    await settled(page, 1200);
-    await shoot(page, '04-wizard-baseline');
-    await page.getByRole('button', { name: 'See your plan' }).click();
-    await page.locator('img[alt^="Simulated look"]').waitFor({ timeout: 240000 });
-    await settled(page, 1500);
-    await shoot(page, '04-wizard-target');
-    await shoot(page, '04-wizard-target-page', { fullPage: true });
-    await page.setViewportSize(MOBILE.viewport);
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await settled(page, 1500);
-    await shoot(page, '04-wizard-target-mobile');
-    await shoot(page, '04-wizard-target-mobile-page', { fullPage: true });
-    await s.context.storageState({ path: join(tmpdir(), 'kept-wizard-state.json'), indexedDB: true }).catch(() => {});
-    writeFileSync(join(tmpdir(), 'kept-wizard-calls.txt'), s.calls.join('\n'));
-    log('  YouCam calls:', s.calls.filter((c) => c.includes('youcam')).join(', '));
-    await s.browser.close();
+    const step = async (label, fn) => {
+      try {
+        await fn();
+      } catch (err) {
+        log(`  ${label} failed: ${err.message.split('\n')[0]}`);
+        await page.screenshot({ path: join(tmpdir(), `kept-wizard-${label}.png`) }).catch(() => {});
+        throw err;
+      }
+    };
+    try {
+      await page.goto(`${BASE}/start`);
+      await settled(page, 800);
+      await step('product', async () => {
+        await page.getByLabel('Product name').fill('2% BHA liquid exfoliant');
+        await page.getByRole('combobox').fill('salicylic');
+        await page.getByRole('option', { name: /salicylic/i }).first().click();
+        await page.waitForTimeout(400);
+        await page.getByRole('button', { name: 'Continue' }).click();
+      });
+      await step('goals', async () => {
+        await page.waitForTimeout(900);
+        await page.getByRole('button', { name: 'Continue' }).click();
+      });
+      const use = page.getByRole('button', { name: 'Use the sample face' });
+      await step('photo', async () => {
+        await page.getByRole('button', { name: 'Take baseline photo' }).click();
+        await page.getByRole('radio', { name: 'Sample face' }).click();
+        await use.waitFor({ timeout: 45000 });
+        await page.waitForTimeout(800);
+      });
+      if (!live) {
+        await page.screenshot({ path: join(tmpdir(), 'kept-wizard-rehearsal.png') });
+        log('  rehearsal reached the sample face; run with --live to scan it');
+        return;
+      }
+      await use.click();
+      await step('scan', () => page.getByRole('button', { name: 'See your plan' }).waitFor({ timeout: 180000 }));
+      await page.getByText(/target is ready/).waitFor({ timeout: 240000 }).catch(() => log('  target not ready yet'));
+      await settled(page, 1200);
+      await shoot(page, '04-wizard-baseline', { exact: false });
+      await page.getByRole('button', { name: 'See your plan' }).click();
+      await step('target', () => page.locator('img[alt^="Simulated look"]').waitFor({ timeout: 240000 }));
+      await settled(page, 1500);
+      await page.mouse.move(0, 0);
+      await shoot(page, '04-wizard-target');
+      await shoot(page, '04-wizard-target-page', { fullPage: true });
+      await page.setViewportSize(MOBILE.viewport);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await settled(page, 1500);
+      await shoot(page, '04-wizard-target-mobile');
+    } finally {
+      log('  API calls:', s.calls.join(', ') || 'none');
+      await s.browser.close();
+    }
   },
 };
 

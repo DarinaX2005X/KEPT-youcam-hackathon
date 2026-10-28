@@ -13,3 +13,4 @@ scripts/.cache/
 
 .vercel
 .env*
+docs/screenshots/full/
