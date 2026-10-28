@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { Plus } from 'lucide-react';
+import { Plus, RotateCcw } from 'lucide-react';
 import { Button, Segmented, useToast } from '@/components/ui';
-import { deleteTrial, importSample } from '@/lib/store';
+import { deleteTrial, importSample, resetSamples } from '@/lib/store';
 import { EmptyMark } from './EmptyMark';
 import { isShelfTab, TABS, type ShelfTab } from './model';
 import { ShelfRow } from './ShelfRow';
@@ -95,6 +95,7 @@ export function ShelfPage() {
   const toast = useToast();
   const [picked, setPicked] = useState<ShelfTab | null>(null);
   const [removing, setRemoving] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     setPicked(readTab());
@@ -138,6 +139,26 @@ export function ShelfPage() {
     }
   }
 
+  async function resetAllSamples() {
+    setResetting(true);
+    try {
+      await resetSamples();
+      await shelf.reload();
+      toast.show({ text: 'Sample trials are back to their first state' });
+    } catch {
+      toast.show({ text: "Couldn't reset the samples. Try again", tone: 'worse' });
+    } finally {
+      setResetting(false);
+    }
+  }
+
+  const resetButton = (
+    <Button variant="quiet" icon={RotateCcw} onClick={() => void resetAllSamples()} loading={resetting} disabled={removing} className={styles.sampleButton}>
+      Reset sample trials
+    </Button>
+  );
+  const onlySamples = samples.length > 0 && samples.length === items.length;
+
   const ready = shelf.status === 'ready';
   const empty = ready && items.length === 0;
 
@@ -171,30 +192,36 @@ export function ShelfPage() {
       {ready && !empty ? (
         <div className={styles.body}>
           {/* Only a shelf of samples needs the explanation; mixed in with real trials, each sample row carries its own tag. */}
-          {samples.length && samples.length === items.length ? (
+          {onlySamples ? (
             <div className={styles.sampleBar}>
               <p>These are sample trials. Your own trials appear here too.</p>
-              <Button variant="quiet" onClick={removeSamples} loading={removing} className={styles.sampleButton}>
-                Remove samples
-              </Button>
+              <div className={styles.sampleActions}>
+                {resetButton}
+                <Button variant="quiet" onClick={removeSamples} loading={removing} disabled={resetting}>
+                  Remove samples
+                </Button>
+              </div>
             </div>
           ) : null}
 
-          <Segmented
-            aria-label="Trials by status"
-            value={tab}
-            onChange={chooseTab}
-            className={styles.tabs}
-            options={TABS.map((t) => ({
-              value: t.value,
-              label: (
-                <>
-                  {t.label}
-                  <span className={`${styles.count} num`}>{counts[t.value]}</span>
-                </>
-              ),
-            }))}
-          />
+          <div className={styles.toolbar}>
+            <Segmented
+              aria-label="Trials by status"
+              value={tab}
+              onChange={chooseTab}
+              className={styles.tabs}
+              options={TABS.map((t) => ({
+                value: t.value,
+                label: (
+                  <>
+                    {t.label}
+                    <span className={`${styles.count} num`}>{counts[t.value]}</span>
+                  </>
+                ),
+              }))}
+            />
+            {samples.length > 0 && !onlySamples ? resetButton : null}
+          </div>
 
           {visible.length ? <Rows items={visible} tab={tab} /> : <EmptyTab tab={tab} counts={counts} onTab={chooseTab} />}
         </div>

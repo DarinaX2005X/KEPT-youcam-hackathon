@@ -179,9 +179,9 @@ export function CompareStage({
             </span>
           ) : null}
           {stat && !projection ? <span className={clsx(styles.stat, 'num')}>{stat}</span> : null}
-          {projection ? (
+          {projection && base !== undefined ? (
             <span className={clsx(styles.stat, 'num')}>
-              {delta !== undefined ? `on day 0. Target ${formatDelta(delta)} by day ${frame.day}` : `on day 0. No target for this area`}
+              {delta !== undefined ? `on day 0, target ${formatDelta(delta)} by day ${frame.day}` : 'on day 0'}
             </span>
           ) : null}
         </div>

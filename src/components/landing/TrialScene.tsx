@@ -288,6 +288,7 @@ export function TrialScene({ data, credit }: { data: HeroData; credit: string })
       ['[data-point]', { x: 0, y: 0 }, { duration: 0, at: 0.58 }],
       [count0, base, { duration: 0, at: 0.58 }],
       [count1, last, { duration: 0, at: 0.58 }],
+      ['[data-verdict] li', { opacity: 1, y: 0 }, { duration: 0, at: 0.58 }],
       ['[data-mask]', { clipPath: 'inset(0% 0% 100% 0%)' }, { duration: 0, at: 0.6 }],
       ['[data-mask]', { opacity: 1 }, { duration: 0, at: 0.62 }],
       ['[data-point]', { x: dx, y: dy }, { duration: 0, at: 0.6 }],

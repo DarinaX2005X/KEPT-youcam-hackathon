@@ -22,6 +22,8 @@ export interface BaselineStepProps {
   /** The target made in the background right after this analysis. */
   targetStatus: TargetState['status'];
   targetLabel: string;
+  /** The target is simulated right after the analysis, so the wait covers both. */
+  withTarget?: boolean;
   onTakePhoto: () => void;
   onContinue: () => void;
 }
@@ -50,7 +52,7 @@ function defaultZone(b: BaselineData | null, zones: Concern[]): Concern | null {
   return b.zones.find((c) => hasVisibleMask(c, b)) ?? b.zones.find((c) => b.masks[c]) ?? b.zones[0] ?? null;
 }
 
-export function BaselineStep({ zones, baseline, scan, captured, sample, targetStatus, targetLabel, onTakePhoto, onContinue }: BaselineStepProps) {
+export function BaselineStep({ zones, baseline, scan, captured, sample, targetStatus, targetLabel, withTarget = false, onTakePhoto, onContinue }: BaselineStepProps) {
   const urls = useBlobUrls<string>(baseline ? { photo: baseline.photo, ...baseline.masks } : null);
   const capturedUrl = useObjectUrl(captured);
   // undefined until the person picks a chip: then the default follows the maps that came back.
@@ -105,7 +107,11 @@ export function BaselineStep({ zones, baseline, scan, captured, sample, targetSt
         {phase === 'running' ? (
           <div className={styles.progress}>
             <StepProgress steps={SCAN_STEPS} current={scan.step === 'done' ? null : scan.step} aria-label="Analysis progress" />
-            <p className={styles.memoSoft}>Measuring {zoneText}. This usually takes about 15 seconds.</p>
+            <p className={styles.memoSoft}>
+              {withTarget
+                ? `Measuring ${zoneText}, then simulating your ${targetLabel} target. Both usually take about 30 seconds.`
+                : `Measuring ${zoneText}. This usually takes about 15 seconds.`}
+            </p>
           </div>
         ) : null}
 

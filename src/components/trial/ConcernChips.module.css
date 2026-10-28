@@ -33,6 +33,25 @@
   font-weight: 700;
 }
 
+.score {
+  margin-left: 2px;
+  font-weight: 600;
+  opacity: 0.72;
+}
+
+.word {
+  margin-left: 6px;
+  font-size: var(--t-13);
+  font-weight: 600;
+}
+
+.hint {
+  flex-basis: 100%;
+  margin: -4px 0 0 2px;
+  font-size: var(--t-15);
+  color: var(--ink-soft);
+}
+
 .better {
   color: var(--better);
 }

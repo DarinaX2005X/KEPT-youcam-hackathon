@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RotateCw } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { deleteTrial, getTrial, importSample, listTrials, loadManifest } from '@/lib/store';
+import { getTrial, importSample, listTrials, loadManifest, resetSamples, samplesDrifted } from '@/lib/store';
 import type { DemoManifest } from '@/lib/domain';
 import { ShelfSkeletonRows } from './ShelfSkeleton';
 import styles from './ShelfPage.module.css';
@@ -25,12 +25,12 @@ async function heroId(manifest: DemoManifest, ids: string[]): Promise<string | u
 
 async function openSample(): Promise<string> {
   const manifest = await loadManifest();
-  let id = await heroId(manifest, await importSample());
+  // Samples copied days ago have drifted: the trial in progress would no longer be on its sample day.
+  const drifted = samplesDrifted(manifest, await listTrials());
+  let id = await heroId(manifest, drifted ? await resetSamples() : await importSample());
   if (!id) {
     // Some samples were removed one by one: put the whole sample shelf back.
-    const stale = (await listTrials()).filter((t) => t.sample);
-    await Promise.all(stale.map((t) => deleteTrial(t.id)));
-    id = await heroId(manifest, await importSample());
+    id = await heroId(manifest, await resetSamples());
   }
   if (!id) throw new Error('The sample trial is missing from the manifest');
   return id;

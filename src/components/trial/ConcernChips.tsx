@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { useRef, type KeyboardEvent } from 'react';
 import { concernLabel, type Concern, type Verdict } from '@/lib/domain';
-import { Chip } from '@/components/ui';
+import { Chip, TONE_WORD } from '@/components/ui';
 import { concernTone, formatDelta, type Frame } from './model';
 import styles from './ConcernChips.module.css';
 
@@ -20,7 +20,7 @@ export interface ConcernChipsProps {
   className?: string;
 }
 
-/** One chip per tracked area with its change from day 0. The selected chip puts that area's map on the photo. ←/→ move the selection. */
+/** One chip per tracked area with its change from day 0 (its day 0 score while there is nothing to compare). The selected chip puts that area's map on the photo. ←/→ move the selection. */
 export function ConcernChips({ targets, watch, baseline, frame, value, onChange, verdict, className }: ConcernChipsProps) {
   const all = [...targets, ...watch];
   const refs = useRef<Partial<Record<Concern, HTMLButtonElement | null>>>({});
@@ -39,10 +39,14 @@ export function ConcernChips({ targets, watch, baseline, frame, value, onChange,
     refs.current[all[next]]?.focus();
   }
 
+  // Day 0 itself or the simulated target on the right: nothing has been measured against day 0 yet,
+  // so the chips show the day 0 score without a tone and the target stays a neutral hint.
+  const projection = frame.kind === 'target';
+
   function chip(c: Concern) {
     const base = baseline.scores[c]?.ui;
     const now = frame.scores[c]?.ui;
-    const delta = compare && base !== undefined && now !== undefined ? now - base : undefined;
+    const delta = compare && !projection && base !== undefined && now !== undefined ? now - base : undefined;
     const tone = delta !== undefined ? concernTone(delta, c, verdict) : undefined;
     const selected = c === value;
     return (
@@ -61,10 +65,27 @@ export function ConcernChips({ targets, watch, baseline, frame, value, onChange,
         {concernLabel(c)}
         {delta !== undefined && tone ? (
           <span className={clsx(styles.delta, 'num', !selected && styles[tone])}>{formatDelta(delta)}</span>
+        ) : base !== undefined ? (
+          <span className={clsx(styles.score, 'num')}>
+            {base}
+            <span className="visually-hidden"> on day 0</span>
+          </span>
+        ) : null}
+        {tone === 'reacting' ? (
+          <span className={clsx(styles.word, !selected && styles.reacting)} aria-hidden>
+            {TONE_WORD.reacting}
+          </span>
         ) : null}
       </Chip>
     );
   }
+
+  const selectedBase = baseline.scores[value]?.ui;
+  const selectedTarget = projection ? frame.scores[value]?.ui : undefined;
+  const hint =
+    projection && selectedBase !== undefined && selectedTarget !== undefined
+      ? `${concernLabel(value)} target ${formatDelta(selectedTarget - selectedBase)} by day ${frame.day}, simulated by YouCam`
+      : null;
 
   return (
     <div className={clsx(styles.root, className)} role="group" aria-label="Skin area shown on the photo">
@@ -79,6 +100,11 @@ export function ConcernChips({ targets, watch, baseline, frame, value, onChange,
           <span className={styles.label}>Watching</span>
           <div className={styles.row}>{watch.map(chip)}</div>
         </div>
+      ) : null}
+      {hint ? (
+        <p className={clsx(styles.hint, 'num')} aria-live="polite">
+          {hint}
+        </p>
       ) : null}
     </div>
   );

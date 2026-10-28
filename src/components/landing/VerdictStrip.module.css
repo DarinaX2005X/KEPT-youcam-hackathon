@@ -8,6 +8,7 @@
 /* ---------------------------------------------------------------- the switch */
 
 .tabs {
+  position: relative;
   display: flex;
   gap: 4px;
   padding: 4px;
@@ -114,7 +115,6 @@
   background: var(--surface);
   box-shadow: var(--shadow-print), var(--highlight);
   overflow: hidden;
-  min-height: 420px;
   transition: background-color 240ms var(--ease-out);
 }
 
@@ -260,7 +260,7 @@
   }
   .panelInner {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    min-height: 360px;
+    min-height: 380px;
   }
   .head {
     padding: 36px 36px 32px;

@@ -25,6 +25,14 @@
   gap: 20px;
 }
 
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
 .tabs {
   align-self: flex-start;
 }
@@ -74,6 +82,17 @@
 
 .sampleButton {
   margin-left: auto;
+}
+
+.sampleActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.sampleActions .sampleButton {
+  margin-left: 0;
 }
 
 /* Nothing on the shelf at all. */

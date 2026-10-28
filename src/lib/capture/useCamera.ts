@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export type CameraStatus = 'idle' | 'starting' | 'live' | 'denied' | 'nocamera' | 'busy' | 'error';
+export type CameraStatus = 'idle' | 'starting' | 'live' | 'denied' | 'nocamera' | 'busy' | 'error' | 'timeout';
+
+/** How long the camera may take to give a first frame, permission prompt included, before the view offers the other sources. */
+export const CAMERA_TIMEOUT_MS = 8000;
 
 export interface CameraState {
   status: CameraStatus;
@@ -26,7 +29,7 @@ function classify(err: unknown): CameraStatus {
 
 /**
  * Front camera into a <video>. Stops every track when `enabled` turns false, on unmount and on pagehide.
- * `retry()` asks again after a refusal.
+ * `retry()` asks again after a refusal. Status `timeout` means no frame came within CAMERA_TIMEOUT_MS.
  */
 export function useCamera(enabled: boolean) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -49,6 +52,11 @@ export function useCamera(enabled: boolean) {
     }
     let cancelled = false;
     setState({ status: 'starting', width: 0, height: 0 });
+    // Some browsers never settle getUserMedia or never deliver a frame. After the timeout the view
+    // offers Upload and the sample face; a camera that does answer later still goes live.
+    const timer = window.setTimeout(() => {
+      if (!cancelled) setState((s) => (s.status === 'starting' ? { status: 'timeout', width: 0, height: 0 } : s));
+    }, CAMERA_TIMEOUT_MS);
 
     (async () => {
       if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
@@ -73,8 +81,10 @@ export function useCamera(enabled: boolean) {
         });
         await v.play().catch(() => undefined);
         if (cancelled) return;
+        window.clearTimeout(timer);
         setState({ status: 'live', width: v.videoWidth, height: v.videoHeight });
       } catch (err) {
+        window.clearTimeout(timer);
         if (!cancelled) setState({ status: classify(err), width: 0, height: 0 });
       }
     })();
@@ -83,6 +93,7 @@ export function useCamera(enabled: boolean) {
     window.addEventListener('pagehide', onHide);
     return () => {
       cancelled = true;
+      window.clearTimeout(timer);
       window.removeEventListener('pagehide', onHide);
       stop();
     };

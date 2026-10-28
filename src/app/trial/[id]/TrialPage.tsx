@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useReducedMotion } from 'motion/react';
 import { FileText } from 'lucide-react';
 import { computeVerdict } from '@/lib/domain';
-import { Button, useToast } from '@/components/ui';
+import { Button, useDocumentTitle, useToast } from '@/components/ui';
 import { TrialWorkspace, TrialWorkspaceSkeleton, useTrialData, type ReadyTrialData } from '@/components/trial';
 import { FROM_TRIAL_KEY, TrialMissing } from '@/components/checkin';
 import { CoachPanel } from '@/components/coach';
@@ -65,9 +65,7 @@ export function TrialPage({ trialId, newScanId }: TrialPageProps) {
   }, [phase, fresh, freshScan, ready, toast, trialId]);
 
   const name = ready?.trial.product.name;
-  useEffect(() => {
-    if (name) document.title = `${name} | Kept`;
-  }, [name, newScanId]);
+  useDocumentTitle(name ? `${name} | Kept` : undefined);
 
   function runCheckin() {
     try {

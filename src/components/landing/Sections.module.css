@@ -177,7 +177,7 @@
   .flow::before {
     left: 4%;
     right: 4%;
-    top: 368px;
+    top: 408px;
     bottom: auto;
     width: auto;
     height: 2px;
@@ -187,7 +187,7 @@
     gap: 0;
   }
   .flowObject {
-    height: 340px;
+    height: 380px;
     align-items: flex-end;
     justify-content: center;
   }
@@ -209,7 +209,7 @@
 
 .camera {
   position: relative;
-  width: min(100%, 230px);
+  width: min(100%, 210px);
 }
 
 .cameraView {

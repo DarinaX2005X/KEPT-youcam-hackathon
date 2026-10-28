@@ -14,3 +14,4 @@ export { CompareSlider, type CompareSliderProps } from './CompareSlider';
 export { MaskLayer, type MaskLayerProps } from './MaskLayer';
 export { Spinner } from './Spinner';
 export { useMediaQuery, MOBILE_QUERY } from './useMediaQuery';
+export { useDocumentTitle } from './useDocumentTitle';

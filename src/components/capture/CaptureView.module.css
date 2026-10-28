@@ -299,16 +299,19 @@
   }
 }
 
-/* Desktop: video 3:4 in the middle, guidance on the left, checks on the right. */
+/* Desktop: video 3:4 with the guidance and the checks beside it as one inspector column; the pair is centred. */
 @media (min-width: 1024px) {
   .root {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto minmax(320px, 420px) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto auto minmax(0, 1fr) auto;
     grid-template-areas:
-      'top top top'
-      'intro stage side'
-      '. tabs .';
-    column-gap: 48px;
+      'top top top top'
+      '. stage . .'
+      '. stage intro .'
+      '. stage side .'
+      '. stage . .'
+      '. tabs . .';
+    column-gap: 0;
     padding: 0 32px 20px;
   }
 
@@ -333,9 +336,8 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    justify-self: end;
-    align-self: center;
-    max-width: 300px;
+    margin-left: clamp(32px, 3.5vw, 56px);
+    max-width: 360px;
   }
 
   .introTitle {
@@ -385,10 +387,8 @@
 
   .side {
     grid-area: side;
-    justify-self: start;
-    align-self: center;
-    width: min(380px, 100%);
     gap: 20px;
+    margin: 28px 0 0 clamp(32px, 3.5vw, 56px);
     padding: 0;
   }
 

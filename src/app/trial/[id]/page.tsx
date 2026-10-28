@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { TrialPage } from './TrialPage';
 
 export const metadata: Metadata = {
-  title: 'Trial',
+  // The product name replaces it once the trial loads from this browser.
+  title: { absolute: 'Kept' },
   robots: { index: false },
 };
 

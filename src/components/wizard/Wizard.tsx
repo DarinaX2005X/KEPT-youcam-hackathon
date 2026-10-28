@@ -296,6 +296,7 @@ export function Wizard() {
         sample={sample}
         targetStatus={state.target.status}
         targetLabel={weekLabel(plan.fullEffectDay).toLowerCase()}
+        withTarget={canSimulate(actives, state.targets)}
         onTakePhoto={() => setCapturing(true)}
         onContinue={() => dispatch({ type: 'goto', step: 'plan' })}
       />

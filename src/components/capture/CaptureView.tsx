@@ -38,7 +38,7 @@ export interface CaptureViewProps {
   mode: 'baseline' | 'checkin';
   /** Day 0 photo for check-ins. Without `anchors` they are read from the photo before the outline shows. */
   ghost?: GhostInput;
-  /** Check-in day for the label «Check-in · Day 28». */
+  /** Check-in day for the label «Check-in, day 28». */
   day?: number;
   /** Overrides the label at the top. */
   title?: string;
@@ -60,6 +60,33 @@ const TABS: { value: CaptureTab; label: string }[] = [
 ];
 
 const FLASH_MS = 120;
+
+const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'LINK', 'TEMPLATE', 'NOSCRIPT']);
+
+/**
+ * Makes everything outside `root` inert and hidden from assistive tech: the site header and footer,
+ * and the screen that opened the capture. Returns the undo.
+ */
+function hideOutside(root: HTMLElement): () => void {
+  const changed: { el: HTMLElement; inert: boolean; hidden: string | null }[] = [];
+  for (let node: HTMLElement | null = root; node && node !== document.body; node = node.parentElement) {
+    const parent: HTMLElement | null = node.parentElement;
+    if (!parent) break;
+    for (const sib of Array.from(parent.children)) {
+      if (sib === node || !(sib instanceof HTMLElement) || SKIP_TAGS.has(sib.tagName) || sib.inert) continue;
+      changed.push({ el: sib, inert: sib.inert, hidden: sib.getAttribute('aria-hidden') });
+      sib.inert = true;
+      sib.setAttribute('aria-hidden', 'true');
+    }
+  }
+  return () => {
+    for (const { el, inert, hidden } of changed) {
+      el.inert = inert;
+      if (hidden === null) el.removeAttribute('aria-hidden');
+      else el.setAttribute('aria-hidden', hidden);
+    }
+  };
+}
 
 /**
  * Full-screen capture: live camera with the face guide, upload, or the sample face.
@@ -119,6 +146,13 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
       setTab((t) => (t === 'camera' ? 'upload' : t));
     }
   }, [camera.state.status]);
+
+  // Full-screen layer: the page behind it is out of reach for keyboards and screen readers.
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = rootRef.current;
+    return root ? hideOutside(root) : undefined;
+  }, []);
 
   // Full-screen layer: lock the page behind it, Escape closes.
   useEffect(() => {
@@ -218,10 +252,11 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
     else if (which === 'upload' && upload.status === 'ready') onCapture(upload.analysis.result);
   }
 
-  const label = title ?? (checkin ? (day !== undefined ? `Check-in · Day ${day}` : 'Check-in photo') : 'Baseline photo');
+  const label = title ?? (checkin ? (day !== undefined ? `Check-in, day ${day}` : 'Check-in photo') : 'Baseline photo');
   const status = camera.state.status;
   const cameraMode = tab === 'camera';
-  const blocked = status === 'denied' || status === 'busy' || status === 'error';
+  const timedOut = status === 'timeout';
+  const blocked = status === 'denied' || status === 'busy' || status === 'error' || timedOut;
   const loading = !taken && !blocked && (status === 'starting' || status === 'idle' || (live && guide.state.model === 'loading'));
   const ghostGuide = checkin && ghostState.guide?.oval ? ghostState.guide : null;
   const match = guide.state.alignment === undefined ? 0 : (0.3 - guide.state.alignment) / (0.3 - ALIGN_OK);
@@ -265,7 +300,9 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
               <CameraOff size={26} strokeWidth={1.75} />
             </span>
             <h2 className={styles.blockedTitle}>
-              {status === 'denied'
+              {timedOut
+                ? "The camera isn't responding"
+                : status === 'denied'
                 ? checkin
                   ? 'Kept needs your camera to take a check-in photo'
                   : 'Kept needs your camera to take your baseline photo'
@@ -274,19 +311,34 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
                   : "The camera didn't start"}
             </h2>
             <p className={styles.blockedText}>
-              {status === 'denied'
+              {timedOut
+                ? 'Use Upload or the Sample face instead.'
+                : status === 'denied'
                 ? 'Allow the camera for this site in your browser settings, then try again.'
                 : status === 'busy'
                   ? 'Close the other app or tab that uses it, then try again.'
                   : 'Try again, or use a photo you already took.'}
             </p>
             <div className={styles.blockedActions}>
-              <Button size="lg" onClick={camera.retry}>
-                Try again
-              </Button>
-              <Button size="lg" variant="secondary" onClick={() => setTab('upload')}>
-                Upload a photo instead
-              </Button>
+              {timedOut ? (
+                <>
+                  <Button size="lg" onClick={() => setTab('upload')}>
+                    Upload a photo
+                  </Button>
+                  <Button size="lg" variant="secondary" onClick={() => setTab('sample')}>
+                    Use the sample face
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="lg" onClick={camera.retry}>
+                    Try again
+                  </Button>
+                  <Button size="lg" variant="secondary" onClick={() => setTab('upload')}>
+                    Upload a photo instead
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         ) : null}
@@ -401,7 +453,7 @@ export function CaptureView({ mode, ghost, day, title, initialTab = 'camera', on
   }
 
   return (
-    <div className={clsx(styles.root, cameraMode && styles.cameraMode)} role="dialog" aria-modal="true" aria-label={label}>
+    <div ref={rootRef} className={clsx(styles.root, cameraMode && styles.cameraMode)} role="dialog" aria-modal="true" aria-label={label}>
       <header className={styles.top}>
         <IconButton icon={X} label="Close" variant="secondary" onClick={onCancel} />
         <p className={styles.title}>{label}</p>

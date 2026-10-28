@@ -9,7 +9,7 @@ import { concernLabel, joinNouns, type DiaryEntry, type Scan, type Trial } from 
 import { blobUrl, getTrial, listScans } from '@/lib/store';
 import { SCAN_STEPS, useScan, type ScanErrorCode } from '@/lib/scan';
 import { CaptureView, type CaptureResult } from '@/components/capture';
-import { Button, IconButton, PhotoPrint, Skeleton, StepProgress, type Step } from '@/components/ui';
+import { Button, IconButton, PhotoPrint, Skeleton, StepProgress, useDocumentTitle, type Step } from '@/components/ui';
 import { baselineOf } from '@/components/trial/model';
 import { DiaryPanel } from './DiaryPanel';
 import { TrialMissing } from './TrialMissing';
@@ -70,9 +70,7 @@ export function CheckinFlow({ trialId }: CheckinFlowProps) {
   }, [load]);
 
   const trial = loaded.status === 'ready' ? loaded.trial : undefined;
-  useEffect(() => {
-    if (trial) document.title = `${trial.product.name} check-in | Kept`;
-  }, [trial]);
+  useDocumentTitle(trial ? `${trial.product.name} check-in | Kept` : undefined);
 
   useEffect(() => () => (shot ? URL.revokeObjectURL(shot.url) : undefined), [shot]);
 
@@ -173,7 +171,7 @@ export function CheckinFlow({ trialId }: CheckinFlowProps) {
   }
 
   const { baseline } = loaded;
-  const dayLabel = `${slot.extra ? 'Extra check-in' : 'Check-in'} · Day ${slot.day}`;
+  const dayLabel = `${slot.extra ? 'Extra check-in' : 'Check-in'}, day ${slot.day}`;
 
   if (phase === 'camera' || !shot) {
     return (
@@ -229,7 +227,7 @@ export function CheckinFlow({ trialId }: CheckinFlowProps) {
             ? saving === 'error'
               ? 'The scan finished, but your browser refused to store it. Free some space or allow this site to store data, then save again.'
               : (err?.message ?? 'Try again in a minute.')
-            : `YouCam AI Skin Analysis reads ${areas.toLowerCase()} on this photo, the same areas as day 0.`}
+            : `YouCam AI Skin Analysis reads ${areas.toLowerCase()} on this photo, the same areas as day 0. This usually takes about 15 seconds.`}
         </p>
         <StepProgress
           steps={STEPS}
@@ -300,12 +298,12 @@ export function CheckinFlow({ trialId }: CheckinFlowProps) {
       <main className={styles.body}>
         <div className={styles.photos}>
           {loaded.baseUrl ? (
-            <PhotoPrint src={loaded.baseUrl} alt="" label="Day 0" tilt={-4} priority className={styles.basePrint} />
+            <PhotoPrint src={loaded.baseUrl} alt="Your day 0 photo" label="Day 0" sublabel={loaded.trial.sample ? 'Face generated with YouCam AI' : 'First photo'} tilt={-1.5} priority className={styles.basePrint} />
           ) : null}
           <motion.div
             className={styles.todayWrap}
             initial={reduced ? false : { opacity: 0, y: 16, rotate: 0 }}
-            animate={{ opacity: 1, y: 0, rotate: 1.5 }}
+            animate={{ opacity: 1, y: 0, rotate: 1 }}
             transition={{ duration: 0.42, ease: [0.2, 0.8, 0.2, 1] }}
           >
             <PhotoPrint

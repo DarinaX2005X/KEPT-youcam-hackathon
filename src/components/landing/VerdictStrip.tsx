@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { useId, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   AlertTriangle,
@@ -45,6 +45,16 @@ export function VerdictStrip({ rows, initial = 'working' }: { rows: VerdictRow[]
   const reduce = useReducedMotion();
   const uid = useId();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // On a phone the switch scrolls sideways; keep the selected verdict in view without moving the page.
+  useEffect(() => {
+    const list = listRef.current;
+    const tab = tabs.current[rows.findIndex((r) => r.kind === kind)];
+    if (!list || !tab || list.scrollWidth <= list.clientWidth) return;
+    const left = tab.offsetLeft - (list.clientWidth - tab.offsetWidth) / 2;
+    list.scrollTo({ left: Math.max(0, left), behavior: reduce ? 'auto' : 'smooth' });
+  }, [kind, rows, reduce]);
   const row = rows.find((r) => r.kind === kind) ?? rows[0];
   const look = LOOK[row.kind];
   const Icon = look.icon;
@@ -66,7 +76,7 @@ export function VerdictStrip({ rows, initial = 'working' }: { rows: VerdictRow[]
 
   return (
     <div className={styles.strip}>
-      <div role="tablist" aria-label="Verdicts" className={styles.tabs}>
+      <div ref={listRef} role="tablist" aria-label="Verdicts" className={styles.tabs}>
         {rows.map((r, i) => {
           const L = LOOK[r.kind];
           const TabIcon = L.icon;

@@ -16,6 +16,8 @@ import {
   listTrials,
   newId,
   putBlob,
+  resetSamples,
+  samplesDrifted,
   saveScan,
   saveTrial,
 } from '@/lib/store';
@@ -219,5 +221,60 @@ describe('importSample', () => {
     const fetch = vi.fn(async () => ({ ok: false, status: 404, json: async () => ({}) as unknown }));
     await expect(importSample({ fetch, now: NOW })).rejects.toThrow(/404/);
     expect(await listTrials()).toEqual([]);
+  });
+});
+
+describe('resetSamples', () => {
+  const LATER = new Date(NOW.getTime() + 19 * 86_400_000);
+
+  it('replaces the samples, their scans and blobs with a fresh import and keeps own trials', async () => {
+    const fetch = fakeFetch();
+    const old = await importSample({ fetch, now: NOW });
+    const own = makeTrial(['salicylic'], { id: 'own' });
+    await saveTrial(own);
+    await saveScan(makeScan(own, 0, { acne: 60 }));
+    // A check-in run on a sample stores its own photo; the reset must remove it too.
+    const extraPhoto = await putBlob(new Blob(['extra']));
+    const ret = (await getTrial(old[1]))!;
+    await saveScan({ ...makeScan(ret, 21, { acne: 70 }), photo: extraPhoto });
+    expect(await countBlobs()).toBe(1);
+
+    const fresh = await resetSamples({ fetch, now: LATER });
+
+    expect(fresh).toHaveLength(2);
+    for (const id of old) {
+      expect(fresh).not.toContain(id);
+      expect(await getTrial(id)).toBeUndefined();
+      expect(await listScans(id)).toEqual([]);
+    }
+    expect(await countBlobs()).toBe(0);
+    expect(await getTrial('own')).toBeDefined();
+    expect(await listScans('own')).toHaveLength(1);
+    expect((await listTrials()).filter((t) => t.sample)).toHaveLength(2);
+    const newRet = (await getTrial(fresh[1]))!;
+    expect(dayOf(newRet, LATER)).toBe(21);
+    expect((await listScans(newRet.id)).map((s) => s.day)).toEqual([0, 7, 18]);
+  });
+
+  it('leaves the old samples in place when the manifest fails to load', async () => {
+    const old = await importSample({ fetch: fakeFetch(), now: NOW });
+    const broken = vi.fn(async () => ({ ok: false, status: 500, json: async () => ({}) as unknown }));
+    await expect(resetSamples({ fetch: broken, now: LATER })).rejects.toThrow(/500/);
+    expect((await listTrials()).map((t) => t.id).sort()).toEqual([...old].sort());
+  });
+
+  it('waits for an import in flight instead of racing it', async () => {
+    const fetch = fakeFetch();
+    const [, reset] = await Promise.all([importSample({ fetch, now: NOW }), resetSamples({ fetch, now: LATER })]);
+    const samples = (await listTrials()).filter((t) => t.sample);
+    expect(samples.map((t) => t.id).sort()).toEqual([...reset].sort());
+  });
+
+  it('samplesDrifted spots samples whose relative start no longer matches now', async () => {
+    await importSample({ fetch: fakeFetch(), now: NOW });
+    const trials = await listTrials();
+    expect(samplesDrifted(MANIFEST, trials, new Date(NOW.getTime() + 86_400_000))).toBe(false);
+    expect(samplesDrifted(MANIFEST, trials, LATER)).toBe(true);
+    expect(samplesDrifted(MANIFEST, trials.filter((t) => !t.sample), LATER)).toBe(false);
   });
 });

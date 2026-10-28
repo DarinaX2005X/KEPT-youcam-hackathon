@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { ArrowLeft, Copy, FileDown } from 'lucide-react';
-import { Button, Skeleton, useToast } from '@/components/ui';
+import { Button, Skeleton, useDocumentTitle, useToast } from '@/components/ui';
 import { useTrialData } from '@/components/trial';
 import { TrialMissing } from '@/components/checkin';
 import { ReportSheet } from './ReportSheet';
@@ -56,9 +56,7 @@ export function ReportPage({ trialId }: ReportPageProps) {
   const [zoom, setZoom] = useState(1);
   const ready = data.status === 'ready' ? data : null;
 
-  useEffect(() => {
-    if (ready) document.title = `${ready.trial.product.name} report | Kept`;
-  }, [ready]);
+  useDocumentTitle(ready ? `${ready.trial.product.name} report | Kept` : undefined);
 
   // If a long product name or many areas push the page past one A4 sheet, print it slightly smaller.
   useLayoutEffect(() => {

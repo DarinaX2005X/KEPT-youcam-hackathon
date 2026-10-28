@@ -32,7 +32,6 @@ export interface PlanStepProps {
 function GoalRow({ c, base, proj }: { c: Concern; base?: number; proj?: number }) {
   const b = base !== undefined ? Math.round(base) : undefined;
   const p = proj !== undefined ? Math.round(proj) : undefined;
-  const up = b !== undefined && p !== undefined && p > b;
   return (
     <li className={styles.goal}>
       <span className={styles.goalName}>{concernLabel(c)}</span>
@@ -43,7 +42,7 @@ function GoalRow({ c, base, proj }: { c: Concern; base?: number; proj?: number }
             <span className={styles.goalArrow} aria-label="to">
               {' → '}
             </span>
-            <span className={clsx(styles.goalTarget, up && styles.up)}>{p}</span>
+            <span className={styles.goalTarget}>{p}</span>
             <span className={styles.goalIf}> if it works</span>
           </>
         ) : (
