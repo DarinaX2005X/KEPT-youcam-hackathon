@@ -22,7 +22,9 @@ Kept turns a new skincare product into a fair trial on your own face: the same p
 
 ## Demo video
 
-https://github.com/user-attachments/assets/812da3b7-2bf8-43b4-a096-4b21df81ab59
+https://github.com/user-attachments/assets/076a44a9-6142-47b0-bf98-deb185ff6306
+
+A 79-second film: adding a product, the camera guide, YouCam's scores and target, the verdicts, the assistant, the check before you buy and the four YouCam APIs. [Download the film (MP4, 36 MB)](docs/video/kept-film.mp4) or [watch the 2:46 walkthrough of the live app](docs/video/kept-demo.mp4).
 
 ## Sample trial
 
