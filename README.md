@@ -24,8 +24,6 @@ Kept turns a new skincare product into a fair trial on your own face: the same p
 
 https://github.com/user-attachments/assets/076a44a9-6142-47b0-bf98-deb185ff6306
 
-A 79-second film: adding a product, the camera guide, YouCam's scores and target, the verdicts, the assistant, the check before you buy and the four YouCam APIs. [Download the film (MP4, 36 MB)](docs/video/kept-film.mp4) or [watch the 2:46 walkthrough of the live app](docs/video/kept-demo.mp4).
-
 ## Sample trial
 
 ![Day 0 against day 56 of a salicylic acid serum trial, with the YouCam acne map on both halves and the Working verdict](docs/readme/trial-compare.png)
